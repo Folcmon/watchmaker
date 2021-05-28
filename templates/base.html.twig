@@ -2,11 +2,51 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
+        {% block meta%}
+            <meta content="width=device-width, initial-scale=1.0" name="viewport">
+            <meta content="" name="keywords">
+            <meta content="" name="description">
+
+            <!-- Facebook Opengraph integration: https://developers.facebook.com/docs/sharing/opengraph -->
+            <meta property="og:title" content="">
+            <meta property="og:image" content="">
+            <meta property="og:url" content="">
+            <meta property="og:site_name" content="">
+            <meta property="og:description" content="">
+
+            <!-- Twitter Cards integration: https://dev.twitter.com/cards/  -->
+            <meta name="twitter:card" content="summary">
+            <meta name="twitter:site" content="">
+            <meta name="twitter:title" content="">
+            <meta name="twitter:description" content="">
+            <meta name="twitter:image" content="">
+        {% endblock %}
+        <title>{% block title %}{{website}}{% endblock %}</title>
         {# Run `composer require symfony/webpack-encore-bundle`
            and uncomment the following Encore helpers to start using Symfony UX #}
         {% block stylesheets %}
-            {#{{ encore_entry_link_tags('app') }}#}
+            <!-- Favicon -->
+            <link href="img/favicon.ico" rel="icon">
+
+            <!-- Google Fonts -->
+            <link href="https://fonts.googleapis.com/css?family=Raleway:400,500,700|Roboto:400,900" rel="stylesheet">
+
+            <!-- Bootstrap CSS File -->
+            <link href="{{ asset('default/lib/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
+
+            <!-- Libraries CSS Files -->
+            <link href="{{ asset('default/lib/font-awesome/css/font-awesome.min.css') }}" rel="stylesheet">
+
+            <!-- Main Stylesheet File -->
+            <link href="{{ asset('default/css/style.css') }}" rel="stylesheet">
+
+            <!-- =======================================================
+              Theme Name: Bell
+              Theme URL: https://bootstrapmade.com/bell-free-bootstrap-4-template/
+              Author: BootstrapMade.com
+              Author URL: https://bootstrapmade.com
+            ======================================================= -->
+
         {% endblock %}
 
         {% block javascripts %}
@@ -14,6 +54,135 @@
         {% endblock %}
     </head>
     <body>
-        {% block body %}{% endblock %}
+        <div>
+            {% block leftBody %}{% endblock %}  
+        </div>
+        <div>
+            <div>
+                {% block upperBody %}
+                    <!-- Header -->
+                    <header id="header">
+                        <div class="container">
+
+                            <div id="logo" class="pull-left">
+                                <h1><a href="{{ path('index') }}">Watchmaker</a></h1>
+                            </div>
+
+                            <nav id="nav-menu-container">
+                                <ul class="nav-menu">
+                                    <li><a href="#about">About Us</a></li>
+                                    <li><a href="#features">Features</a></li>
+                                    <li><a href="#portfolio">Portfolio</a></li>
+                                    <li><a href="#team">Team</a></li>
+                                    <li class="menu-has-children"><a href="">Drop Down</a>
+                                        <ul>
+                                            <li><a href="#">Drop Down 1</a></li>
+                                            <li class="menu-has-children"><a href="#">Drop Down 2</a>
+                                                <ul>
+                                                    <li><a href="#">Deep Drop Down 1</a></li>
+                                                    <li><a href="#">Deep Drop Down 2</a></li>
+                                                    <li><a href="#">Deep Drop Down 3</a></li>
+                                                    <li><a href="#">Deep Drop Down 4</a></li>
+                                                    <li><a href="#">Deep Drop Down 5</a></li>
+                                                </ul>
+                                            </li>
+                                            <li><a href="#">Drop Down 3</a></li>
+                                            <li><a href="#">Drop Down 4</a></li>
+                                            <li><a href="#">Drop Down 5</a></li>
+                                        </ul>
+                                    </li>
+                                    <li><a href="#contact">{{ "" }}</a></li>
+                                </ul>
+                            </nav><!-- #nav-menu-container -->
+                        </div>
+                    </header><!-- #header -->
+
+                {% endblock %}
+            </div>
+            <div>
+                {% block body %}{% endblock %}
+            </div>
+            <div>
+                {% block lowerBody %}
+                    <footer class="site-footer">
+                        <div class="bottom">
+                            <div class="container">
+                                <div class="row">
+
+                                    <div class="col-lg-6 col-xs-12 text-lg-left text-center">
+                                        <p class="copyright-text">
+                                            © BELL Theme
+                                        </p>
+                                        <div class="credits">
+                                            <!-- 
+                                            All the links in the footer should remain intact. 
+                                            You can delete the links only if you purchased the pro version.
+                                            Licensing information: https://bootstrapmade.com/license/
+                                            Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/buy/?theme=Bell
+                                            -->
+                                            <a href="https://bootstrapmade.com/">Bootstrap Themes</a> by BootstrapMade
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-6 col-xs-12 text-lg-right text-center">
+                                        <ul class="list-inline">
+                                            <li class="list-inline-item">
+                                                <a href="index.html">Home</a>
+                                            </li>
+
+                                            <li class="list-inline-item">
+                                                <a href="#about">About Us</a>
+                                            </li>
+
+                                            <li class="list-inline-item">
+                                                <a href="#features">Features</a>
+                                            </li>
+
+                                            <li class="list-inline-item">
+                                                <a href="#portfolio">Portfolio</a>
+                                            </li>
+
+                                            <li class="list-inline-item">
+                                                <a href="#team">Team</a>
+                                            </li>
+
+                                            <li class="list-inline-item">
+                                                <a href="#contact">Contact</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </footer>
+                {% endblock %}
+            </div>
+        </div>
+        <div>
+            {% block rightBody %}{% endblock %} 
+        </div>
+        {% block bodyJavascripts %}
+            <!-- Required JavaScript Libraries -->
+            <script src="{{ asset('default/lib/jquery/jquery.min.js') }}"></script>
+            <script src="{{ asset('default/lib/superfish/hoverIntent.js') }}"></script>
+            <script src="{{ asset('default/lib/superfish/superfish.min.js') }}"></script>
+            <script src="{{ asset('default/lib/tether/js/tether.min.js') }}"></script>
+            <script src="{{ asset('default/lib/stellar/stellar.min.js') }}"></script>
+            <script src="{{ asset('default/lib/bootstrap/js/bootstrap.min.js') }}"></script>
+            <script src="{{ asset('default/lib/counterup/counterup.min.js') }}"></script>
+            <script src="{{ asset('default/lib/waypoints/waypoints.min.js') }}"></script>
+            <script src="{{ asset('default/lib/easing/easing.js') }}"></script>
+            <script src="{{ asset('default/lib/stickyjs/sticky.js') }}"></script>
+            <script src="{{ asset('default/lib/parallax/parallax.js') }}"></script>
+            <script src="{{ asset('default/lib/lockfixed/lockfixed.min.js') }}"></script>
+
+            <!-- Template Specisifc Custom Javascript File -->
+            <script src="{{ asset('default/js/custom.js') }}"></script>
+
+            <script src="{{ asset('default/contactform/contactform.js') }}"></script>
+        {% endblock %}
     </body>
 </html>
+
+

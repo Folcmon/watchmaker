@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New RealisedService{% endblock %}
+
+{% block body %}
+    <h1>Create new RealisedService</h1>
+
+    {{ include('realised_service/_form.html.twig') }}
+
+    <a href="{{ path('realised_service_index') }}">back to list</a>
+{% endblock %}

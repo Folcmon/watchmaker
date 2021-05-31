@@ -9,8 +9,13 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
-#[Route('/realised/service')]
+/**
+ * @IsGranted("ROLE_USER")
+ */
+
+#[Route('/realised_service')]
 class RealisedServiceController extends AbstractController
 {
     #[Route('/', name: 'realised_service_index', methods: ['GET'])]

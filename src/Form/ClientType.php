@@ -14,8 +14,6 @@ class ClientType extends AbstractType
         $builder
             ->add('telephone')
             ->add('email')
-            ->add('createdAt')
-            ->add('updatedAt')
         ;
     }
 

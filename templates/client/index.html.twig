@@ -2,6 +2,10 @@
 
 {% block title %}Client index{% endblock %}
 
+{% block leftBody %}
+    {% include '/shared/leftSidebar.html.twig' %}
+{% endblock %}
+
 {% block body %}
     <h1>Client index</h1>
 
@@ -17,23 +21,23 @@
             </tr>
         </thead>
         <tbody>
-        {% for client in clients %}
-            <tr>
-                <td>{{ client.id }}</td>
-                <td>{{ client.telephone }}</td>
-                <td>{{ client.email }}</td>
-                <td>{{ client.createdAt ? client.createdAt|date('Y-m-d H:i:s') : '' }}</td>
-                <td>{{ client.updatedAt ? client.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
-                <td>
-                    <a href="{{ path('client_show', {'id': client.id}) }}">show</a>
-                    <a href="{{ path('client_edit', {'id': client.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="6">no records found</td>
-            </tr>
-        {% endfor %}
+            {% for client in clients %}
+                <tr>
+                    <td>{{ client.id }}</td>
+                    <td>{{ client.telephone }}</td>
+                    <td>{{ client.email }}</td>
+                    <td>{{ client.createdAt ? client.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+                    <td>{{ client.updatedAt ? client.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
+                    <td>
+                        <a href="{{ path('client_show', {'id': client.id}) }}">show</a>
+                        <a href="{{ path('client_edit', {'id': client.id}) }}">edit</a>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="6">no records found</td>
+                </tr>
+            {% endfor %}
         </tbody>
     </table>
 

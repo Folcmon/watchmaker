@@ -1,4 +1,23 @@
 {{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button class="btn">{{ button_label|default('Save') }}</button>
+<div class="form-group">
+    <label class="col-form-label">
+        {{ "Telefon"|trans }}
+    </label>
+    <div class="">
+        {{ form_errors(form.telephone) }}
+    </div>
+    {{ form_widget(form.telephone, {'attr':{'class':'form-control'}}) }}
+</div>
+<div class="form-group">
+    <label class="col-form-label">
+        {{ "Adres email"|trans }}
+    </label>
+    <div class="">
+        {{ form_errors(form.email) }}
+    </div>
+    {{ form_widget(form.email, {'attr':{'class':'form-control'}}) }}
+</div>
+<div class="form-group">
+    <button class="btn btn-primary btn-lg">{{ "Zapisz"|trans }}</button>
+</div>
 {{ form_end(form) }}

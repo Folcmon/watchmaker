@@ -1,23 +1,23 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Client index{% endblock %}
+{% block title %}{{ "Klienci"|trans }}{% endblock %}
 
 {% block leftBody %}
     {% include '/shared/leftSidebar.html.twig' %}
 {% endblock %}
 
 {% block body %}
-    <h1>Client index</h1>
+    <h1>{{ "Klienci"|trans }}</h1>
 
-    <table class="table">
+    <table class="table table-striped">
         <thead>
             <tr>
                 <th>Id</th>
-                <th>Telephone</th>
-                <th>Email</th>
-                <th>CreatedAt</th>
-                <th>UpdatedAt</th>
-                <th>actions</th>
+                <th>{{ "Telefon"|trans }}</th>
+                <th>{{ "Adres email"|trans }}</th>
+                <th>{{ "Utworzony"|trans }}</th>
+                <th>{{ "Zmodyfikowany"|trans }}</th>
+                <th>{{ "Akcje"|trans }}</th>
             </tr>
         </thead>
         <tbody>
@@ -29,17 +29,17 @@
                     <td>{{ client.createdAt ? client.createdAt|date('Y-m-d H:i:s') : '' }}</td>
                     <td>{{ client.updatedAt ? client.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
                     <td>
-                        <a href="{{ path('client_show', {'id': client.id}) }}">show</a>
-                        <a href="{{ path('client_edit', {'id': client.id}) }}">edit</a>
+                        <a href="{{ path('client_show', {'id': client.id}) }}" class="btn-outline-primary btn btn-sm">{{ "Wyświetl"|trans }}</a>
+                        <a href="{{ path('client_edit', {'id': client.id}) }}" class="btn-outline-secondary btn btn-sm">{{ "Edytuj"|trans }}</a>
                     </td>
                 </tr>
             {% else %}
                 <tr>
-                    <td colspan="6">no records found</td>
+                    <td colspan="6">{{ "Brak klientów"|trans }}</td>
                 </tr>
             {% endfor %}
         </tbody>
     </table>
 
-    <a href="{{ path('client_new') }}">Create new</a>
+    <a href="{{ path('client_new') }}" class="btn btn-primary btn-lg">{{ "Dodaj klienta"|trans }}</a>
 {% endblock %}

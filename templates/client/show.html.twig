@@ -1,42 +1,51 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Client{% endblock %}
+{% block title %}{{"Klient"|trans}}{% endblock %}
 
 {% block leftBody %}
     {% include '/shared/leftSidebar.html.twig' %}
 {% endblock %}
 
 {% block body %}
-    <h1>Client</h1>
+    <h1>{{"Klient"|trans}}</h1>
 
-    <table class="table">
+    <table class="table table-striped ">
         <tbody>
             <tr>
                 <th>Id</th>
                 <td>{{ client.id }}</td>
             </tr>
             <tr>
-                <th>Telephone</th>
+                <th>{{ "Telefon"|trans }}</th>
                 <td>{{ client.telephone }}</td>
             </tr>
             <tr>
-                <th>Email</th>
+                <th>{{ "Adres email"|trans }}</th>
                 <td>{{ client.email }}</td>
             </tr>
             <tr>
-                <th>CreatedAt</th>
+                <th>{{ "Utworzony"|trans }}</th>
                 <td>{{ client.createdAt ? client.createdAt|date('Y-m-d H:i:s') : '' }}</td>
             </tr>
             <tr>
-                <th>UpdatedAt</th>
+                <th>{{ "Zmodyfikowany" }}</th>
                 <td>{{ client.updatedAt ? client.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
             </tr>
         </tbody>
     </table>
-
-    <a href="{{ path('client_index') }}">back to list</a>
-
-    <a href="{{ path('client_edit', {'id': client.id}) }}">edit</a>
-
-    {{ include('client/_delete_form.html.twig') }}
+    <div class="row">
+        <div class="col-xl-6">
+            <a href="{{ path('client_edit', {'id': client.id}) }}"
+               class="btn-primary btn btn-lg btn">{{ "Edycja"|trans }}</a>
+        </div>
+        <div class="col-lg-6">
+            {{ include('client/_delete_form.html.twig') }}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xl-12 text-right">
+            <a href="{{ path('client_index') }}"
+               class="btn btn-lg btn-primary">{{ "Powrót"|trans }}</a>
+        </div>
+    </div>
 {% endblock %}

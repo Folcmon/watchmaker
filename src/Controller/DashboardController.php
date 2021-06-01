@@ -17,7 +17,8 @@ class DashboardController extends AbstractController
     #[Route('/dashboard', name: 'dashboard')]
     public function index(RealisedServiceRepository $realisedServiceRepository, ClientRepository $clientRepository): Response
     {
-        $firstDayOfMonth = date('d-m-Y', strtotime(date('Y-m-1')));
+        $time = strtotime(date('Y-m-01 00:00:00')); // == 1338534000
+        $firstDayOfMonth = date('Y-m-d H:i:s', $time); // == 2012-06-01 00:00:00
         $allRealisedServices = $realisedServiceRepository->count([]);
         $thisMonthRealisedServices = $realisedServiceRepository->createQueryBuilder('rs')
             ->andWhere('rs.createdAt >= :date')

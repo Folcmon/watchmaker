@@ -1,7 +1,7 @@
 {{ form_start(form) }}
 <div class="form-group">
     <label class="col-form-label">
-        {{ "Nazwa usługi"|trans }}
+        {{ "Nazwa"|trans }}
     </label>
     <div class="">
         {{ form_errors(form.name) }}
@@ -10,21 +10,21 @@
 </div>
 <div class="form-group">
     <label class="col-form-label">
-        {{ "Opis usługi"|trans }}
+        {{ "Ilość"|trans }}
     </label>
     <div class="">
-        {{ form_errors(form.description) }}
+        {{ form_errors(form.qunatity) }}
     </div>
-    {{ form_widget(form.description, {'attr':{'class':'form-control'}}) }}
+    {{ form_widget(form.qunatity, {'attr':{'class':'form-control'}}) }}
 </div>
 <div class="form-group">
     <label class="col-form-label">
-        {{ "Klient"|trans }}
+        {{ "Ilość alarmowa"|trans }}
     </label>
     <div class="">
-        {{ form_errors(form.client) }}
+        {{ form_errors(form.alarmQuantity) }}
     </div>
-    {{ form_widget(form.client, {'attr':{'class':'form-control'}}) }}
+    {{ form_widget(form.alarmQuantity, {'attr':{'class':'form-control'}}) }}
 </div>
 <div class="form-group">
     <button class="btn btn-primary btn-lg">{{ "Zapisz"|trans }}</button>

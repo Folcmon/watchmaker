@@ -1,0 +1,53 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ "Przedmiot"|trans }}{% endblock %}
+
+{% block body %}
+    <h1>{{ "Przedmiot"|trans }}</h1>
+
+    <table class="table table-striped ">
+        <tbody>
+        <tr>
+            <th>{{ "Numer magazynowy"|trans }}</th>
+            <td>{{ storage.id }}</td>
+        </tr>
+        <tr>
+            <th>{{ "Nazwa"|trans }}</th>
+            <td>{{ storage.name }}</td>
+        </tr>
+        <tr>
+            <th>{{ "Ilość"|trans }}</th>
+            <td>{{ storage.qunatity }}</td>
+        </tr>
+        <tr>
+            <th>{{ "Ilość alarmowa"|trans }}</th>
+            <td>{{ storage.alarmQuantity }}</td>
+        </tr>
+        <tr>
+            <th>{{ "Utworzony"|trans }}</th>
+            <td>{{ storage.createdAt ? storage.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+        </tr>
+        <tr>
+            <th>{{ "Zmodyfikowany" }}</th>
+            <td>{{ storage.updatedAt ? storage.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
+        </tr>
+        </tbody>
+    </table>
+    <div class="row">
+        <div class="col-xl-6">
+            <a href="{{ path('storage_edit', {'id': storage.id}) }}"
+               class="btn-primary btn btn-lg btn">{{ "Edycja"|trans }}</a>
+        </div>
+        <div class="col-lg-6">
+            {{ include('storage/_delete_form.html.twig') }}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xl-12 text-right">
+            <a href="{{ path('storage_index') }}"
+               class="btn btn-lg btn-primary">{{ "Powrót"|trans }}</a>
+        </div>
+    </div>
+
+    <a href="{{ path('storage_index') }}">back to list</a>
+{% endblock %}

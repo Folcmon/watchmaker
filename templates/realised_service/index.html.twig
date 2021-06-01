@@ -1,22 +1,22 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}RealisedService index{% endblock %}
+{% block title %}{{"Usługi"|trans}}{% endblock %}
 
 {% block leftBody %}
     {% include '/shared/leftSidebar.html.twig' %}
 {% endblock %}
 
 {% block body %}
-    <h1>RealisedService index</h1>
+    <h1>{{"Usługi"|trans}}</h1>
 
-    <table class="table">
+    <table class="table table-striped">
         <thead>
             <tr>
-                <th>Id</th>
-                <th>Description</th>
-                <th>CreatedAt</th>
-                <th>UpdatedAt</th>
-                <th>actions</th>
+                <th>{{ "Numer usługi"|trans }}</th>
+                <th>{{ "Opis usługi"|trans }}</th>
+                <th>{{ "Utworzony"|trans }}</th>
+                <th>{{ "Zmodyfikowany"|trans }}</th>
+                <th>{{ "Akcje"|trans }}</th>
             </tr>
         </thead>
         <tbody>
@@ -27,17 +27,17 @@
                 <td>{{ realised_service.createdAt ? realised_service.createdAt|date('Y-m-d H:i:s') : '' }}</td>
                 <td>{{ realised_service.updatedAt ? realised_service.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
                 <td>
-                    <a href="{{ path('realised_service_show', {'id': realised_service.id}) }}">show</a>
-                    <a href="{{ path('realised_service_edit', {'id': realised_service.id}) }}">edit</a>
+                    <a href="{{ path('realised_service_show', {'id': realised_service.id}) }}" class="btn-outline-primary btn btn-sm">{{ "Wyświetl"|trans }}</a>
+                    <a href="{{ path('realised_service_edit', {'id': realised_service.id}) }}" class="btn-outline-secondary btn btn-sm">{{ "Edytuj"|trans }}</a>
                 </td>
             </tr>
         {% else %}
             <tr>
-                <td colspan="5">no records found</td>
+                <td colspan="6">{{ "Brak usług"|trans }}</td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
 
-    <a href="{{ path('realised_service_new') }}">Create new</a>
+    <a href="{{ path('realised_service_new') }}"class=" btn btn-primary btn-lg">{{ "Dodaj usługę"|trans }}</a>
 {% endblock %}

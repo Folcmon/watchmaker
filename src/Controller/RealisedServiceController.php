@@ -3,9 +3,11 @@
 namespace App\Controller;
 
 use App\Entity\RealisedService;
+use App\Entity\ServiceAttachment;
 use App\Form\RealisedServiceType;
 use App\Repository\RealisedServiceRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -27,13 +29,34 @@ class RealisedServiceController extends AbstractController
     }
 
     #[Route('/new', name: 'realised_service_new', methods: ['GET', 'POST'])]
-    public function new(Request $request): Response
+    public function new(Request $request, $uploadsDirectory): Response
     {
         $realisedService = new RealisedService();
         $form = $this->createForm(RealisedServiceType::class, $realisedService);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
+            $files = $request->files->get('realised_service')['serviceAttachments'];
+            if ($files != null) {
+                /**
+                 * @var $oneFileAttachment UploadedFile
+                 */
+                foreach ($files as $oneFileAttachment) {
+                    $directory = $uploadsDirectory . DIRECTORY_SEPARATOR . ServiceAttachment::SERVICE_ATTACHMENT_STORE_FOLDER;
+                    $extension = $oneFileAttachment->guessExtension();
+                    if (!$extension) {
+                        $extension = 'bin';
+                    }
+                    $filename = md5(microtime()) . '.' . $extension;
+                    $oneFileAttachment->move($directory, $filename);
+                    $serviceAttachment = new ServiceAttachment();
+                    $serviceAttachment->setPath($filename);
+                    $serviceAttachment->setService($realisedService);
+                    $this->getDoctrine()->getManager()->persist($serviceAttachment);
+                    $this->getDoctrine()->getManager()->flush();
+                }
+            }
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($realisedService);
             $entityManager->flush();

@@ -6,17 +6,17 @@ use App\Entity\RealisedService;
 use App\Entity\ServiceAttachment;
 use App\Form\RealisedServiceType;
 use App\Repository\RealisedServiceRepository;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 /**
  * @IsGranted("ROLE_USER")
  */
-
 #[Route('/realised_service')]
 class RealisedServiceController extends AbstractController
 {
@@ -29,7 +29,7 @@ class RealisedServiceController extends AbstractController
     }
 
     #[Route('/new', name: 'realised_service_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, $uploadsDirectory): Response
+    public function new(Request $request): Response
     {
         $realisedService = new RealisedService();
         $form = $this->createForm(RealisedServiceType::class, $realisedService);
@@ -39,23 +39,8 @@ class RealisedServiceController extends AbstractController
 
             $files = $request->files->get('realised_service')['serviceAttachments'];
             if ($files != null) {
-                /**
-                 * @var $oneFileAttachment UploadedFile
-                 */
-                foreach ($files as $oneFileAttachment) {
-                    $directory = $uploadsDirectory . DIRECTORY_SEPARATOR . ServiceAttachment::SERVICE_ATTACHMENT_STORE_FOLDER;
-                    $extension = $oneFileAttachment->guessExtension();
-                    if (!$extension) {
-                        $extension = 'bin';
-                    }
-                    $filename = md5(microtime()) . '.' . $extension;
-                    $oneFileAttachment->move($directory, $filename);
-                    $serviceAttachment = new ServiceAttachment();
-                    $serviceAttachment->setPath($filename);
-                    $serviceAttachment->setService($realisedService);
-                    $this->getDoctrine()->getManager()->persist($serviceAttachment);
-                    $this->getDoctrine()->getManager()->flush();
-                }
+                $uploadsDirectory = $this->getParameter('uploadsDirectory');
+                $this->uploadServiceAttachment($files, $realisedService, $uploadsDirectory);
             }
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($realisedService);
@@ -85,6 +70,21 @@ class RealisedServiceController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $uploadsDirectory = $this->getParameter('uploadsDirectory');
+
+            $filesystem = new Filesystem();
+            if (!empty($realisedService->getServiceAttachments())) {
+                foreach ($realisedService->getServiceAttachments() as $attachment){
+                    $fileToRemove = $uploadsDirectory . DIRECTORY_SEPARATOR . ServiceAttachment::SERVICE_ATTACHMENT_STORE_FOLDER. DIRECTORY_SEPARATOR . $attachment->getPath();
+                    $filesystem->remove($fileToRemove);
+                    $this->getDoctrine()->getManager()->remove($attachment);
+                }
+            }
+            $this->getDoctrine()->getManager()->flush();
+            $files = $request->files->get('realised_service')['serviceAttachments'];
+            if ($files != null) {
+                $this->uploadServiceAttachment($files, $realisedService, $uploadsDirectory);
+            }
             $this->getDoctrine()->getManager()->flush();
 
             return $this->redirectToRoute('realised_service_index');
@@ -99,12 +99,39 @@ class RealisedServiceController extends AbstractController
     #[Route('/{id}', name: 'realised_service_delete', methods: ['POST'])]
     public function delete(Request $request, RealisedService $realisedService): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$realisedService->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $realisedService->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($realisedService);
             $entityManager->flush();
         }
 
         return $this->redirectToRoute('realised_service_index');
+    }
+
+    private function uploadServiceAttachment($files, $realisedService, $uploadsDirectory)
+    {
+        if ($files != null) {
+            /**
+             * @var $oneFileAttachment UploadedFile
+             */
+            foreach ($files as $oneFileAttachment) {
+                $directory = $uploadsDirectory . DIRECTORY_SEPARATOR . ServiceAttachment::SERVICE_ATTACHMENT_STORE_FOLDER;
+                $extension = $oneFileAttachment->guessExtension();
+                if (!$extension) {
+                    $extension = 'bin';
+                }
+                $filename = md5(microtime()) . '.' . $extension;
+                $oneFileAttachment->move($directory, $filename);
+                $serviceAttachment = new ServiceAttachment();
+                $serviceAttachment->setPath($filename);
+                $serviceAttachment->setService($realisedService);
+                $this->getDoctrine()->getManager()->persist($serviceAttachment);
+                $this->getDoctrine()->getManager()->flush();
+            }
+        }
+    }
+
+    private function removeOldServiceAttachment()
+    {
     }
 }

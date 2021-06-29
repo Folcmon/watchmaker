@@ -42,9 +42,15 @@ class RealisedService
      */
     private Collection|array $serviceAttachments;
 
+    /**
+     * @ORM\OneToMany(targetEntity=RealisedServiceUsedItem::class, mappedBy="realisedService")
+     */
+    private $realisedServiceUsedItems;
+
     public function __construct()
     {
         $this->serviceAttachments = new ArrayCollection();
+        $this->realisedServiceUsedItems = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -112,6 +118,36 @@ class RealisedService
             // set the owning side to null (unless already changed)
             if ($serviceAttachment->getService() === $this) {
                 $serviceAttachment->setService(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|RealisedServiceUsedItem[]
+     */
+    public function getRealisedServiceUsedItems(): Collection
+    {
+        return $this->realisedServiceUsedItems;
+    }
+
+    public function addRealisedServiceUsedItem(RealisedServiceUsedItem $realisedServiceUsedItem): self
+    {
+        if (!$this->realisedServiceUsedItems->contains($realisedServiceUsedItem)) {
+            $this->realisedServiceUsedItems[] = $realisedServiceUsedItem;
+            $realisedServiceUsedItem->setRealisedService($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRealisedServiceUsedItem(RealisedServiceUsedItem $realisedServiceUsedItem): self
+    {
+        if ($this->realisedServiceUsedItems->removeElement($realisedServiceUsedItem)) {
+            // set the owning side to null (unless already changed)
+            if ($realisedServiceUsedItem->getRealisedService() === $this) {
+                $realisedServiceUsedItem->setRealisedService(null);
             }
         }
 

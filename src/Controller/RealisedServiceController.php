@@ -2,10 +2,12 @@
 
 namespace App\Controller;
 
+use App\Entity\Client;
 use App\Entity\RealisedService;
 use App\Entity\ServiceAttachment;
 use App\Form\RealisedServiceType;
 use App\Repository\RealisedServiceRepository;
+use Knp\Component\Pager\PaginatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Filesystem\Filesystem;
@@ -21,10 +23,29 @@ use Symfony\Component\Routing\Annotation\Route;
 class RealisedServiceController extends AbstractController
 {
     #[Route('/', name: 'realised_service_index', methods: ['GET'])]
-    public function index(RealisedServiceRepository $realisedServiceRepository): Response
+    public function index(Request $request,RealisedServiceRepository $realisedServiceRepository, PaginatorInterface $paginator): Response
     {
+        $results = null;
+        $qb = $this->getDoctrine()->getManager()->createQueryBuilder();
+
+        if (!$request->get('search')) {
+            $results = $realisedServiceRepository->findAll();
+        } else {
+            $results = $realisedServiceRepository->createQueryBuilder('r_e')
+                ->join('r_e.client', 'c_e')
+                ->where($qb->expr()->like('c_e.email', ':search'))
+                ->orWhere($qb->expr()->like('c_e.telephone', ':search'))
+                ->setParameter('search', "%" . $request->get('search') . "%");
+        }
+
+        $pagination = $paginator->paginate(
+            $results,
+            $request->query->getInt('page', 1),
+            25
+        );
+
         return $this->render('realised_service/index.html.twig', [
-            'realised_services' => $realisedServiceRepository->findAll(),
+            'pagination' => $pagination,
         ]);
     }
 
@@ -131,7 +152,22 @@ class RealisedServiceController extends AbstractController
         }
     }
 
-    private function removeOldServiceAttachment()
+    #[Route('/client/{id}', name: 'realised_service_show_by_client', methods: ['GET'])]
+    public function showByClient(Client $client, RealisedServiceRepository $realisedServiceRepository, PaginatorInterface $paginator, Request $request): Response
     {
+        $realisedServices = $realisedServiceRepository->findBy(['client'=>$client]);
+
+        $pagination = $paginator->paginate(
+            $realisedServices,
+            $request->query->getInt('page', 1),
+            25
+        );
+
+        return $this->render('realised_service/showByClient.html.twig',[
+            'pagination' => $pagination,
+            'realised_services' =>$realisedServices,
+            'client'=>$client
+        ]);
     }
+
 }

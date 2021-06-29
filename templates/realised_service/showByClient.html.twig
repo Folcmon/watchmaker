@@ -8,30 +8,23 @@
 
 {% block body %}
     <h1>{{"Usługi"|trans}}</h1>
-    <div class="row">
-        <div class="col-xl-12">
-            <form method="get" class="form">
-                <div class="row">
-                    <div class="col-xl-12">
-                        <div class="form-group">
-                            <label class="label inline">{{ "Email użytkownika lub numer telefonu"|trans }}</label>
-                            <input type="text" name="search" class="form-control"
-                                   value="{{ app.request.query.get('search') }}">
-                        </div>
-                    </div>
-                    <div class="col-xl-12 text-right">
-                        <div class="form-group">
-                            <input type="submit" value="{{ "Szukaj "|trans }}" class="btn btn-primary">
-                            <a class="btn btn-danger"
-                               href="{{ url('client_index') }}">{{ "Resetowanie wyników"|trans }}</a>
+
+    <table class="table table-striped">
+        <tr class="table-info">
+            <th colspan="6">{{"Usługi realizowane dla"|trans}} {{ client }}</th>
+        </tr>
+        <tr>
+            <th>
+                <div class="row mb-2">
+                    <div class="col-lg-12 text-right">
+                        {{ "Wszystkich"|trans }}
+                        <div class="badge badge-primary">
+                            {{ pagination.getTotalItemCount }}
                         </div>
                     </div>
                 </div>
-            </form>
-        </div>
-    </div>
-    <table class="table table-striped">
-        <thead>
+            </th>
+        </tr>
             <tr>
                 <th>{{ "Numer usługi"|trans }}</th>
                 <th>{{ "Opis usługi"|trans }}</th>

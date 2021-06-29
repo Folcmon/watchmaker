@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Client;
 use App\Form\ClientType;
 use App\Repository\ClientRepository;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -19,10 +20,28 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 class ClientController extends AbstractController
 {
     #[Route('/', name: 'client_index', methods: ['GET'])]
-    public function index(ClientRepository $clientRepository): Response
+    public function index(Request $request,ClientRepository $clientRepository,PaginatorInterface $paginator): Response
     {
+        $results = null;
+        $qb = $this->getDoctrine()->getManager()->createQueryBuilder();
+
+        if (!$request->get('search')) {
+            $results = $clientRepository->findAll();
+        } else {
+            $results = $clientRepository->createQueryBuilder('c_e')
+                ->where($qb->expr()->like('c_e.email', ':search'))
+                ->orWhere($qb->expr()->like('c_e.telephone', ':search'))
+                ->setParameter('search', "%" . $request->get('search') . "%");
+        }
+
+        $pagination = $paginator->paginate(
+            $results,
+            $request->query->getInt('page', 1),
+            25
+        );
+
         return $this->render('client/index.html.twig', [
-            'clients' => $clientRepository->findAll(),
+            'pagination' => $pagination,
         ]);
     }
 

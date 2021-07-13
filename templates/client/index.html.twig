@@ -7,7 +7,16 @@
 {% endblock %}
 
 {% block body %}
-    <h1>{{ "Klienci"|trans }}</h1>
+    <h1>
+        <div class="row">
+            <div class="col-xl-6">
+                {{ "Klienci"|trans }}
+            </div>
+            <div class="col-xl-6">
+                <a href="{{ path('client_new') }}" class="btn btn-primary btn-lg">{{ "Dodaj klienta"|trans }}</a>
+            </div>
+        </div>
+    </h1>
 
     <div class="row">
         <div class="col-xl-12">
@@ -33,33 +42,35 @@
     </div>
     <table class="table table-striped">
         <thead>
-            <tr>
-                <th>{{ "Numer klienta"|trans }}</th>
-                <th>{{ "Telefon"|trans }}</th>
-                <th>{{ "Adres email"|trans }}</th>
-                <th>{{ "Utworzony"|trans }}</th>
-                <th>{{ "Zmodyfikowany"|trans }}</th>
-                <th>{{ "Akcje"|trans }}</th>
-            </tr>
+        <tr>
+            <th>{{ "Numer klienta"|trans }}</th>
+            <th>{{ "Telefon"|trans }}</th>
+            <th>{{ "Adres email"|trans }}</th>
+            <th>{{ "Utworzony"|trans }}</th>
+            <th>{{ "Zmodyfikowany"|trans }}</th>
+            <th>{{ "Akcje"|trans }}</th>
+        </tr>
         </thead>
         <tbody>
-            {% for client in pagination %}
-                <tr>
-                    <td>{{ client.id }}</td>
-                    <td>{{ client.telephone }}</td>
-                    <td>{{ client.email }}</td>
-                    <td>{{ client.createdAt ? client.createdAt|date('Y-m-d H:i:s') : '' }}</td>
-                    <td>{{ client.updatedAt ? client.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
-                    <td>
-                        <a href="{{ path('client_show', {'id': client.id}) }}" class="btn-outline-primary btn btn-sm">{{ "Wyświetl"|trans }}</a>
-                        <a href="{{ path('client_edit', {'id': client.id}) }}" class="btn-outline-secondary btn btn-sm">{{ "Edytuj"|trans }}</a>
-                    </td>
-                </tr>
-            {% else %}
-                <tr>
-                    <td colspan="6">{{ "Brak klientów"|trans }}</td>
-                </tr>
-            {% endfor %}
+        {% for client in pagination %}
+            <tr>
+                <td>{{ client.id }}</td>
+                <td>{{ client.telephone }}</td>
+                <td>{{ client.email }}</td>
+                <td>{{ client.createdAt ? client.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ client.updatedAt ? client.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>
+                    <a href="{{ path('client_show', {'id': client.id}) }}"
+                       class="btn-outline-primary btn btn-sm">{{ "Wyświetl"|trans }}</a>
+                    <a href="{{ path('client_edit', {'id': client.id}) }}"
+                       class="btn-outline-secondary btn btn-sm">{{ "Edytuj"|trans }}</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="6">{{ "Brak klientów"|trans }}</td>
+            </tr>
+        {% endfor %}
         </tbody>
     </table>
     <div class="row">
@@ -69,6 +80,4 @@
             </div>
         </div>
     </div>
-
-    <a href="{{ path('client_new') }}" class="btn btn-primary btn-lg">{{ "Dodaj klienta"|trans }}</a>
 {% endblock %}

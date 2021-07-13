@@ -1,13 +1,23 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{"Usługi"|trans}}{% endblock %}
+{% block title %}{{ "Usługi"|trans }}{% endblock %}
 
 {% block leftBody %}
     {% include '/shared/leftSidebar.html.twig' %}
 {% endblock %}
 
 {% block body %}
-    <h1>{{"Usługi"|trans}}</h1>
+    <h1>
+        <div class="row">
+            <div class="col-xl-6">
+                {{ "Usługi"|trans }}
+            </div>
+            <div class="col-xl-6">
+                <a href="{{ path('realised_service_new') }}"
+                   class=" btn btn-primary btn-lg">{{ "Dodaj usługę"|trans }}</a>
+            </div>
+        </div>
+    </h1>
     <div class="row">
         <div class="col-xl-12">
             <form method="get" class="form">
@@ -32,13 +42,13 @@
     </div>
     <table class="table table-striped">
         <thead>
-            <tr>
-                <th>{{ "Numer usługi"|trans }}</th>
-                <th>{{ "Opis usługi"|trans }}</th>
-                <th>{{ "Utworzony"|trans }}</th>
-                <th>{{ "Zmodyfikowany"|trans }}</th>
-                <th>{{ "Akcje"|trans }}</th>
-            </tr>
+        <tr>
+            <th>{{ "Numer usługi"|trans }}</th>
+            <th>{{ "Opis usługi"|trans }}</th>
+            <th>{{ "Utworzony"|trans }}</th>
+            <th>{{ "Zmodyfikowany"|trans }}</th>
+            <th>{{ "Akcje"|trans }}</th>
+        </tr>
         </thead>
         <tbody>
         {% for realised_service in pagination %}
@@ -48,8 +58,10 @@
                 <td>{{ realised_service.createdAt ? realised_service.createdAt|date('Y-m-d H:i:s') : '' }}</td>
                 <td>{{ realised_service.updatedAt ? realised_service.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
                 <td>
-                    <a href="{{ path('realised_service_show', {'id': realised_service.id}) }}" class="btn-outline-primary btn btn-sm">{{ "Wyświetl"|trans }}</a>
-                    <a href="{{ path('realised_service_edit', {'id': realised_service.id}) }}" class="btn-outline-secondary btn btn-sm">{{ "Edytuj"|trans }}</a>
+                    <a href="{{ path('realised_service_show', {'id': realised_service.id}) }}"
+                       class="btn-outline-primary btn btn-sm">{{ "Wyświetl"|trans }}</a>
+                    <a href="{{ path('realised_service_edit', {'id': realised_service.id}) }}"
+                       class="btn-outline-secondary btn btn-sm">{{ "Edytuj"|trans }}</a>
                 </td>
             </tr>
         {% else %}
@@ -66,6 +78,4 @@
             </div>
         </div>
     </div>
-
-    <a href="{{ path('realised_service_new') }}"class=" btn btn-primary btn-lg">{{ "Dodaj usługę"|trans }}</a>
 {% endblock %}

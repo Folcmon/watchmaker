@@ -7,7 +7,17 @@
 {% endblock %}
 
 {% block body %}
-    <h1>{{ "Magazyn"|trans }}</h1>
+    <h1>
+        <div class="row">
+            <div class="col-xl-6">
+                {{ "Magazyn"|trans }}
+            </div>
+            <div class="col-xl-6">
+                <a href="{{ path('storage_new') }}"
+                   class="btn btn-primary btn-lg">{{ "Dodaj przedmiot do magazynu" }}</a>
+            </div>
+        </div>
+    </h1>
 
     <table class="table table-striped">
         <thead>
@@ -31,8 +41,10 @@
                 <td>{{ storage.createdAt ? storage.createdAt|date('Y-m-d H:i:s') : '' }}</td>
                 <td>{{ storage.updatedAt ? storage.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
                 <td>
-                    <a href="{{ path('storage_show', {'id': storage.id}) }}" class="btn-outline-primary btn btn-sm">{{ "Wyświetl"|trans }}</a>
-                    <a href="{{ path('storage_edit', {'id': storage.id}) }}" class="btn-outline-secondary btn btn-sm">{{ "Edytuj"|trans }}</a>
+                    <a href="{{ path('storage_show', {'id': storage.id}) }}"
+                       class="btn-outline-primary btn btn-sm">{{ "Wyświetl"|trans }}</a>
+                    <a href="{{ path('storage_edit', {'id': storage.id}) }}"
+                       class="btn-outline-secondary btn btn-sm">{{ "Edytuj"|trans }}</a>
                 </td>
             </tr>
         {% else %}
@@ -42,6 +54,4 @@
         {% endfor %}
         </tbody>
     </table>
-
-    <a href="{{ path('storage_new') }}" class="btn btn-primary btn-lg">{{ "Dodaj przedmiot do magazynu" }}</a>
 {% endblock %}

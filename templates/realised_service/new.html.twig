@@ -1,13 +1,13 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{"Dodawanie usługi"|trans}}{% endblock %}
+{% block title %}{{ "Dodawanie usługi"|trans }}{% endblock %}
 
 {% block leftBody %}
     {% include '/shared/leftSidebar.html.twig' %}
 {% endblock %}
 
 {% block body %}
-    <h1>{{"Dodawanie usługi"|trans}}</h1>
+    <h1>{{ "Dodawanie usługi"|trans }}</h1>
 
     <div class="row">
         <div class="col-xl-12">
@@ -20,4 +20,9 @@
                class="btn btn-lg btn-primary">{{ "Powrót"|trans }}</a>
         </div>
     </div>
+{% endblock %}
+
+{% block bodyJavascripts %}
+    {{ parent() }}
+    <script src="{{ asset('default/js/realisedServiceForm.js') }}"></script>
 {% endblock %}

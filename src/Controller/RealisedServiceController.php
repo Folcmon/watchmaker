@@ -23,7 +23,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class RealisedServiceController extends AbstractController
 {
     #[Route('/', name: 'realised_service_index', methods: ['GET'])]
-    public function index(Request $request,RealisedServiceRepository $realisedServiceRepository, PaginatorInterface $paginator): Response
+    public function index(Request $request, RealisedServiceRepository $realisedServiceRepository, PaginatorInterface $paginator): Response
     {
         $results = null;
         $qb = $this->getDoctrine()->getManager()->createQueryBuilder();
@@ -95,8 +95,8 @@ class RealisedServiceController extends AbstractController
 
             $filesystem = new Filesystem();
             if (!empty($realisedService->getServiceAttachments())) {
-                foreach ($realisedService->getServiceAttachments() as $attachment){
-                    $fileToRemove = $uploadsDirectory . DIRECTORY_SEPARATOR . ServiceAttachment::SERVICE_ATTACHMENT_STORE_FOLDER. DIRECTORY_SEPARATOR . $attachment->getPath();
+                foreach ($realisedService->getServiceAttachments() as $attachment) {
+                    $fileToRemove = $uploadsDirectory . DIRECTORY_SEPARATOR . ServiceAttachment::SERVICE_ATTACHMENT_STORE_FOLDER . DIRECTORY_SEPARATOR . $attachment->getPath();
                     $filesystem->remove($fileToRemove);
                     $this->getDoctrine()->getManager()->remove($attachment);
                 }
@@ -155,7 +155,7 @@ class RealisedServiceController extends AbstractController
     #[Route('/client/{id}', name: 'realised_service_show_by_client', methods: ['GET'])]
     public function showByClient(Client $client, RealisedServiceRepository $realisedServiceRepository, PaginatorInterface $paginator, Request $request): Response
     {
-        $realisedServices = $realisedServiceRepository->findBy(['client'=>$client]);
+        $realisedServices = $realisedServiceRepository->findBy(['client' => $client]);
 
         $pagination = $paginator->paginate(
             $realisedServices,
@@ -163,10 +163,10 @@ class RealisedServiceController extends AbstractController
             25
         );
 
-        return $this->render('realised_service/showByClient.html.twig',[
+        return $this->render('realised_service/showByClient.html.twig', [
             'pagination' => $pagination,
-            'realised_services' =>$realisedServices,
-            'client'=>$client
+            'realised_services' => $realisedServices,
+            'client' => $client
         ]);
     }
 

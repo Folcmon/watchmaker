@@ -35,6 +35,25 @@
     </div>
     {{ form_widget(form.client, {'attr':{'class':'form-control'}}) }}
 </div>
+
+<div class="form-group">
+    <label class="col-form-label h2">
+        {{ "Użyte części"|trans }}
+    </label>
+    <div class="row">
+        {{ form_errors(form.usedParts) }}
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-md-12">
+            <span class="btn btn-primary" id="used-part-addition-button">{{ "Dodaj użytą część"|trans }}</span>
+        </div>
+    </div>
+    <div class="usedPartsContainer row">
+
+    </div>
+</div>
+
 <div class="form-group">
     <button class="btn btn-primary btn-lg">{{ "Zapisz"|trans }}</button>
 </div>

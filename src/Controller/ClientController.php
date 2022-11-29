@@ -17,13 +17,13 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
  */
 
 #[Route('/client')]
-class ClientController extends AbstractController
+class ClientController extends BaseController
 {
     #[Route('/', name: 'client_index', methods: ['GET'])]
     public function index(Request $request,ClientRepository $clientRepository,PaginatorInterface $paginator): Response
     {
         $results = null;
-        $qb = $this->getDoctrine()->getManager()->createQueryBuilder();
+        $qb = $this->doctrine->createQueryBuilder();
 
         if (!$request->get('search')) {
             $results = $clientRepository->findAll();
@@ -53,7 +53,7 @@ class ClientController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager = $this->doctrine;
             $entityManager->persist($client);
             $entityManager->flush();
 
@@ -81,7 +81,7 @@ class ClientController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+            $this->doctrine->flush();
 
             return $this->redirectToRoute('client_index');
         }
@@ -96,7 +96,7 @@ class ClientController extends AbstractController
     public function delete(Request $request, Client $client): Response
     {
         if ($this->isCsrfTokenValid('delete'.$client->getId(), $request->request->get('_token'))) {
-            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager = $this->doctrine;
             $entityManager->remove($client);
             $entityManager->flush();
         }

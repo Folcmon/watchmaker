@@ -12,7 +12,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 /**
  * @IsGranted("ROLE_USER")
  */
-class DashboardController extends AbstractController
+class DashboardController extends BaseController
 {
     #[Route('/dashboard', name: 'dashboard')]
     public function index(RealisedServiceRepository $realisedServiceRepository, ClientRepository $clientRepository): Response

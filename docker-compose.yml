@@ -1,0 +1,16 @@
+version: '3'
+
+services:
+###> doctrine/doctrine-bundle ###
+  database:
+    image: "mariadb:latest"
+    environment:
+      MARIADB_ROOT_PASSWORD: 1234
+    volumes:
+      - db-data:/var/lib/mysql:rw
+    ports:
+      - "3306:3306"
+volumes:
+###> doctrine/doctrine-bundle ###
+  db-data:
+###< doctrine/doctrine-bundle ###

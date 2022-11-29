@@ -14,7 +14,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
  * @IsGranted("ROLE_USER")
  */
 #[Route('/storage')]
-class StorageController extends AbstractController
+class StorageController extends BaseController
 {
     #[Route('/', name: 'storage_index', methods: ['GET'])]
     public function index(StorageRepository $storageRepository): Response
@@ -32,7 +32,7 @@ class StorageController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager = $this->doctrine;
             $entityManager->persist($storage);
             $entityManager->flush();
 
@@ -60,7 +60,7 @@ class StorageController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+            $this->doctrine->flush();
 
             return $this->redirectToRoute('storage_index');
         }
@@ -75,7 +75,7 @@ class StorageController extends AbstractController
     public function delete(Request $request, Storage $storage): Response
     {
         if ($this->isCsrfTokenValid('delete'.$storage->getId(), $request->request->get('_token'))) {
-            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager = $this->doctrine;
             $entityManager->remove($storage);
             $entityManager->flush();
         }

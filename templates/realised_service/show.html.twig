@@ -1,36 +1,36 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{"Usługa"|trans}}{% endblock %}
+{% block title %}{{ "Usługa"|trans }}{% endblock %}
 
 {% block leftBody %}
     {% include '/shared/leftSidebar.html.twig' %}
 {% endblock %}
 
 {% block body %}
-    <h1>{{"Usługa"|trans}}</h1>
+    <h1>{{ "Usługa"|trans }}</h1>
 
     <table class="table table-striped ">
         <tbody>
-            <tr>
-                <th>{{ "Klient"|trans }}</th>
-                <td>{{ realised_service.client }}</td>
-            </tr>
-            <tr>
-                <th>{{ "Numer usługi"|trans }}</th>
-                <td>{{ realised_service.id }}</td>
-            </tr>
-            <tr>
-                <th>{{ "Opis"|trans }}</th>
-                <td>{{ realised_service.description }}</td>
-            </tr>
-            <tr>
-                <th>{{ "Utworzony"|trans }}</th>
-                <td>{{ realised_service.createdAt ? realised_service.createdAt|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
-            <tr>
-                <th>{{ "Zmodyfikowany" }}</th>
-                <td>{{ realised_service.updatedAt ? realised_service.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
+        <tr>
+            <th>{{ "Klient"|trans }}</th>
+            <td>{{ realised_service.client }}</td>
+        </tr>
+        <tr>
+            <th>{{ "Numer usługi"|trans }}</th>
+            <td>{{ realised_service.id }}</td>
+        </tr>
+        <tr>
+            <th>{{ "Opis"|trans }}</th>
+            <td>{{ realised_service.description }}</td>
+        </tr>
+        <tr>
+            <th>{{ "Utworzony"|trans }}</th>
+            <td>{{ realised_service.createdAt ? realised_service.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+        </tr>
+        <tr>
+            <th>{{ "Zmodyfikowany" }}</th>
+            <td>{{ realised_service.updatedAt ? realised_service.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
+        </tr>
         </tbody>
     </table>
     <div class="row mb-3">
@@ -38,6 +38,26 @@
             {% for attachment in realised_service.serviceAttachments %}
                 <img class="img-thumbnail" src="{{ asset("uploads/service_attachment/") }}{{ attachment.getPath }}">
             {% endfor %}
+        </div>
+    </div>
+    <div class="row mb-3">
+        <div class="col-xl-12">
+            <table class="table table-bordered">
+                <thead class="table-info">
+                <tr>
+                    <td>
+                        {{ "Użyte części"|trans }}
+                    </td>
+                </tr>
+                </thead>
+                {% for usedPart in realised_service.realisedServiceUsedItems %}
+                    <tr>
+                        <td>
+                            Nazwa: {{ usedPart.name }} Ilość: {{ usedPart.quantity }}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
         </div>
     </div>
 

@@ -4,9 +4,12 @@ namespace App\Controller;
 
 use App\Entity\Client;
 use App\Entity\RealisedService;
+use App\Entity\RealisedServiceUsedItem;
 use App\Entity\ServiceAttachment;
 use App\Form\RealisedServiceType;
 use App\Repository\RealisedServiceRepository;
+use App\Repository\RealisedServiceUsedItemRepository;
+use App\Repository\StorageRepository;
 use Knp\Component\Pager\PaginatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -20,13 +23,13 @@ use Symfony\Component\Routing\Annotation\Route;
  * @IsGranted("ROLE_USER")
  */
 #[Route('/realised_service')]
-class RealisedServiceController extends AbstractController
+class RealisedServiceController extends BaseController
 {
     #[Route('/', name: 'realised_service_index', methods: ['GET'])]
     public function index(Request $request, RealisedServiceRepository $realisedServiceRepository, PaginatorInterface $paginator): Response
     {
         $results = null;
-        $qb = $this->getDoctrine()->getManager()->createQueryBuilder();
+        $qb = $this->doctrine->createQueryBuilder();
 
         if (!$request->get('search')) {
             $results = $realisedServiceRepository->findAll();
@@ -50,22 +53,34 @@ class RealisedServiceController extends AbstractController
     }
 
     #[Route('/new', name: 'realised_service_new', methods: ['GET', 'POST'])]
-    public function new(Request $request): Response
+    public function new(Request $request, StorageRepository $storageRepository): Response
     {
+        $em = $this->doctrine;
         $realisedService = new RealisedService();
         $form = $this->createForm(RealisedServiceType::class, $realisedService);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $usedParts = $request->request->get('realised_service')['usedParts'];
+            foreach ($usedParts as $oneUsedPart) {
+                $usedPartStorageEntity = $storageRepository->find($oneUsedPart['usedPart']);
+                $usedPartStorageEntity->setQunatity($usedPartStorageEntity->getQunatity() - $oneUsedPart['quantity']);
+                $realisedServiceUsedItem = new RealisedServiceUsedItem();
+                $realisedServiceUsedItem->setName($usedPartStorageEntity->getName());
+                $realisedServiceUsedItem->setQuantity($oneUsedPart['quantity']);
+                $realisedServiceUsedItem->setPrice(0);// do zrobienia kalkulacja ceny feature na przyszłośc  cena albo 1 itemu bądz całkowita dla typu części  * ilosć
+                $em->persist($realisedServiceUsedItem);
+                $realisedService->addRealisedServiceUsedItem($realisedServiceUsedItem);
+            }
+            $em->flush();
 
             $files = $request->files->get('realised_service')['serviceAttachments'];
             if ($files != null) {
                 $uploadsDirectory = $this->getParameter('uploadsDirectory');
                 $this->uploadServiceAttachment($files, $realisedService, $uploadsDirectory);
             }
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($realisedService);
-            $entityManager->flush();
+            $em->persist($realisedService);
+            $em->flush();
 
             return $this->redirectToRoute('realised_service_index');
         }
@@ -85,12 +100,31 @@ class RealisedServiceController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'realised_service_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, RealisedService $realisedService): Response
+    public function edit(Request $request, RealisedService $realisedService, StorageRepository $storageRepository, RealisedServiceUsedItemRepository $realisedServiceUsedItemRepository): Response
     {
+        $em = $this->doctrine;
         $form = $this->createForm(RealisedServiceType::class, $realisedService);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
+            $usedParts = $request->request->get('realised_service')['usedParts'];
+            foreach ($realisedService->getRealisedServiceUsedItems() as $oldOneRealisedServiceUsedItem) {
+                $realisedService->removeRealisedServiceUsedItem($oldOneRealisedServiceUsedItem);
+            }
+            $em->flush();
+            foreach ($usedParts as $oneUsedPart) {
+                $usedPartStorageEntity = $storageRepository->find($oneUsedPart['usedPart']);
+                $usedPartStorageEntity->setQunatity($usedPartStorageEntity->getQunatity() - $oneUsedPart['quantity']);
+                $realisedServiceUsedItem = new RealisedServiceUsedItem();
+                $realisedServiceUsedItem->setName($usedPartStorageEntity->getName());
+                $realisedServiceUsedItem->setQuantity($oneUsedPart['quantity']);
+                $realisedServiceUsedItem->setPrice(0);// do zrobienia kalkulacja ceny feature na przyszłośc  cena albo 1 itemu bądz całkowita dla typu części  * ilosć
+                $em->persist($realisedServiceUsedItem);
+                $realisedService->addRealisedServiceUsedItem($realisedServiceUsedItem);
+            }
+            $em->flush();
+
             $uploadsDirectory = $this->getParameter('uploadsDirectory');
 
             $filesystem = new Filesystem();
@@ -98,15 +132,15 @@ class RealisedServiceController extends AbstractController
                 foreach ($realisedService->getServiceAttachments() as $attachment) {
                     $fileToRemove = $uploadsDirectory . DIRECTORY_SEPARATOR . ServiceAttachment::SERVICE_ATTACHMENT_STORE_FOLDER . DIRECTORY_SEPARATOR . $attachment->getPath();
                     $filesystem->remove($fileToRemove);
-                    $this->getDoctrine()->getManager()->remove($attachment);
+                    $this->doctrine->remove($attachment);
                 }
             }
-            $this->getDoctrine()->getManager()->flush();
+            $em->flush();
             $files = $request->files->get('realised_service')['serviceAttachments'];
             if ($files != null) {
                 $this->uploadServiceAttachment($files, $realisedService, $uploadsDirectory);
             }
-            $this->getDoctrine()->getManager()->flush();
+            $em->flush();
 
             return $this->redirectToRoute('realised_service_index');
         }
@@ -121,9 +155,9 @@ class RealisedServiceController extends AbstractController
     public function delete(Request $request, RealisedService $realisedService): Response
     {
         if ($this->isCsrfTokenValid('delete' . $realisedService->getId(), $request->request->get('_token'))) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->remove($realisedService);
-            $entityManager->flush();
+            $em = $this->doctrine;
+            $em->remove($realisedService);
+            $em->flush();
         }
 
         return $this->redirectToRoute('realised_service_index');
@@ -146,8 +180,8 @@ class RealisedServiceController extends AbstractController
                 $serviceAttachment = new ServiceAttachment();
                 $serviceAttachment->setPath($filename);
                 $serviceAttachment->setService($realisedService);
-                $this->getDoctrine()->getManager()->persist($serviceAttachment);
-                $this->getDoctrine()->getManager()->flush();
+                $this->doctrine->persist($serviceAttachment);
+                $this->doctrine->flush();
             }
         }
     }

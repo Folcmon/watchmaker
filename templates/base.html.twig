@@ -24,7 +24,7 @@
         <title>{% block title %}{{website}}{% endblock %}</title>
         {# Run `composer require symfony/webpack-encore-bundle`
            and uncomment the following Encore helpers to start using Symfony UX #}
-        {% block stylesheets %}
+        {% block head_scripts %}
             <!-- Favicon -->
             <link href="img/favicon.ico" rel="icon">
 
@@ -48,10 +48,7 @@
             ======================================================= -->
 
         {% endblock %}
-
-        {% block javascripts %}
             {#{{ encore_entry_script_tags('app') }}#}
-        {% endblock %}
     </head>
     <body>
 
@@ -167,7 +164,7 @@
             {% endblock %}
         </div>
 
-        {% block bodyJavascripts %}
+        {% block body_scripts %}
             <!-- Required JavaScript Libraries -->
             <script src="{{ asset('default/lib/jquery/jquery.min.js') }}"></script>
             <script src="{{ asset('default/lib/superfish/hoverIntent.js') }}"></script>

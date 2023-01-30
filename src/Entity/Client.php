@@ -6,35 +6,29 @@ use App\Repository\ClientRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Timestampable\Traits\TimestampableEntity;
 
-/**
- * @ORM\Entity(repositoryClass=ClientRepository::class)
- */
+#[ORM\Entity(repositoryClass: ClientRepository::class)]
 class Client
 {
-    use \Gedmo\Timestampable\Traits\TimestampableEntity; 
-    
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
+    use TimestampableEntity;
+
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
     private $id;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
+    #[ORM\Column(type: 'string', length: 255)]
     private $telephone;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
+    #[ORM\Column(type: 'string', length: 255)]
     private $email;
 
-    /**
-     * @ORM\OneToMany(targetEntity=RealisedService::class, mappedBy="client")
-     */
-    private $realisedServices;
+    #[ORM\Column(type: "string", length: 255, nullable: true)]
+    private string $name = '';
+
+    #[ORM\OneToMany(mappedBy: 'client', targetEntity: RealisedService::class)]
+    private Collection $realisedServices;
 
     public function __construct()
     {
@@ -71,6 +65,22 @@ class Client
     }
 
     /**
+     * @return string
+     */
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    /**
+     * @param string $name
+     */
+    public function setName(string $name): void
+    {
+        $this->name = $name;
+    }
+
+    /**
      * @return Collection|RealisedService[]
      */
     public function getRealisedServices(): Collection
@@ -80,7 +90,8 @@ class Client
 
     public function addRealisedService(RealisedService $realisedService): self
     {
-        if (!$this->realisedServices->contains($realisedService)) {
+        if (!$this->realisedServices->contains($realisedService))
+        {
             $this->realisedServices[] = $realisedService;
             $realisedService->setClient($this);
         }
@@ -90,17 +101,20 @@ class Client
 
     public function removeRealisedService(RealisedService $realisedService): self
     {
-        if ($this->realisedServices->removeElement($realisedService)) {
+        if ($this->realisedServices->removeElement($realisedService))
+        {
             // set the owning side to null (unless already changed)
-            if ($realisedService->getClient() === $this) {
+            if ($realisedService->getClient() === $this)
+            {
                 $realisedService->setClient(null);
             }
         }
 
         return $this;
     }
-    
-    public function __toString() {
-        return $this->email.' '.$this->telephone;
+
+    public function __toString()
+    {
+        return $this->email . ' ' . $this->telephone;
     }
 }

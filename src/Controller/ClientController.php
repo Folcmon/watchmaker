@@ -15,19 +15,20 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 /**
  * @IsGranted("ROLE_USER")
  */
-
-#[Route('/client')]
+#[Route('/clients')]
 class ClientController extends BaseController
 {
     #[Route('/', name: 'client_index', methods: ['GET'])]
-    public function index(Request $request,ClientRepository $clientRepository,PaginatorInterface $paginator): Response
+    public function index(Request $request, ClientRepository $clientRepository, PaginatorInterface $paginator): Response
     {
         $results = null;
         $qb = $this->doctrine->createQueryBuilder();
 
-        if (!$request->get('search')) {
+        if (!$request->get('search'))
+        {
             $results = $clientRepository->findAll();
-        } else {
+        } else
+        {
             $results = $clientRepository->createQueryBuilder('c_e')
                 ->where($qb->expr()->like('c_e.email', ':search'))
                 ->orWhere($qb->expr()->like('c_e.telephone', ':search'))
@@ -52,7 +53,8 @@ class ClientController extends BaseController
         $form = $this->createForm(ClientType::class, $client);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($form->isSubmitted() && $form->isValid())
+        {
             $entityManager = $this->doctrine;
             $entityManager->persist($client);
             $entityManager->flush();
@@ -80,7 +82,8 @@ class ClientController extends BaseController
         $form = $this->createForm(ClientType::class, $client);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($form->isSubmitted() && $form->isValid())
+        {
             $this->doctrine->flush();
 
             return $this->redirectToRoute('client_index');
@@ -95,7 +98,8 @@ class ClientController extends BaseController
     #[Route('/{id}', name: 'client_delete', methods: ['POST'])]
     public function delete(Request $request, Client $client): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$client->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $client->getId(), $request->request->get('_token')))
+        {
             $entityManager = $this->doctrine;
             $entityManager->remove($client);
             $entityManager->flush();

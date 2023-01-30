@@ -1,28 +1,69 @@
-<div class="sidebar-sticky">
-    <ul class="nav flex-column">
-        <li class="nav-item">
-            <a class="nav-link" href="{{ path('dashboard') }}">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-home"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
-                {{ "Ekran główny"|trans }} <span class="sr-only">(current)</span>
+<aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
+    <div class="app-brand demo">
+        <a href="{{ path('index') }}" class="app-brand-link">
+              <span class="app-brand-logo demo">
+                    <i class='bx bxs-key'></i>
+              </span>
+            <span class="app-brand-text demo menu-text fw-bolder ms-2">Serwis</span>
+        </a>
+
+        <a href="javascript:void(0);"
+           class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">
+            <i class="bx bx-chevron-left bx-sm align-middle"></i>
+        </a>
+    </div>
+
+    <div class="menu-inner-shadow"></div>
+
+    <ul class="menu-inner py-1">
+        <!-- Dashboard -->
+        <li class="menu-item active">
+            <a href="{{ path("dashboard") }}" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-home-circle"></i>
+                <div data-i18n="Analytics">{{ "Ekran główny"|trans }}</div>
             </a>
         </li>
-        <li class="nav-item">
-            <a class="nav-link" href="{{ path('client_index') }}">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-users"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
-                {{ "Klienci"|trans }}
+        <!-- Components -->
+        <li class="menu-header small text-uppercase"><span
+                    class="menu-header-text">{{ "Serwis"| trans }}</span></li>
+
+        <!-- Extended components -->
+        <li class="menu-item">
+            <a href="javascript:void(0)" class="menu-link menu-toggle">
+                <i class="menu-icon tf-icons bx bx-copy"></i>
+                <div data-i18n="Extended UI">Extended UI</div>
+            </a>
+            <ul class="menu-sub">
+                <li class="menu-item">
+                    <a href="extended-ui-perfect-scrollbar.html" class="menu-link">
+                        <div data-i18n="Perfect Scrollbar">Perfect scrollbar</div>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="extended-ui-text-divider.html" class="menu-link">
+                        <div data-i18n="Text Divider">Text Divider</div>
+                    </a>
+                </li>
+            </ul>
+        </li>
+
+        <li class="menu-item">
+            <a href="{{ path('client_index') }}" class="menu-link">
+                <i class='bx bxs-user-detail mx-2'></i>
+                <div>{{ "Klienci"| trans }}</div>
             </a>
         </li>
-        <li class="nav-item">
-            <a class="nav-link" href="{{ path('realised_service_index') }}">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path><polyline points="13 2 13 9 20 9"></polyline></svg>
-                {{ "Usługi"|trans }}
+        <li class="menu-item">
+            <a href="{{ path('realised_service_index') }}" class="menu-link">
+                <i class='bx bxs-extension mx-2'></i>
+                <div>{{ "Usługi"|trans }}</div>
             </a>
         </li>
-        <li class="nav-item">
-            <a class="nav-link" href="{{ path('storage_index') }}">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-shopping-cart"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
-                {{ "Magazyn"|trans }}
+        <li class="menu-item">
+            <a href="{{ path('storage_index') }}" class="menu-link">
+                <i class='bx bxs-store-alt mx-2'></i>
+                <div>{{ "Magazyn"| trans }}</div>
             </a>
         </li>
     </ul>
-</div>
+</aside>

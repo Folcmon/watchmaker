@@ -5,32 +5,22 @@ namespace App\Entity;
 use App\Repository\StorageRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity(repositoryClass=StorageRepository::class)
- */
+#[ORM\Entity(repositoryClass: StorageRepository::class)]
 class Storage
 {
     use \Gedmo\Timestampable\Traits\TimestampableEntity;
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
     private $id;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
+    #[ORM\Column(type: 'string', length: 255)]
     private $name;
 
-    /**
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Column(type: 'integer')]
     private $qunatity;
 
-    /**
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Column(type: 'integer')]
     private $alarmQuantity;
 
     public function getId(): ?int

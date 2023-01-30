@@ -7,44 +7,30 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity(repositoryClass=RealisedServiceRepository::class)
- */
+#[ORM\Entity(repositoryClass: RealisedServiceRepository::class)]
 class RealisedService
 {
     use \Gedmo\Timestampable\Traits\TimestampableEntity;
 
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
     private $id;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
+    #[ORM\Column(type: 'string', length: 255)]
     private $description;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Client::class, inversedBy="realisedServices")
-     * @ORM\JoinColumn(nullable=false)
-     */
+    #[ORM\ManyToOne(targetEntity: Client::class, inversedBy: 'realisedServices')]
+    #[ORM\JoinColumn(nullable: false)]
     private $client;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
+    #[ORM\Column(type: 'string', length: 255)]
     private $name;
 
-    /**
-     * @ORM\OneToMany(targetEntity=ServiceAttachment::class, mappedBy="service")
-     */
+    #[ORM\OneToMany(targetEntity: ServiceAttachment::class, mappedBy: 'service')]
     private Collection|array $serviceAttachments;
 
-    /**
-     * @ORM\OneToMany(targetEntity=RealisedServiceUsedItem::class, mappedBy="realisedService")
-     */
+    #[ORM\OneToMany(targetEntity: RealisedServiceUsedItem::class, mappedBy: 'realisedService')]
     private $realisedServiceUsedItems;
 
     public function __construct()

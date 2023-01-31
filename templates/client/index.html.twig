@@ -7,76 +7,83 @@
 {% endblock %}
 
 {% block body %}
-    <h1>
-        <div class="row">
-            <div class="col-xl-6">
-                {{ "Klienci"|trans }}
-            </div>
-            <div class="col-xl-6">
-                <a href="{{ path('client_new') }}" class="btn btn-primary btn-lg">{{ "Dodaj klienta"|trans }}</a>
-            </div>
-        </div>
-    </h1>
+    <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">
+           <a href="{{ path('client_index') }}">{{ "Klienci"| trans }}</a></h4>
 
     <div class="row">
-        <div class="col-xl-12">
-            <form method="get" class="form">
-                <div class="row">
-                    <div class="col-xl-12">
-                        <div class="form-group">
-                            <label class="label inline">{{ "Email użytkownika lub numer telefonu"|trans }}</label>
-                            <input type="text" name="search" class="form-control"
-                                   value="{{ app.request.query.get('search') }}">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row mb-4">
+                        <div class="col-xl-12">
+                            <form method="get" class="form">
+                                <div class="row mb-4">
+                                    <div class="col-xl-12">
+                                        <div class="form-group">
+                                            <label class="label inline">{{ "Email użytkownika lub numer telefonu"|trans }}</label>
+                                            <input type="text" name="search" class="form-control"
+                                                   value="{{ app.request.query.get('search') }}">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-xl-12">
+                                        <div class="form-group">
+                                            <a class="btn btn-danger"
+                                               href="{{ url('client_index') }}">{{ "Resetowanie wyników"|trans }}</a>
+                                            <input type="submit" value="{{ "Szukaj "|trans }}"
+                                                   class="btn btn-primary float-end">
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
                         </div>
                     </div>
-                    <div class="col-xl-12 text-right">
-                        <div class="form-group">
-                            <input type="submit" value="{{ "Szukaj "|trans }}" class="btn btn-primary">
-                            <a class="btn btn-danger"
-                               href="{{ url('client_index') }}">{{ "Resetowanie wyników"|trans }}</a>
+                    <div class="mb-4">
+                        <table class="table table-striped">
+                            <thead>
+                            <tr>
+                                <th>{{ "Numer klienta"|trans }}</th>
+                                <th>{{ "Telefon"|trans }}</th>
+                                <th>{{ "Adres email"|trans }}</th>
+                                <th>{{ "Utworzony"|trans }}</th>
+                                <th>{{ "Akcje"|trans }}</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for client in pagination %}
+                                <tr>
+                                    <td>{{ client.id }}</td>
+                                    <td>{{ client.telephone }}</td>
+                                    <td>{{ client.email }}</td>
+                                    <td>{{ client.createdAt ? client.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+                                    <td>
+                                        <a href="{{ path('client_show', {'id': client.id}) }}"
+                                           class="btn-success btn btn-sm">{{ "Wyświetl"|trans }}</a>
+                                        <a href="{{ path('client_edit', {'id': client.id}) }}"
+                                           class="btn-primary btn btn-sm">{{ "Edytuj"|trans }}</a>
+                                    </td>
+                                </tr>
+                            {% else %}
+                                <tr>
+                                    <td colspan="6">{{ "Brak klientów"|trans }}</td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            {{ knp_pagination_render(pagination) }}
                         </div>
                     </div>
                 </div>
-            </form>
-        </div>
-    </div>
-    <table class="table table-striped">
-        <thead>
-        <tr>
-            <th>{{ "Numer klienta"|trans }}</th>
-            <th>{{ "Telefon"|trans }}</th>
-            <th>{{ "Adres email"|trans }}</th>
-            <th>{{ "Utworzony"|trans }}</th>
-            <th>{{ "Zmodyfikowany"|trans }}</th>
-            <th>{{ "Akcje"|trans }}</th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for client in pagination %}
-            <tr>
-                <td>{{ client.id }}</td>
-                <td>{{ client.telephone }}</td>
-                <td>{{ client.email }}</td>
-                <td>{{ client.createdAt ? client.createdAt|date('Y-m-d H:i:s') : '' }}</td>
-                <td>{{ client.updatedAt ? client.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
-                <td>
-                    <a href="{{ path('client_show', {'id': client.id}) }}"
-                       class="btn-outline-primary btn btn-sm">{{ "Wyświetl"|trans }}</a>
-                    <a href="{{ path('client_edit', {'id': client.id}) }}"
-                       class="btn-outline-secondary btn btn-sm">{{ "Edytuj"|trans }}</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="6">{{ "Brak klientów"|trans }}</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-    <div class="row">
-        <div class="col-lg-12">
-            <div class="navigation text-center">
-                {{ knp_pagination_render(pagination) }}
+                <div class="card-footer">
+                    <div class="col-xl-12">
+                        <a href="{{ path('client_new') }}"
+                           class="btn btn-success float-end">{{ "Dodaj klienta"|trans }}</a>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

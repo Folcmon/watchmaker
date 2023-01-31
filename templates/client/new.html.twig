@@ -1,23 +1,28 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{"Dodawanie klienta"|trans}}{% endblock %}
+{% block title %}{{ "Klienci"|trans }} / {{ "Dodaj"| trans }}{% endblock %}
 
 {% block leftBody %}
     {% include '/shared/leftSidebar.html.twig' %}
 {% endblock %}
 
 {% block body %}
-    <h1>{{"Dodawanie klienta"|trans}}</h1>
+    <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">
+           <a href="{{ path('client_index') }}">{{ "Klienci"| trans }}</a> /</span> {{ "Dodaj" |trans }}</h4>
 
     <div class="row">
-        <div class="col-xl-12">
-            {{ include('client/_form.html.twig') }}
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-xl-12 text-right">
-            <a href="{{ path('client_index') }}"
-               class="btn btn-lg btn-primary">{{ "Powrót"|trans }}</a>
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    {{ include('client/_form.html.twig') }}
+                </div>
+                <div class="card-footer">
+                    <div class="col-xl-12">
+                        <a href="{{ path('client_index') }}"
+                           class="btn btn-warning float-end">{{ "Powrót"|trans }}</a>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 {% endblock %}

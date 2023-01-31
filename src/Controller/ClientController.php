@@ -37,9 +37,11 @@ class ClientController extends BaseController
 
         $pagination = $paginator->paginate(
             $results,
-            $request->query->getInt('page', 1),
-            25
+            $request->query->getInt('page', 1)
         );
+        $pagination->setCustomParameters([
+            'align' => 'center'
+        ]);
 
         return $this->render('client/index.html.twig', [
             'pagination' => $pagination,
@@ -52,9 +54,10 @@ class ClientController extends BaseController
         $client = new Client();
         $form = $this->createForm(ClientType::class, $client);
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid())
         {
+            $this->addFlash('notice', 'info');
+            $this->addFlash('error', 'error');
             $entityManager = $this->doctrine;
             $entityManager->persist($client);
             $entityManager->flush();

@@ -1,29 +1,30 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{"Edycja klienta"}}{% endblock %}
+{% block title %}{{ "Klienci"|trans }} / {{ "Edytuj"| trans }}{% endblock %}
 
 {% block leftBody %}
     {% include '/shared/leftSidebar.html.twig' %}
 {% endblock %}
 
 {% block body %}
-    <h1>{{"Edycja klienta"}}</h1>
-    
+    <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">
+           <a href="{{ path('client_index') }}">{{ "Klienci"| trans }}</a> /</span> {{ "Edytuj" |trans }}</h4>
+
     <div class="row">
-        <div class="col-xl-12">
-            {{ include('client/_form.html.twig', {'button_label': 'Zapisz'}) }}
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    {{ include('client/_form.html.twig') }}
+                </div>
+                <div class="card-footer">
+                    <div class="col-xl-12">
+                        <a href="{{ path('client_index') }}" class="btn btn-warning float-end">
+                            {{ "Powrót"|trans }}
+                        </a>
+                        {{ include('client/_delete_form.html.twig') }}
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-    <div class="row">
-        <div class="col-xl-12">
-            {{ include('client/_delete_form.html.twig') }}
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-xl-12 text-right">
-            <a href="{{ path('client_index') }}"
-               class="btn btn-lg btn-primary">{{ "Powrót"|trans }}</a>
-        </div>
-    </div>
-    
 {% endblock %}

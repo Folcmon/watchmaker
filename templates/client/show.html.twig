@@ -1,55 +1,59 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{"Klient"|trans}}{% endblock %}
+{% block title %}{{ "Klienci"|trans }}/ {{ client.email }}{% endblock %}
 
 {% block leftBody %}
     {% include '/shared/leftSidebar.html.twig' %}
 {% endblock %}
 
 {% block body %}
-    <h1>{{"Klient"|trans}}</h1>
+    <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">
+           <a href="{{ path('client_index') }}">{{ "Klienci"| trans }}</a> /</span> {{ client.email }}</h4>
 
-    <table class="table table-striped ">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ client.id }}</td>
-            </tr>
-            <tr>
-                <th>{{ "Telefon"|trans }}</th>
-                <td>{{ client.telephone }}</td>
-            </tr>
-            <tr>
-                <th>{{ "Adres email"|trans }}</th>
-                <td>{{ client.email }}</td>
-            </tr>
-            <tr>
-                <th>{{ "Utworzony"|trans }}</th>
-                <td>{{ client.createdAt ? client.createdAt|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
-            <tr>
-                <th>{{ "Zmodyfikowany" }}</th>
-                <td>{{ client.updatedAt ? client.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
-        </tbody>
-    </table>
+
     <div class="row">
-        <div class="col-xl-3">
-            <a href="{{ path('realised_service_show_by_client', {'id': client.id}) }}"
-               class="btn-primary btn btn-lg btn">{{ "Usługi"|trans }}</a>
-        </div>
-        <div class="col-xl-3">
-            <a href="{{ path('client_edit', {'id': client.id}) }}"
-               class="btn-primary btn btn-lg btn">{{ "Edycja"|trans }}</a>
-        </div>
-        <div class="col-lg-6">
-            {{ include('client/_delete_form.html.twig') }}
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-xl-12 text-right">
-            <a href="{{ path('client_index') }}"
-               class="btn btn-lg btn-primary">{{ "Powrót"|trans }}</a>
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row mb-4">
+                        <table class="table table-striped">
+                            <tbody>
+                            <tr>
+                                <th>{{ "Telefon"|trans }}</th>
+                                <td>{{ client.telephone }}</td>
+                            </tr>
+                            <tr>
+                                <th>{{ "Adres email"|trans }}</th>
+                                <td>{{ client.email }}</td>
+                            </tr>
+                            <tr>
+                                <th>{{ "Utworzony"|trans }}</th>
+                                <td>{{ client.createdAt ? client.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+                            </tr>
+                            <tr>
+                                <th>{{ "Zmodyfikowany" }}</th>
+                                <td>{{ client.updatedAt ? client.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <a href="{{ path('client_edit', {'id': client.id}) }}"
+                               class="btn btn-primary float-end">{{ "Edycja"|trans }}</a>
+                            <a href="{{ path('realised_service_show_by_client', {'id': client.id}) }}"
+                               class="btn btn-success float-end mx-2">{{ "Usługi"|trans }}</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer border-top">
+                    <div class="col-xl-12">
+                        <a href="{{ path('client_index') }}"
+                           class="btn btn-warning float-end">{{ "Powrót"|trans }}</a>
+                        {{ include('client/_delete_form.html.twig') }}
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 {% endblock %}

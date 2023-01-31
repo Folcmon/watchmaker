@@ -6,7 +6,6 @@ use App\Entity\Client;
 use App\Form\ClientType;
 use App\Repository\ClientRepository;
 use Knp\Component\Pager\PaginatorInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -21,7 +20,6 @@ class ClientController extends BaseController
     #[Route('/', name: 'client_index', methods: ['GET'])]
     public function index(Request $request, ClientRepository $clientRepository, PaginatorInterface $paginator): Response
     {
-        $results = null;
         $qb = $this->doctrine->createQueryBuilder();
 
         if (!$request->get('search'))

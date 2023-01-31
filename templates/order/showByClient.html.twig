@@ -34,15 +34,15 @@
             </tr>
         </thead>
         <tbody>
-        {% for realised_service in pagination %}
+        {% for order in pagination %}
             <tr>
-                <td>{{ realised_service.id }}</td>
-                <td>{{ realised_service.description }}</td>
-                <td>{{ realised_service.createdAt ? realised_service.createdAt|date('Y-m-d H:i:s') : '' }}</td>
-                <td>{{ realised_service.updatedAt ? realised_service.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ order.id }}</td>
+                <td>{{ order.description }}</td>
+                <td>{{ order.createdAt ? order.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ order.updatedAt ? order.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
                 <td>
-                    <a href="{{ path('realised_service_show', {'id': realised_service.id}) }}" class="btn-outline-primary btn btn-sm">{{ "Wyświetl"|trans }}</a>
-                    <a href="{{ path('realised_service_edit', {'id': realised_service.id}) }}" class="btn-outline-secondary btn btn-sm">{{ "Edytuj"|trans }}</a>
+                    <a href="{{ path('service_show', {'id': order.id}) }}" class="btn-outline-primary btn btn-sm">{{ "Wyświetl"|trans }}</a>
+                    <a href="{{ path('service_edit', {'id': order.id}) }}" class="btn-outline-secondary btn btn-sm">{{ "Edytuj"|trans }}</a>
                 </td>
             </tr>
         {% else %}
@@ -60,5 +60,5 @@
         </div>
     </div>
 
-    <a href="{{ path('realised_service_new') }}"class=" btn btn-primary btn-lg">{{ "Dodaj usługę"|trans }}</a>
+    <a href="{{ path('service_new') }}"class=" btn btn-primary btn-lg">{{ "Dodaj usługę"|trans }}</a>
 {% endblock %}

@@ -5,11 +5,12 @@ namespace App\Controller;
 use App\Entity\Storage;
 use App\Form\StorageType;
 use App\Repository\StorageRepository;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+
 /**
  * @IsGranted("ROLE_USER")
  */
@@ -17,10 +18,16 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 class StorageController extends BaseController
 {
     #[Route('/', name: 'storage_index', methods: ['GET'])]
-    public function index(StorageRepository $storageRepository): Response
+    public function index(StorageRepository $storageRepository, PaginatorInterface $paginator, Request $request): Response
     {
+        $pagination = $paginator->paginate(
+            $storageRepository->findAll(),
+            $request->query->getInt('page', 1),
+            25
+        );
         return $this->render('storage/index.html.twig', [
-            'storages' => $storageRepository->findAll(),
+
+            'pagination' => $pagination,
         ]);
     }
 
@@ -31,7 +38,8 @@ class StorageController extends BaseController
         $form = $this->createForm(StorageType::class, $storage);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($form->isSubmitted() && $form->isValid())
+        {
             $entityManager = $this->doctrine;
             $entityManager->persist($storage);
             $entityManager->flush();
@@ -59,7 +67,8 @@ class StorageController extends BaseController
         $form = $this->createForm(StorageType::class, $storage);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($form->isSubmitted() && $form->isValid())
+        {
             $this->doctrine->flush();
 
             return $this->redirectToRoute('storage_index');
@@ -74,7 +83,8 @@ class StorageController extends BaseController
     #[Route('/{id}', name: 'storage_delete', methods: ['POST'])]
     public function delete(Request $request, Storage $storage): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$storage->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $storage->getId(), $request->request->get('_token')))
+        {
             $entityManager = $this->doctrine;
             $entityManager->remove($storage);
             $entityManager->flush();

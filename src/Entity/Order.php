@@ -2,15 +2,17 @@
 
 namespace App\Entity;
 
-use App\Repository\RealisedServiceRepository;
+use App\Repository\OrderRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Timestampable\Traits\TimestampableEntity;
 
-#[ORM\Entity(repositoryClass: RealisedServiceRepository::class)]
-class RealisedService
+#[ORM\Entity(repositoryClass: OrderRepository::class)]
+#[ORM\Table(name: 'orders')]
+class Order
 {
-    use \Gedmo\Timestampable\Traits\TimestampableEntity;
+    use TimestampableEntity;
 
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -20,7 +22,7 @@ class RealisedService
     #[ORM\Column(type: 'string', length: 255)]
     private $description;
 
-    #[ORM\ManyToOne(targetEntity: Client::class, inversedBy: 'realisedServices')]
+    #[ORM\ManyToOne(targetEntity: Client::class, inversedBy: 'orders')]
     #[ORM\JoinColumn(nullable: false)]
     private $client;
 
@@ -90,7 +92,8 @@ class RealisedService
 
     public function addServiceAttachment(ServiceAttachment $serviceAttachment): self
     {
-        if (!$this->serviceAttachments->contains($serviceAttachment)) {
+        if (!$this->serviceAttachments->contains($serviceAttachment))
+        {
             $this->serviceAttachments[] = $serviceAttachment;
             $serviceAttachment->setService($this);
         }
@@ -100,9 +103,11 @@ class RealisedService
 
     public function removeServiceAttachment(ServiceAttachment $serviceAttachment): self
     {
-        if ($this->serviceAttachments->removeElement($serviceAttachment)) {
+        if ($this->serviceAttachments->removeElement($serviceAttachment))
+        {
             // set the owning side to null (unless already changed)
-            if ($serviceAttachment->getService() === $this) {
+            if ($serviceAttachment->getService() === $this)
+            {
                 $serviceAttachment->setService(null);
             }
         }
@@ -120,7 +125,8 @@ class RealisedService
 
     public function addRealisedServiceUsedItem(RealisedServiceUsedItem $realisedServiceUsedItem): self
     {
-        if (!$this->realisedServiceUsedItems->contains($realisedServiceUsedItem)) {
+        if (!$this->realisedServiceUsedItems->contains($realisedServiceUsedItem))
+        {
             $this->realisedServiceUsedItems[] = $realisedServiceUsedItem;
             $realisedServiceUsedItem->setRealisedService($this);
         }
@@ -130,9 +136,11 @@ class RealisedService
 
     public function removeRealisedServiceUsedItem(RealisedServiceUsedItem $realisedServiceUsedItem): self
     {
-        if ($this->realisedServiceUsedItems->removeElement($realisedServiceUsedItem)) {
+        if ($this->realisedServiceUsedItems->removeElement($realisedServiceUsedItem))
+        {
             // set the owning side to null (unless already changed)
-            if ($realisedServiceUsedItem->getRealisedService() === $this) {
+            if ($realisedServiceUsedItem->getRealisedService() === $this)
+            {
                 $realisedServiceUsedItem->setRealisedService(null);
             }
         }

@@ -24,7 +24,7 @@ class RealisedServiceUsedItem
     #[ORM\Column(type: 'integer')]
     private $price;
 
-    #[ORM\ManyToOne(targetEntity: RealisedService::class, inversedBy: 'realisedServiceUsedItems')]
+    #[ORM\ManyToOne(targetEntity: Order::class, inversedBy: 'realisedServiceUsedItems')]
     private $realisedService;
 
     public function getId(): ?int
@@ -68,12 +68,12 @@ class RealisedServiceUsedItem
         return $this;
     }
 
-    public function getRealisedService(): ?RealisedService
+    public function getRealisedService(): ?Order
     {
         return $this->realisedService;
     }
 
-    public function setRealisedService(?RealisedService $realisedService): self
+    public function setRealisedService(?Order $realisedService): self
     {
         $this->realisedService = $realisedService;
 

@@ -13,29 +13,29 @@
         <tbody>
         <tr>
             <th>{{ "Klient"|trans }}</th>
-            <td>{{ realised_service.client }}</td>
+            <td>{{ order.client }}</td>
         </tr>
         <tr>
             <th>{{ "Numer usługi"|trans }}</th>
-            <td>{{ realised_service.id }}</td>
+            <td>{{ order.id }}</td>
         </tr>
         <tr>
             <th>{{ "Opis"|trans }}</th>
-            <td>{{ realised_service.description }}</td>
+            <td>{{ order.description }}</td>
         </tr>
         <tr>
             <th>{{ "Utworzony"|trans }}</th>
-            <td>{{ realised_service.createdAt ? realised_service.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+            <td>{{ order.createdAt ? order.createdAt|date('Y-m-d H:i:s') : '' }}</td>
         </tr>
         <tr>
             <th>{{ "Zmodyfikowany" }}</th>
-            <td>{{ realised_service.updatedAt ? realised_service.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
+            <td>{{ order.updatedAt ? order.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
         </tr>
         </tbody>
     </table>
     <div class="row mb-3">
         <div class="col-xl-12">
-            {% for attachment in realised_service.serviceAttachments %}
+            {% for attachment in order.serviceAttachments %}
                 <img class="img-thumbnail" src="{{ asset("uploads/service_attachment/") }}{{ attachment.getPath }}">
             {% endfor %}
         </div>
@@ -50,7 +50,7 @@
                     </td>
                 </tr>
                 </thead>
-                {% for usedPart in realised_service.realisedServiceUsedItems %}
+                {% for usedPart in order.realisedServiceUsedItems %}
                     <tr>
                         <td>
                             Nazwa: {{ usedPart.name }} Ilość: {{ usedPart.quantity }}
@@ -63,16 +63,16 @@
 
     <div class="row">
         <div class="col-xl-6">
-            <a href="{{ path('realised_service_edit', {'id': realised_service.id}) }}"
+            <a href="{{ path('order_edit', {'id': order.id}) }}"
                class="btn-primary btn btn-lg btn">{{ "Edycja"|trans }}</a>
         </div>
         <div class="col-lg-6">
-            {{ include('realised_service/_delete_form.html.twig') }}
+            {{ include('order/_delete_form.html.twig') }}
         </div>
     </div>
     <div class="row">
         <div class="col-xl-12 text-right">
-            <a href="{{ path('realised_service_index') }}"
+            <a href="{{ path('order_index') }}"
                class="btn btn-lg btn-primary">{{ "Powrót"|trans }}</a>
         </div>
     </div>

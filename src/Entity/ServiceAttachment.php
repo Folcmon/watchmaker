@@ -19,7 +19,7 @@ class ServiceAttachment
     #[ORM\Column(type: 'string', length: 255)]
     private $path;
 
-    #[ORM\ManyToOne(targetEntity: RealisedService::class, inversedBy: 'serviceAttachments')]
+    #[ORM\ManyToOne(targetEntity: Order::class, inversedBy: 'serviceAttachments')]
     private $service;
 
     public function getId(): ?int
@@ -39,12 +39,12 @@ class ServiceAttachment
         return $this;
     }
 
-    public function getService(): ?RealisedService
+    public function getService(): ?Order
     {
         return $this->service;
     }
 
-    public function setService(?RealisedService $service): self
+    public function setService(?Order $service): self
     {
         $this->service = $service;
 

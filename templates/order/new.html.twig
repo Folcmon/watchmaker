@@ -1,0 +1,28 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ "Zlecenia"|trans }} / {{ "Dodaj"| trans }}{% endblock %}
+
+{% block leftBody %}
+    {% include '/shared/leftSidebar.html.twig' %}
+{% endblock %}
+
+{% block body %}
+    <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">
+           <a href="{{ path('order_index') }}">{{ "Zlecenia"| trans }}</a> /</span> {{ "Dodaj" |trans }}</h4>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    {{ include('order/_form.html.twig') }}
+                </div>
+                <div class="card-footer border-top">
+                    <div class="col-xl-12">
+                        <a href="{{ path('order_index') }}"
+                           class="btn btn-warning float-end">{{ "Powrót"|trans }}</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

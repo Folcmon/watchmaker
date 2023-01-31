@@ -67,7 +67,7 @@ LOCK TABLES `doctrine_migration_versions` WRITE;
 UNLOCK TABLES;
 
 --
--- Table structure for table `realised_service`
+-- Table structure for table `order`
 --
 
 DROP TABLE IF EXISTS `realised_service`;
@@ -87,7 +87,7 @@ CREATE TABLE `realised_service` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `realised_service`
+-- Dumping data for table `order`
 --
 
 LOCK TABLES `realised_service` WRITE;

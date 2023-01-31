@@ -27,12 +27,12 @@ class Client
     #[ORM\Column(type: "string", length: 255, nullable: true)]
     private string $name = '';
 
-    #[ORM\OneToMany(mappedBy: 'client', targetEntity: RealisedService::class)]
-    private Collection $realisedServices;
+    #[ORM\OneToMany(mappedBy: 'client', targetEntity: Order::class)]
+    private Collection $orders;
 
     public function __construct()
     {
-        $this->realisedServices = new ArrayCollection();
+        $this->orders = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -81,39 +81,37 @@ class Client
     }
 
     /**
-     * @return Collection|RealisedService[]
+     * @return Collection<Order>
      */
-    public function getRealisedServices(): Collection
+    public function getOrders(): Collection
     {
-        return $this->realisedServices;
+        return $this->orders;
     }
 
-    public function addRealisedService(RealisedService $realisedService): self
+    public function addOrders(Order $orders): self
     {
-        if (!$this->realisedServices->contains($realisedService))
+        if (!$this->orders->contains($orders))
         {
-            $this->realisedServices[] = $realisedService;
-            $realisedService->setClient($this);
+            $this->orders[] = $orders;
+            $orders->setClient($this);
         }
 
         return $this;
     }
 
-    public function removeRealisedService(RealisedService $realisedService): self
+    public function removeOrders(Order $orders): void
     {
-        if ($this->realisedServices->removeElement($realisedService))
+        if ($this->orders->removeElement($orders))
         {
             // set the owning side to null (unless already changed)
-            if ($realisedService->getClient() === $this)
+            if ($orders->getClient() === $this)
             {
-                $realisedService->setClient(null);
+                $orders->setClient(null);
             }
         }
-
-        return $this;
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         return $this->email . ' ' . $this->telephone;
     }

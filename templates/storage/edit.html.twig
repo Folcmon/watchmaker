@@ -3,22 +3,22 @@
 {% block title %}{{ "Edycja przedmiotu"|trans }}{% endblock %}
 
 {% block body %}
-    <h1>{{ "Edycja przedmiotu"|trans }}</h1>
+    <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">
+           <a href="{{ path('storage_index') }}">{{ "Magazyn"| trans }}</a> /</span> {{ storage.name }}</h4>
 
     <div class="row">
-        <div class="col-xl-12">
-            {{ include('storage/_form.html.twig', {'button_label': 'Zapisz'}) }}
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-xl-12">
-            {{ include('storage/_delete_form.html.twig') }}
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-xl-12 text-right">
-            <a href="{{ path('storage_index') }}"
-               class="btn btn-lg btn-primary">{{ "Powrót"|trans }}</a>
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    {{ include('storage/_form.html.twig') }}
+                </div>
+                <div class="card-footer border-top">
+                    <div class="col-xl-12">
+                        <a href="{{ path('storage_index') }}"
+                           class="btn btn-warning float-end">{{ "Powrót"|trans }}</a>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 

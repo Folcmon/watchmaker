@@ -9,19 +9,29 @@ use Doctrine\ORM\Mapping as ORM;
 class Storage
 {
     use \Gedmo\Timestampable\Traits\TimestampableEntity;
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
     private $id;
 
     #[ORM\Column(type: 'string', length: 255)]
-    private $name;
+    private ?string $name;
 
     #[ORM\Column(type: 'integer')]
-    private $qunatity;
+    private ?int $qunatity;
 
     #[ORM\Column(type: 'integer')]
-    private $alarmQuantity;
+    private ?int $alarmQuantity;
+
+    #[ORM\Column(type: 'integer')]
+    private int $price = 0;
+
+    #[ORM\Column(type: 'decimal')]
+    private float $vat = 0.0;
+
+    #[ORM\Column(type: 'decimal')]
+    private float $margin = 0.0;
 
     public function getId(): ?int
     {
@@ -62,6 +72,54 @@ class Storage
         $this->alarmQuantity = $alarmQuantity;
 
         return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPrice(): float
+    {
+        return $this->price / 1000;
+    }
+
+    /**
+     * @param mixed $price
+     */
+    public function setPrice(float $price): void
+    {
+        $this->price = $price * 1000;
+    }
+
+    /**
+     * @return int
+     */
+    public function getVat(): float
+    {
+        return $this->vat;
+    }
+
+    /**
+     * @param float $vat
+     */
+    public function setVat(float $vat): void
+    {
+        $this->vat = $vat;
+    }
+
+    /**
+     * @return float
+     */
+    public function getMargin(): float
+    {
+        return $this->margin;
+    }
+
+    /**
+     * @param float $margin
+     */
+    public function setMargin(float $margin): void
+    {
+        $this->margin = $margin;
     }
 
     public function __toString()

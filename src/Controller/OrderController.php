@@ -98,7 +98,7 @@ class OrderController extends BaseController
     #[Route('/{id}', name: 'order_show', methods: ['GET'])]
     public function show(Order $realisedOrder): Response
     {
-        return $this->render('realised_order/show.html.twig', [
+        return $this->render('order/show.html.twig', [
             'realised_order' => $realisedOrder,
         ]);
     }
@@ -152,16 +152,16 @@ class OrderController extends BaseController
             }
             $em->flush();
 
-            return $this->redirectToRoute('realised_order_index');
+            return $this->redirectToRoute('order_index');
         }
 
-        return $this->render('realised_order/edit.html.twig', [
+        return $this->render('order/edit.html.twig', [
             'realised_order' => $realisedOrder,
             'form' => $form->createView(),
         ]);
     }
 
-    #[Route('/{id}', name: 'realised_order_delete', methods: ['POST'])]
+    #[Route('/{id}', name: 'order_delete', methods: ['POST'])]
     public function delete(Request $request, Order $realisedOrder): Response
     {
         if ($this->isCsrfTokenValid('delete' . $realisedOrder->getId(), $request->request->get('_token')))
@@ -171,7 +171,7 @@ class OrderController extends BaseController
             $em->flush();
         }
 
-        return $this->redirectToRoute('realised_order_index');
+        return $this->redirectToRoute('order_index');
     }
 
     private function uploadOrderAttachment($files, $realisedOrder, $uploadsDirectory)
@@ -211,7 +211,7 @@ class OrderController extends BaseController
             25
         );
 
-        return $this->render('realised_order/showByClient.html.twig', [
+        return $this->render('order/showByClient.html.twig', [
             'pagination' => $pagination,
             'realised_orders' => $realisedOrders,
             'client' => $client

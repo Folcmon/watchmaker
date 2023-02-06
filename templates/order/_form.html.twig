@@ -1,5 +1,5 @@
 {{ form_start(form) }}
-<div class="form-group">
+<div class="form-group mb-4">
     <label class="col-form-label">
         {{ "Nazwa usługi"|trans }}
     </label>
@@ -8,7 +8,7 @@
     </div>
     {{ form_widget(form.name, {'attr':{'class':'form-control'}}) }}
 </div>
-<div class="form-group">
+<div class="form-group mb-4">
     <label class="col-form-label">
         {{ "Opis usługi"|trans }}
     </label>
@@ -17,7 +17,7 @@
     </div>
     {{ form_widget(form.description, {'attr':{'class':'form-control'}}) }}
 </div>
-<div class="form-group">
+<div class="form-group mb-4">
     <label class="col-form-label">
         {{ "Załączniki"|trans }}
     </label>
@@ -26,7 +26,7 @@
     </div>
     {{ form_widget(form.serviceAttachments, {'attr':{'class':'form-control'}}) }}
 </div>
-<div class="form-group">
+<div class="form-group mb-4">
     <label class="col-form-label">
         {{ "Klient"|trans }}
     </label>
@@ -36,7 +36,7 @@
     {{ form_widget(form.client, {'attr':{'class':'form-control'}}) }}
 </div>
 
-<div class="form-group">
+<div class="form-group mb-4">
     <label class="col-form-label h2">
         {{ "Użyte części"|trans }}
     </label>
@@ -44,7 +44,7 @@
         {{ form_errors(form.usedParts) }}
     </div>
 
-    <div class="row mb-3">
+    <div class="row mb-4">
         <div class="col-md-12">
             <span class="btn btn-success" id="used-part-addition-button">{{ "Dodaj użytą część"|trans }}</span>
         </div>
@@ -54,7 +54,7 @@
     </div>
 </div>
 
-<div class="form-group">
-    <button class="btn btn-primary btn-lg">{{ "Zapisz"|trans }}</button>
+<div class="form-group mb-4">
+    <button class="btn btn-primary float-end">{{ "Zapisz"|trans }}</button>
 </div>
 {{ form_end(form) }}

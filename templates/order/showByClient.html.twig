@@ -1,64 +1,78 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{"Usługi"|trans}}{% endblock %}
+{% block title %}{{ "Zlecenia"|trans }}{% endblock %}
 
 {% block leftBody %}
     {% include '/shared/leftSidebar.html.twig' %}
 {% endblock %}
 
 {% block body %}
-    <h1>{{"Usługi"|trans}}</h1>
+    <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">
+           <a href="{{ path('order_index') }}">{{ "Zlecenia"| trans }}</a>
+        </span> {{ client.email }}
+    </h4>
 
-    <table class="table table-striped">
-        <tr class="table-info">
-            <th colspan="6">{{"Usługi realizowane dla"|trans}} {{ client }}</th>
-        </tr>
-        <tr>
-            <th>
-                <div class="row mb-2">
-                    <div class="col-lg-12 text-right">
-                        {{ "Wszystkich"|trans }}
-                        <div class="badge badge-primary">
-                            {{ pagination.getTotalItemCount }}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="mb-4">
+                        <table class="table table-striped">
+                            <tr>
+                                <th colspan="5">
+                                    <div class="row mb-2">
+                                        <div class="col-lg-12 text-right">
+                                            {{ "Wszystkich"|trans }}
+                                            <div class="badge badge-primary">
+                                                {{ pagination.getTotalItemCount | default(0) }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </th>
+                            </tr>
+                            <tr>
+                                <th>{{ "Numer usługi"|trans }}</th>
+                                <th>{{ "Opis usługi"|trans }}</th>
+                                <th>{{ "Utworzony"|trans }}</th>
+                                <th>{{ "Zmodyfikowany"|trans }}</th>
+                                <th>{{ "Akcje"|trans }}</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for order in pagination %}
+                                <tr>
+                                    <td>{{ order.id }}</td>
+                                    <td>{{ order.description }}</td>
+                                    <td>{{ order.createdAt ? order.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+                                    <td>{{ order.updatedAt ? order.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
+                                    <td>
+                                        <a href="{{ path('order_show', {'id': order.id}) }}"
+                                           class="btn-secondary btn btn-sm">{{ "Wyświetl"|trans }}</a>
+                                        <a href="{{ path('order_edit', {'id': order.id}) }}"
+                                           class="btn-primary btn btn-sm">{{ "Edytuj"|trans }}</a>
+                                    </td>
+                                </tr>
+                            {% else %}
+                                <tr>
+                                    <td colspan="6">{{ "Brak zleceń"|trans }}</td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            {{ knp_pagination_render(pagination) }}
                         </div>
                     </div>
                 </div>
-            </th>
-        </tr>
-            <tr>
-                <th>{{ "Numer usługi"|trans }}</th>
-                <th>{{ "Opis usługi"|trans }}</th>
-                <th>{{ "Utworzony"|trans }}</th>
-                <th>{{ "Zmodyfikowany"|trans }}</th>
-                <th>{{ "Akcje"|trans }}</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for order in pagination %}
-            <tr>
-                <td>{{ order.id }}</td>
-                <td>{{ order.description }}</td>
-                <td>{{ order.createdAt ? order.createdAt|date('Y-m-d H:i:s') : '' }}</td>
-                <td>{{ order.updatedAt ? order.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
-                <td>
-                    <a href="{{ path('service_show', {'id': order.id}) }}" class="btn-outline-primary btn btn-sm">{{ "Wyświetl"|trans }}</a>
-                    <a href="{{ path('service_edit', {'id': order.id}) }}" class="btn-outline-secondary btn btn-sm">{{ "Edytuj"|trans }}</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="6">{{ "Brak usług"|trans }}</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-    <div class="row">
-        <div class="col-lg-12">
-            <div class="navigation text-center">
-                {{ knp_pagination_render(pagination) }}
+                <div class="card-footer border-top">
+                    <div class="col-xl-12">
+                        <a href="{{ path('order_new') }}"
+                           class="btn btn-success float-end">{{ "Dodaj zlecenie"|trans }}</a>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-
-    <a href="{{ path('service_new') }}"class=" btn btn-primary btn-lg">{{ "Dodaj usługę"|trans }}</a>
 {% endblock %}

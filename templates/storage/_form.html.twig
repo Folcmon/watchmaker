@@ -1,5 +1,5 @@
 {{ form_start(form) }}
-<div class="form-group">
+<div class="form-group mb-4">
     <label class="col-form-label">
         {{ "Nazwa"|trans }}
     </label>
@@ -8,7 +8,7 @@
     </div>
     {{ form_widget(form.name, {'attr':{'class':'form-control'}}) }}
 </div>
-<div class="form-group">
+<div class="form-group mb-4">
     <label class="col-form-label">
         {{ "Ilość"|trans }}
     </label>
@@ -17,7 +17,7 @@
     </div>
     {{ form_widget(form.qunatity, {'attr':{'class':'form-control'}}) }}
 </div>
-<div class="form-group">
+<div class="form-group mb-4">
     <label class="col-form-label">
         {{ "Ilość alarmowa"|trans }}
     </label>
@@ -26,7 +26,7 @@
     </div>
     {{ form_widget(form.alarmQuantity, {'attr':{'class':'form-control'}}) }}
 </div>
-<div class="form-group">
-    <button class="btn btn-primary btn-lg">{{ "Zapisz"|trans }}</button>
+<div class="form-group mb-4">
+    <button class="btn btn-primary float-end">{{ "Zapisz"|trans }}</button>
 </div>
 {{ form_end(form) }}

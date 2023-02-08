@@ -22,9 +22,11 @@ class StorageController extends BaseController
     {
         $pagination = $paginator->paginate(
             $storageRepository->findAll(),
-            $request->query->getInt('page', 1),
-            25
+            $request->query->getInt('page', 1)
         );
+        $pagination->setCustomParameters([
+            'align' => 'center'
+        ]);
         return $this->render('storage/index.html.twig', [
 
             'pagination' => $pagination,

@@ -44,9 +44,11 @@ class OrderController extends BaseController
 
         $pagination = $paginator->paginate(
             $results,
-            $request->query->getInt('page', 1),
-            25
+            $request->query->getInt('page', 1)
         );
+        $pagination->setCustomParameters([
+            'align' => 'center'
+        ]);
 
         return $this->render('order/index.html.twig', [
             'pagination' => $pagination,

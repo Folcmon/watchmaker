@@ -1,4 +1,23 @@
 {{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button class="btn">{{ button_label|default('Save') }}</button>
+<div class="form-group mb-4">
+    <label class="col-form-label">
+        {{ "Nazwa stawki VAT"|trans }}
+    </label>
+    <div class="">
+        {{ form_errors(form.rateName) }}
+    </div>
+    {{ form_widget(form.rateName, {'attr':{'class':'form-control'}}) }}
+</div>
+<div class="form-group mb-4">
+    <label class="col-form-label">
+        {{ "Stawka VAT w procentach "|trans }}
+    </label>
+    <div class="">
+        {{ form_errors(form.rateValue) }}
+    </div>
+    {{ form_widget(form.rateValue, {'attr':{'class':'form-control'}}) }}
+</div>
+<div class="form-group mb-4">
+    <button class="btn btn-primary float-end">{{ "Zapisz"|trans }}</button>
+</div>
 {{ form_end(form) }}

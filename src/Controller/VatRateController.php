@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\VatRate;
 use App\Form\VatRateType;
 use App\Repository\VatRateRepository;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -14,10 +15,19 @@ use Symfony\Component\Routing\Annotation\Route;
 class VatRateController extends AbstractController
 {
     #[Route('/', name: 'app_vat_rate_index', methods: ['GET'])]
-    public function index(VatRateRepository $vatRateRepository): Response
+    public function index(VatRateRepository $vatRateRepository, Request $request, PaginatorInterface $paginator): Response
     {
+        $results = $vatRateRepository->findAll();
+        $pagination = $paginator->paginate(
+            $results,
+            $request->query->getInt('page', 1)
+        );
+        $pagination->setCustomParameters([
+            'align' => 'center'
+        ]);
+
         return $this->render('vat_rate/index.html.twig', [
-            'vat_rates' => $vatRateRepository->findAll(),
+            'pagination' => $pagination,
         ]);
     }
 
@@ -28,7 +38,8 @@ class VatRateController extends AbstractController
         $form = $this->createForm(VatRateType::class, $vatRate);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($form->isSubmitted() && $form->isValid())
+        {
             $vatRateRepository->save($vatRate, true);
 
             return $this->redirectToRoute('app_vat_rate_index', [], Response::HTTP_SEE_OTHER);
@@ -54,7 +65,8 @@ class VatRateController extends AbstractController
         $form = $this->createForm(VatRateType::class, $vatRate);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($form->isSubmitted() && $form->isValid())
+        {
             $vatRateRepository->save($vatRate, true);
 
             return $this->redirectToRoute('app_vat_rate_index', [], Response::HTTP_SEE_OTHER);
@@ -69,7 +81,8 @@ class VatRateController extends AbstractController
     #[Route('/{id}', name: 'app_vat_rate_delete', methods: ['POST'])]
     public function delete(Request $request, VatRate $vatRate, VatRateRepository $vatRateRepository): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$vatRate->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $vatRate->getId(), $request->request->get('_token')))
+        {
             $vatRateRepository->remove($vatRate, true);
         }
 

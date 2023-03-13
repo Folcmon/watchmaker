@@ -7,39 +7,264 @@
 {% endblock %}
 
 {% block body %}
-    <h1>{{ "Panel zarządzania"|trans }}</h1>
     <div class="row">
         <div class="col-md-3">
-            <div class="card bg-primary mb-3" style="max-width: 18rem;">
+            <div class="card mb-3">
                 <div class="card-header mb-3">{{ "Wszystkie zrealizowane usługi"|trans }}</div>
                 <div class="card-body">
-                    <h2 class="card-title text-center mb-3">{{ allRealisedServices }}</h2>
+                    <h2 class="card-title text-center text-primary mb-3">{{ allRealisedServices }}</h2>
                 </div>
             </div>
         </div>
         <div class="col-md-3">
-            <div class="card bg-primary mb-3" style="max-width: 18rem;">
-                <div class="card-header">{{ "Usługi zrealizowane w tym miesiącu"|trans }}</div>
+            <div class="card mb-3">
+                <div class="card-header mb-3">{{ "Usługi zrealizowane w tym miesiącu"|trans }}</div>
                 <div class="card-body">
-                    <h2 class="card-title text-center mb-3">{{ thisMonthRealisedServices|length }}</h2>
+                    <h2 class="card-title text-center text-primary mb-3">{{ thisMonthRealisedServices|length }}</h2>
                 </div>
             </div>
         </div>
         <div class="col-md-3">
-            <div class="card bg-primary mb-3" style="max-width: 18rem;">
-                <div class="card-header mb-3">{{ "Zarejestrowani klienci"|trans }}</div>
+            <div class="card mb-3">
+                <div class="card-header text-center mb-3">{{ "Zarejestrowani klienci"|trans }}</div>
                 <div class="card-body">
-                    <h2 class="card-title text-center mb-3">{{ numOfClients }}</h2>
+                    <h2 class="card-title text-center text-primary mb-3">{{ numOfClients }}</h2>
                 </div>
             </div>
         </div>
         <div class="col-md-3">
-            <div class="card bg-primary mb-3" style="max-width: 18rem;">
-                <div class="card-header mb-3">{{ "Nowi klienci w tym miesiącu"|trans }}</div>
+            <div class="card mb-3">
+                <div class="card-header text-center mb-3">{{ "Nowi klienci w tym miesiącu"|trans }}</div>
                 <div class="card-body">
-                    <h2 class="card-title text-center mb-3">{{ numOfNewClients|length }}</h2>
+                    <h2 class="card-title text-center text-primary mb-3">{{ numOfNewClients|length }}</h2>
                 </div>
             </div>
         </div>
     </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card mb-3">
+                <div class="card-header mb-3">{{ "Zrealizowane usługi"|trans }} {{ "now"|date('Y') }}</div>
+                <div class="card-body">
+                    <div id="yearNumOfServices"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card mb-3">
+                <div class="card-header mb-3">{{ "Wartość usług"|trans }} {{ "now"|date('Y') }}</div>
+                <div class="card-body">
+                    <div id="yearValueOfServices"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block body_scripts %}
+    {{ parent() }}
+    <script>
+        // Income Chart - Area chart
+        // --------------------------------------------------------------------
+        let cardColor, headingColor, axisColor, shadeColor, borderColor;
+        const incomeChartEl = document.querySelector('#yearNumOfServices'),
+            incomeChartConfigValue = {
+                series: [
+                    {
+                        data: [24, 21, 30, 22, 42, 26, 35, 29, 24, 21, 30, 22, 22]
+                    }
+                ],
+                chart: {
+                    height: 215,
+                    parentHeightOffset: 0,
+                    parentWidthOffset: 0,
+                    toolbar: {
+                        show: false
+                    },
+                    type: 'area'
+                },
+                dataLabels: {
+                    enabled: false
+                },
+                stroke: {
+                    width: 2,
+                    curve: 'smooth'
+                },
+                legend: {
+                    show: false
+                },
+                markers: {
+                    size: 6,
+                    colors: 'transparent',
+                    strokeColors: 'transparent',
+                    strokeWidth: 4,
+                    discrete: [
+                        {
+                            fillColor: config.colors.white,
+                            seriesIndex: 0,
+                            dataPointIndex: 7,
+                            strokeColor: config.colors.primary,
+                            strokeWidth: 2,
+                            size: 6,
+                            radius: 8
+                        }
+                    ],
+                    hover: {
+                        size: 7
+                    }
+                },
+                colors: [config.colors.primary],
+                fill: {
+                    type: 'gradient',
+                    gradient: {
+                        shade: shadeColor,
+                        shadeIntensity: 0.6,
+                        opacityFrom: 0.5,
+                        opacityTo: 0.25,
+                        stops: [0, 95, 100]
+                    }
+                },
+                grid: {
+                    borderColor: borderColor,
+                    strokeDashArray: 3,
+                    padding: {
+                        top: -20,
+                        bottom: -8,
+                        left: -10,
+                        right: 8
+                    }
+                },
+                xaxis: {
+                    categories: ['', '{{ "Styczeń"|trans }}', '{{ "Luty"|trans }}', '{{ "Marzec"|trans }}', '{{ "Kwiecień"|trans }}', '{{ "Maj"|trans }}', '{{ "Czerwiec"|trans }}', '{{ "Lipiec"|trans }}', '{{ "Sierpień"|trans }}', '{{ "Wrzesień"|trans }}', '{{ "Paźdźiernik"|trans }}', '{{ "Listopad"|trans }}', '{{ "Grudzień"|trans }}', ''],
+                    axisBorder: {
+                        show: false
+                    },
+                    axisTicks: {
+                        show: false
+                    },
+                    labels: {
+                        show: true,
+                        style: {
+                            fontSize: '13px',
+                            colors: axisColor
+                        }
+                    }
+                },
+                yaxis: {
+                    labels: {
+                        show: false
+                    },
+                    min: 10,
+                    max: 50,
+                    tickAmount: 4
+                }
+            };
+        if (typeof incomeChartEl !== undefined && incomeChartEl !== null) {
+            const incomeChart = new ApexCharts(incomeChartEl, incomeChartConfigValue);
+            incomeChart.render();
+        }
+
+    </script>
+    <script>
+        // Income Chart - Area chart
+        // --------------------------------------------------------------------
+        const incomeChartElValue = document.querySelector('#yearValueOfServices'),
+            incomeChartConfig = {
+                series: [
+                    {
+                        data: [24, 21, 30, 22, 42, 26, 35, 29, 24, 21, 30, 22, 22]
+                    }
+                ],
+                chart: {
+                    height: 215,
+                    parentHeightOffset: 0,
+                    parentWidthOffset: 0,
+                    toolbar: {
+                        show: false
+                    },
+                    type: 'area'
+                },
+                dataLabels: {
+                    enabled: false
+                },
+                stroke: {
+                    width: 2,
+                    curve: 'smooth'
+                },
+                legend: {
+                    show: false
+                },
+                markers: {
+                    size: 6,
+                    colors: 'transparent',
+                    strokeColors: 'transparent',
+                    strokeWidth: 4,
+                    discrete: [
+                        {
+                            fillColor: config.colors.white,
+                            seriesIndex: 0,
+                            dataPointIndex: 7,
+                            strokeColor: config.colors.primary,
+                            strokeWidth: 2,
+                            size: 6,
+                            radius: 8
+                        }
+                    ],
+                    hover: {
+                        size: 7
+                    }
+                },
+                colors: [config.colors.primary],
+                fill: {
+                    type: 'gradient',
+                    gradient: {
+                        shade: shadeColor,
+                        shadeIntensity: 0.6,
+                        opacityFrom: 0.5,
+                        opacityTo: 0.25,
+                        stops: [0, 95, 100]
+                    }
+                },
+                grid: {
+                    borderColor: borderColor,
+                    strokeDashArray: 3,
+                    padding: {
+                        top: -20,
+                        bottom: -8,
+                        left: -10,
+                        right: 8
+                    }
+                },
+                xaxis: {
+                    categories: ['', '{{ "Styczeń"|trans }}', '{{ "Luty"|trans }}', '{{ "Marzec"|trans }}', '{{ "Kwiecień"|trans }}', '{{ "Maj"|trans }}', '{{ "Czerwiec"|trans }}', '{{ "Lipiec"|trans }}', '{{ "Sierpień"|trans }}', '{{ "Wrzesień"|trans }}', '{{ "Paźdźiernik"|trans }}', '{{ "Listopad"|trans }}', '{{ "Grudzień"|trans }}', ''],
+                    axisBorder: {
+                        show: false
+                    },
+                    axisTicks: {
+                        show: false
+                    },
+                    labels: {
+                        show: true,
+                        style: {
+                            fontSize: '13px',
+                            colors: axisColor
+                        }
+                    }
+                },
+                yaxis: {
+                    labels: {
+                        show: false
+                    },
+                    min: 10,
+                    max: 50,
+                    tickAmount: 4
+                }
+            };
+        if (typeof incomeChartElValue !== undefined && incomeChartElValue !== null) {
+            const incomeChartValue = new ApexCharts(incomeChartElValue, incomeChartConfig);
+            incomeChartValue.render();
+        }
+
+    </script>
 {% endblock %}

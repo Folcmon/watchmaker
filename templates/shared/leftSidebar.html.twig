@@ -1,12 +1,20 @@
 <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
     <div class="app-brand demo">
-        <a href="{{ path('index') }}" class="app-brand-link">
+        {% if is_granted('ROLE_USER') %}
+            <a href=" {{ path('dashboard') }}" class="app-brand-link">
               <span class="app-brand-logo demo">
                     <i class='bx bxs-key'></i>
               </span>
-            <span class="app-brand-text demo menu-text fw-bolder ms-2">Serwis</span>
-        </a>
-
+                <span class="app-brand-text demo menu-text fw-bolder ms-2">Serwis</span>
+            </a>
+        {% else %}
+            <a href=" {{ path('index') }}" class="app-brand-link">
+              <span class="app-brand-logo demo">
+                    <i class='bx bxs-key'></i>
+              </span>
+                <span class="app-brand-text demo menu-text fw-bolder ms-2">Serwis</span>
+            </a>
+        {% endif %}
         <a href="javascript:void(0);"
            class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">
             <i class="bx bx-chevron-left bx-sm align-middle"></i>

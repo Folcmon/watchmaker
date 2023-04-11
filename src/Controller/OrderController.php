@@ -4,16 +4,16 @@ namespace App\Controller;
 
 use App\Entity\Client;
 use App\Entity\Order;
-use App\Entity\OrderUsedItem;
-use App\Entity\OrderAttachment;
+use App\Entity\RealisedServiceUsedItem;
+use App\Entity\ServiceAttachment;
 use App\Form\OrderType;
 use App\Repository\OrderRepository;
-use App\Repository\OrderUsedItemRepository;
 use App\Repository\StorageRepository;
 use Knp\Component\Pager\PaginatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\HttpFoundation\FileBag;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -65,25 +65,12 @@ class OrderController extends BaseController
 
         if ($form->isSubmitted() && $form->isValid())
         {
-            $usedParts = $request->request->get('realised_order')['usedParts'];
-            foreach ($usedParts as $oneUsedPart)
+            $files = $request->files;
+            foreach ($files->getIterator() as $file)
             {
-                $usedPartStorageEntity = $storageRepository->find($oneUsedPart['usedPart']);
-                $usedPartStorageEntity->setQunatity($usedPartStorageEntity->getQunatity() - $oneUsedPart['quantity']);
-                $realisedOrderUsedItem = new OrderUsedItem();
-                $realisedOrderUsedItem->setName($usedPartStorageEntity->getName());
-                $realisedOrderUsedItem->setQuantity($oneUsedPart['quantity']);
-                $realisedOrderUsedItem->setPrice(0);// do zrobienia kalkulacja ceny feature na przyszłośc  cena albo 1 itemu bądz całkowita dla typu części  * ilosć
-                $em->persist($realisedOrderUsedItem);
-                $realisedOrder->addOrderUsedItem($realisedOrderUsedItem);
-            }
-            $em->flush();
-
-            $files = $request->files->get('realised_order')['orderAttachments'];
-            if ($files != null)
-            {
+                $uploadedFiles = $file['serviceAttachments'];
                 $uploadsDirectory = $this->getParameter('uploadsDirectory');
-                $this->uploadOrderAttachment($files, $realisedOrder, $uploadsDirectory);
+                $this->uploadOrderAttachment($uploadedFiles, $realisedOrder, $uploadsDirectory);
             }
             $em->persist($realisedOrder);
             $em->flush();
@@ -106,7 +93,7 @@ class OrderController extends BaseController
     }
 
     #[Route('/{id}/edit', name: 'order_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Order $realisedOrder, StorageRepository $storageRepository, OrderUsedItemRepository $realisedOrderUsedItemRepository): Response
+    public function edit(Request $request, Order $realisedOrder, StorageRepository $storageRepository, RealisedServiceUsedItem $realisedOrderUsedItemRepository): Response
     {
         $em = $this->doctrine;
         $form = $this->createForm(OrderType::class, $realisedOrder);
@@ -116,38 +103,38 @@ class OrderController extends BaseController
         {
 
             $usedParts = $request->request->get('order')['usedParts'];
-            foreach ($realisedOrder->getOrderUsedItems() as $oldOneOrderUsedItem)
+            foreach ($realisedOrder->getRealisedServiceUsedItems() as $oldOneOrderUsedItem)
             {
-                $realisedOrder->removeOrderUsedItem($oldOneOrderUsedItem);
+                $realisedOrder->removeRealisedServiceUsedItem($oldOneOrderUsedItem);
             }
             $em->flush();
             foreach ($usedParts as $oneUsedPart)
             {
                 $usedPartStorageEntity = $storageRepository->find($oneUsedPart['usedPart']);
                 $usedPartStorageEntity->setQunatity($usedPartStorageEntity->getQunatity() - $oneUsedPart['quantity']);
-                $realisedOrderUsedItem = new OrderUsedItem();
+                $realisedOrderUsedItem = new RealisedServiceUsedItem();
                 $realisedOrderUsedItem->setName($usedPartStorageEntity->getName());
                 $realisedOrderUsedItem->setQuantity($oneUsedPart['quantity']);
                 $realisedOrderUsedItem->setPrice(0);// do zrobienia kalkulacja ceny feature na przyszłośc  cena albo 1 itemu bądz całkowita dla typu części  * ilosć
                 $em->persist($realisedOrderUsedItem);
-                $realisedOrder->addOrderUsedItem($realisedOrderUsedItem);
+                $realisedOrder->addRealisedServiceUsedItem($realisedOrderUsedItem);
             }
             $em->flush();
 
             $uploadsDirectory = $this->getParameter('uploadsDirectory');
 
             $filesystem = new Filesystem();
-            if (!empty($realisedOrder->getOrderAttachments()))
+            if (!empty($realisedOrder->getServiceAttachments()))
             {
-                foreach ($realisedOrder->getOrderAttachments() as $attachment)
+                foreach ($realisedOrder->getServiceAttachments() as $attachment)
                 {
-                    $fileToRemove = $uploadsDirectory . DIRECTORY_SEPARATOR . OrderAttachment::SERVICE_ATTACHMENT_STORE_FOLDER . DIRECTORY_SEPARATOR . $attachment->getPath();
+                    $fileToRemove = $uploadsDirectory . DIRECTORY_SEPARATOR . ServiceAttachment::SERVICE_ATTACHMENT_STORE_FOLDER . DIRECTORY_SEPARATOR . $attachment->getPath();
                     $filesystem->remove($fileToRemove);
                     $this->doctrine->remove($attachment);
                 }
             }
             $em->flush();
-            $files = $request->files->get('realised_order')['orderAttachments'];
+            $files = $request->files->get('order')['orderAttachments'];
             if ($files != null)
             {
                 $this->uploadOrderAttachment($files, $realisedOrder, $uploadsDirectory);
@@ -185,7 +172,7 @@ class OrderController extends BaseController
              */
             foreach ($files as $oneFileAttachment)
             {
-                $directory = $uploadsDirectory . DIRECTORY_SEPARATOR . OrderAttachment::SERVICE_ATTACHMENT_STORE_FOLDER;
+                $directory = $uploadsDirectory . DIRECTORY_SEPARATOR . ServiceAttachment::SERVICE_ATTACHMENT_STORE_FOLDER;
                 $extension = $oneFileAttachment->guessExtension();
                 if (!$extension)
                 {
@@ -193,9 +180,9 @@ class OrderController extends BaseController
                 }
                 $filename = md5(microtime()) . '.' . $extension;
                 $oneFileAttachment->move($directory, $filename);
-                $orderAttachment = new OrderAttachment();
+                $orderAttachment = new ServiceAttachment();
                 $orderAttachment->setPath($filename);
-                $orderAttachment->setOrder($realisedOrder);
+                $orderAttachment->setService($realisedOrder);
                 $this->doctrine->persist($orderAttachment);
                 $this->doctrine->flush();
             }

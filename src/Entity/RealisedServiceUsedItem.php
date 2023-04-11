@@ -4,28 +4,29 @@ namespace App\Entity;
 
 use App\Repository\RealisedServiceUsedItemRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Timestampable\Traits\TimestampableEntity;
 
 #[ORM\Entity(repositoryClass: RealisedServiceUsedItemRepository::class)]
 class RealisedServiceUsedItem
 {
-    use \Gedmo\Timestampable\Traits\TimestampableEntity;
+    use TimestampableEntity;
 
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    private $id;
+    private ?int $id;
 
     #[ORM\Column(type: 'string', length: 255)]
-    private $name;
+    private ?string $name;
 
     #[ORM\Column(type: 'integer')]
-    private $quantity;
+    private ?int $quantity;
 
     #[ORM\Column(type: 'integer')]
-    private $price;
+    private ?int $price;
 
     #[ORM\ManyToOne(targetEntity: Order::class, inversedBy: 'realisedServiceUsedItems')]
-    private $realisedService;
+    private ?Order $realisedService;
 
     public function getId(): ?int
     {

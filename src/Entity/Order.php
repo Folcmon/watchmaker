@@ -17,23 +17,23 @@ class Order
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    private $id;
+    private ?int $id;
 
     #[ORM\Column(type: 'string', length: 255)]
-    private $description;
+    private ?string $description;
 
     #[ORM\ManyToOne(targetEntity: Client::class, inversedBy: 'orders')]
     #[ORM\JoinColumn(nullable: false)]
-    private $client;
+    private ?Client $client;
 
     #[ORM\Column(type: 'string', length: 255)]
-    private $name;
+    private ?string $name;
 
-    #[ORM\OneToMany(targetEntity: ServiceAttachment::class, mappedBy: 'service')]
+    #[ORM\OneToMany(mappedBy: 'service', targetEntity: ServiceAttachment::class, cascade: ['all'], orphanRemoval: true)]
     private Collection|array $serviceAttachments;
 
-    #[ORM\OneToMany(targetEntity: RealisedServiceUsedItem::class, mappedBy: 'realisedService')]
-    private $realisedServiceUsedItems;
+    #[ORM\OneToMany(mappedBy: 'realisedService', targetEntity: RealisedServiceUsedItem::class, cascade: ['persist', 'remove'])]
+    private Collection $realisedServiceUsedItems;
 
     public function __construct()
     {

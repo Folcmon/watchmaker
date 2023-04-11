@@ -13,29 +13,29 @@
         <tbody>
         <tr>
             <th>{{ "Klient"|trans }}</th>
-            <td>{{ order.client }}</td>
+            <td>{{ realised_order.client }}</td>
         </tr>
         <tr>
             <th>{{ "Numer usługi"|trans }}</th>
-            <td>{{ order.id }}</td>
+            <td>{{ realised_order.id }}</td>
         </tr>
         <tr>
             <th>{{ "Opis"|trans }}</th>
-            <td>{{ order.description }}</td>
+            <td>{{ realised_order.description }}</td>
         </tr>
         <tr>
             <th>{{ "Utworzony"|trans }}</th>
-            <td>{{ order.createdAt ? order.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+            <td>{{ realised_order.createdAt ? realised_order.createdAt|date('Y-m-d H:i:s') : '' }}</td>
         </tr>
         <tr>
             <th>{{ "Zmodyfikowany" }}</th>
-            <td>{{ order.updatedAt ? order.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
+            <td>{{ realised_order.updatedAt ? realised_order.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
         </tr>
         </tbody>
     </table>
     <div class="row mb-3">
         <div class="col-xl-12">
-            {% for attachment in order.serviceAttachments %}
+            {% for attachment in realised_order.serviceAttachments %}
                 <img class="img-thumbnail" src="{{ asset("uploads/service_attachment/") }}{{ attachment.getPath }}">
             {% endfor %}
         </div>
@@ -50,7 +50,7 @@
                     </td>
                 </tr>
                 </thead>
-                {% for usedPart in order.realisedServiceUsedItems %}
+                {% for usedPart in realised_order.realisedServiceUsedItems %}
                     <tr>
                         <td>
                             Nazwa: {{ usedPart.name }} Ilość: {{ usedPart.quantity }}
@@ -63,7 +63,7 @@
 
     <div class="row">
         <div class="col-xl-6">
-            <a href="{{ path('order_edit', {'id': order.id}) }}"
+            <a href="{{ path('order_edit', {'id': realised_order.id}) }}"
                class="btn-primary btn btn-lg btn">{{ "Edycja"|trans }}</a>
         </div>
         <div class="col-lg-6">

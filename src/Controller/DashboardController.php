@@ -7,11 +7,8 @@ use App\Repository\OrderRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
-/**
- * @IsGranted("ROLE_USER")
- */
+#[\Symfony\Component\Security\Http\Attribute\IsGranted('ROLE_USER')]
 class DashboardController extends BaseController
 {
     #[Route('/dashboard', name: 'dashboard')]

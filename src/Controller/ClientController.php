@@ -9,12 +9,9 @@ use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
-/**
- * @IsGranted("ROLE_USER")
- */
 #[Route('/clients')]
+#[\Symfony\Component\Security\Http\Attribute\IsGranted('ROLE_USER')]
 class ClientController extends BaseController
 {
     #[Route('/', name: 'client_index', methods: ['GET'])]

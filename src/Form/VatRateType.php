@@ -20,7 +20,7 @@ class VatRateType extends AbstractType
             ])
             ->add('rateValue', NumberType::class, [
                 'label' => 'Stawka VAT w procentach',
-                'scale' => 0,
+                'scale' => 2,
                 'html5' => true
             ]);
         ;

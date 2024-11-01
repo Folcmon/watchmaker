@@ -6,7 +6,7 @@ use App\Repository\ClientRepository;
 use App\Repository\OrderRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 #[\Symfony\Component\Security\Http\Attribute\IsGranted('ROLE_USER')]
 class DashboardController extends BaseController

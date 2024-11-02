@@ -4,13 +4,14 @@ namespace App\Entity;
 
 use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 class User implements UserInterface , PasswordAuthenticatedUserInterface
 {
-    use \Gedmo\Timestampable\Traits\TimestampableEntity; 
+    use TimestampableEntity;
     
     #[ORM\Id]
     #[ORM\GeneratedValue]

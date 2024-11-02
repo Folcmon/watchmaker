@@ -27,7 +27,7 @@ class Client
     #[ORM\Column(type: "string", length: 255, nullable: true)]
     private string $name = '';
 
-    #[ORM\OneToMany(mappedBy: 'client', targetEntity: Order::class)]
+    #[ORM\OneToMany(targetEntity: Order::class, mappedBy: 'client')]
     private Collection $orders;
 
     public function __construct()

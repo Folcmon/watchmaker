@@ -29,10 +29,10 @@ class Order
     #[ORM\Column(type: 'string', length: 255)]
     private ?string $name;
 
-    #[ORM\OneToMany(mappedBy: 'service', targetEntity: ServiceAttachment::class, cascade: ['all'], orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: ServiceAttachment::class, mappedBy: 'service', cascade: ['all'], orphanRemoval: true)]
     private Collection|array $serviceAttachments;
 
-    #[ORM\OneToMany(mappedBy: 'realisedService', targetEntity: RealisedServiceUsedItem::class, cascade: ['persist', 'remove'])]
+    #[ORM\OneToMany(targetEntity: RealisedServiceUsedItem::class, mappedBy: 'realisedService', cascade: ['persist', 'remove'])]
     private Collection $realisedServiceUsedItems;
 
     public function __construct()

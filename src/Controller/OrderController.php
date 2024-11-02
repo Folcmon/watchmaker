@@ -91,9 +91,8 @@ class OrderController extends BaseController
         $em = $this->doctrine;
         $form = $this->createForm(OrderType::class, $realisedOrder);
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
-            dd($realisedOrder);
+            dd($form->getData());
             $usedParts = $request->request->get('order')['usedParts'];
             foreach ($realisedOrder->getRealisedServiceUsedItems() as $oldOneOrderUsedItem) {
                 $realisedOrder->removeRealisedServiceUsedItem($oldOneOrderUsedItem);

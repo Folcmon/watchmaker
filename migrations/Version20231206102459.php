@@ -21,6 +21,8 @@ final class Version20231206102459 extends AbstractMigration
     {
         $this->addSql('Insert into vat_rate (rate_name,rate_value) values ("23%", 23)');
         $this->addSql('Insert into vat_rate (rate_name,rate_value) values ("8%", 8)');
+        $this->addSql('Insert into vat_rate (rate_name,rate_value) values ("5%", 5)');
+        $this->addSql('Insert into vat_rate (rate_name,rate_value) values ("0%", 0)');
 
     }
 

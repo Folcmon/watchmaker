@@ -7,7 +7,7 @@ knp_paginator:
     distinct: true                  # ensure distinct results, useful when ORM queries are using GROUP BY statements
     filter_field_name: filterField  # filter field query parameter name
     filter_value_name: filterValue  # filter value query parameter name
-    default_limit: 1
+    default_limit: 25               # default number of items per page
 
   template:
     pagination: '@KnpPaginator/Pagination/bootstrap_v5_pagination.html.twig'     # sliding pagination controls template

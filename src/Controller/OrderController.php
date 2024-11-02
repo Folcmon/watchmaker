@@ -27,11 +27,9 @@ class OrderController extends BaseController
         $results = null;
         $qb = $this->doctrine->createQueryBuilder();
 
-        if (!$request->get('search'))
-        {
+        if (!$request->get('search')) {
             $results = $orderRepository->findAll();
-        } else
-        {
+        } else {
             $results = $orderRepository->createQueryBuilder('order')
                 ->join('order.client', 'client')
                 ->where($qb->expr()->like('client.email', ':search'))
@@ -60,11 +58,9 @@ class OrderController extends BaseController
         $form = $this->createForm(OrderType::class, $realisedOrder);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid())
-        {
+        if ($form->isSubmitted() && $form->isValid()) {
             $files = $request->files;
-            foreach ($files->getIterator() as $file)
-            {
+            foreach ($files->getIterator() as $file) {
                 $uploadedFiles = $file['serviceAttachments'];
                 $uploadsDirectory = $this->getParameter('uploadsDirectory');
                 $this->uploadOrderAttachment($uploadedFiles, $realisedOrder, $uploadsDirectory);
@@ -90,23 +86,20 @@ class OrderController extends BaseController
     }
 
     #[Route('/{id}/edit', name: 'order_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Order $realisedOrder, StorageRepository $storageRepository, RealisedServiceUsedItem $realisedOrderUsedItemRepository): Response
+    public function edit(Request $request, Order $realisedOrder, StorageRepository $storageRepository): Response
     {
         $em = $this->doctrine;
         $form = $this->createForm(OrderType::class, $realisedOrder);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid())
-        {
-
+        if ($form->isSubmitted() && $form->isValid()) {
+            dd($realisedOrder);
             $usedParts = $request->request->get('order')['usedParts'];
-            foreach ($realisedOrder->getRealisedServiceUsedItems() as $oldOneOrderUsedItem)
-            {
+            foreach ($realisedOrder->getRealisedServiceUsedItems() as $oldOneOrderUsedItem) {
                 $realisedOrder->removeRealisedServiceUsedItem($oldOneOrderUsedItem);
             }
             $em->flush();
-            foreach ($usedParts as $oneUsedPart)
-            {
+            foreach ($usedParts as $oneUsedPart) {
                 $usedPartStorageEntity = $storageRepository->find($oneUsedPart['usedPart']);
                 $usedPartStorageEntity->setQunatity($usedPartStorageEntity->getQunatity() - $oneUsedPart['quantity']);
                 $realisedOrderUsedItem = new RealisedServiceUsedItem();
@@ -117,23 +110,23 @@ class OrderController extends BaseController
                 $realisedOrder->addRealisedServiceUsedItem($realisedOrderUsedItem);
             }
             $em->flush();
-
             $uploadsDirectory = $this->getParameter('uploadsDirectory');
-
-            $filesystem = new Filesystem();
-            if (!empty($realisedOrder->getServiceAttachments()))
-            {
-                foreach ($realisedOrder->getServiceAttachments() as $attachment)
-                {
-                    $fileToRemove = $uploadsDirectory . DIRECTORY_SEPARATOR . ServiceAttachment::SERVICE_ATTACHMENT_STORE_FOLDER . DIRECTORY_SEPARATOR . $attachment->getPath();
-                    $filesystem->remove($fileToRemove);
-                    $this->doctrine->remove($attachment);
+            $files = $request->files->get('order')['orderAttachments'];
+            if ($files != null) {
+                $uploadsDirectory = $this->getParameter('uploadsDirectory');
+                $filesystem = new Filesystem();
+                if (!empty($realisedOrder->getServiceAttachments())) {
+                    foreach ($realisedOrder->getServiceAttachments() as $attachment) {
+                        $fileToRemove = $uploadsDirectory . DIRECTORY_SEPARATOR . ServiceAttachment::SERVICE_ATTACHMENT_STORE_FOLDER . DIRECTORY_SEPARATOR . $attachment->getPath();
+                        $filesystem->remove($fileToRemove);
+                        $this->doctrine->remove($attachment);
+                    }
                 }
+                $em->flush();
+                $this->uploadOrderAttachment($files, $realisedOrder, $uploadsDirectory);
             }
             $em->flush();
-            $files = $request->files->get('order')['orderAttachments'];
-            if ($files != null)
-            {
+            if ($files != null) {
                 $this->uploadOrderAttachment($files, $realisedOrder, $uploadsDirectory);
             }
             $em->flush();
@@ -150,9 +143,17 @@ class OrderController extends BaseController
     #[Route('/{id}', name: 'order_delete', methods: ['POST'])]
     public function delete(Request $request, Order $realisedOrder): Response
     {
-        if ($this->isCsrfTokenValid('delete' . $realisedOrder->getId(), $request->request->get('_token')))
-        {
+        if ($this->isCsrfTokenValid('delete' . $realisedOrder->getId(), $request->request->get('_token'))) {
             $em = $this->doctrine;
+            $uploadsDirectory = $this->getParameter('uploadsDirectory');
+            $filesystem = new Filesystem();
+            if (!empty($realisedOrder->getServiceAttachments())) {
+                foreach ($realisedOrder->getServiceAttachments() as $attachment) {
+                    $fileToRemove = $uploadsDirectory . DIRECTORY_SEPARATOR . ServiceAttachment::SERVICE_ATTACHMENT_STORE_FOLDER . DIRECTORY_SEPARATOR . $attachment->getPath();
+                    $filesystem->remove($fileToRemove);
+                    $this->doctrine->remove($attachment);
+                }
+            }
             $em->remove($realisedOrder);
             $em->flush();
         }
@@ -162,17 +163,14 @@ class OrderController extends BaseController
 
     private function uploadOrderAttachment($files, $realisedOrder, $uploadsDirectory)
     {
-        if ($files != null)
-        {
+        if ($files != null) {
             /**
              * @var $oneFileAttachment UploadedFile
              */
-            foreach ($files as $oneFileAttachment)
-            {
+            foreach ($files as $oneFileAttachment) {
                 $directory = $uploadsDirectory . DIRECTORY_SEPARATOR . ServiceAttachment::SERVICE_ATTACHMENT_STORE_FOLDER;
                 $extension = $oneFileAttachment->guessExtension();
-                if (!$extension)
-                {
+                if (!$extension) {
                     $extension = 'bin';
                 }
                 $filename = md5(microtime()) . '.' . $extension;

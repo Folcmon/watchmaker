@@ -1,33 +1,43 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ "Edycja usługi"|trans }}{% endblock %}
+{% block title %}{{ "Zlecenia"|trans }} / {{ "Edytuj"| trans }}{% endblock %}
+
 
 {% block leftBody %}
     {% include '/shared/leftSidebar.html.twig' %}
 {% endblock %}
 
 {% block body %}
-    <h1>{{ "Edycja usługi"|trans }}</h1>
+    <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">
+           <a href="{{ path('order_index') }}">{{ "Zlecenia"| trans }}</a> /</span> {{ "Edytuj" |trans }}</h4>
 
     <div class="row">
-        <div class="col-xl-12">
-            {{ include('order/_form.html.twig', {'button_label': 'Zapisz'}) }}
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-xl-12">
-            {{ include('order/_delete_form.html.twig') }}
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-xl-12 text-right">
-            <a href="{{ path('order_index') }}"
-               class="btn btn-lg btn-primary">{{ "Powrót"|trans }}</a>
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    {{ include('order/_form.html.twig') }}
+                </div>
+                <div class="card-footer border-top pt-4">
+                    <div class="col-xl-12">
+                        <a href="{{ path('order_index') }}" class="btn btn-warning float-end">
+                            {{ "Powrót"|trans }}
+                        </a>
+                        {{ include('order/_delete_form.html.twig') }}
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 {% endblock %}
 
 {% block body_scripts %}
     {{ parent() }}
-    <script src="{{ asset('default/js/realisedServiceForm.js') }}"></script>
+    <script>
+        $(document).ready(function () {
+            $('.select2').select2({
+                width: '100%',
+                language: 'pl'
+            });
+        });
+    </script>
 {% endblock %}

@@ -6,7 +6,6 @@ one relacja) i może mieć encje service attachment - załaczniki do usługi np 
 # Do zrobienia
 
 - do formularza dodawania usługi dodać zapis do zużytych części i zminusować magazyn
-- na usunięcie usługi wywalić zdjęcia z dysku - do sprawdzenia czy działa
 - walidacja Formularzy
 
 # Przydatne komendy

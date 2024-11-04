@@ -92,25 +92,25 @@ class OrderController extends BaseController
         $form = $this->createForm(OrderType::class, $realisedOrder);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            dd($form->getData());
-            $usedParts = $request->request->get('order')['usedParts'];
-            foreach ($realisedOrder->getRealisedServiceUsedItems() as $oldOneOrderUsedItem) {
-                $realisedOrder->removeRealisedServiceUsedItem($oldOneOrderUsedItem);
-            }
-            $em->flush();
-            foreach ($usedParts as $oneUsedPart) {
-                $usedPartStorageEntity = $storageRepository->find($oneUsedPart['usedPart']);
-                $usedPartStorageEntity->setQunatity($usedPartStorageEntity->getQunatity() - $oneUsedPart['quantity']);
-                $realisedOrderUsedItem = new RealisedServiceUsedItem();
-                $realisedOrderUsedItem->setName($usedPartStorageEntity->getName());
-                $realisedOrderUsedItem->setQuantity($oneUsedPart['quantity']);
-                $realisedOrderUsedItem->setPrice(0);// do zrobienia kalkulacja ceny feature na przyszłośc  cena albo 1 itemu bądz całkowita dla typu części  * ilosć
-                $em->persist($realisedOrderUsedItem);
-                $realisedOrder->addRealisedServiceUsedItem($realisedOrderUsedItem);
-            }
-            $em->flush();
+            $data = $form->getData();
+            /*            $usedParts = $request->request->get('order')['usedParts'];
+                        foreach ($realisedOrder->getRealisedServiceUsedItems() as $oldOneOrderUsedItem) {
+                            $realisedOrder->removeRealisedServiceUsedItem($oldOneOrderUsedItem);
+                        }
+                        $em->flush();
+                        foreach ($usedParts as $oneUsedPart) {
+                            $usedPartStorageEntity = $storageRepository->find($oneUsedPart['usedPart']);
+                            $usedPartStorageEntity->setQunatity($usedPartStorageEntity->getQunatity() - $oneUsedPart['quantity']);
+                            $realisedOrderUsedItem = new RealisedServiceUsedItem();
+                            $realisedOrderUsedItem->setName($usedPartStorageEntity->getName());
+                            $realisedOrderUsedItem->setQuantity($oneUsedPart['quantity']);
+                            $realisedOrderUsedItem->setPrice(0);// do zrobienia kalkulacja ceny feature na przyszłośc  cena albo 1 itemu bądz całkowita dla typu części  * ilosć
+                            $em->persist($realisedOrderUsedItem);
+                            $realisedOrder->addRealisedServiceUsedItem($realisedOrderUsedItem);
+                        }
+                        $em->flush();*/
             $uploadsDirectory = $this->getParameter('uploadsDirectory');
-            $files = $request->files->get('order')['orderAttachments'];
+            $files = $request->files->get('order')['serviceAttachments'];
             if ($files != null) {
                 $uploadsDirectory = $this->getParameter('uploadsDirectory');
                 $filesystem = new Filesystem();
@@ -125,11 +125,6 @@ class OrderController extends BaseController
                 $this->uploadOrderAttachment($files, $realisedOrder, $uploadsDirectory);
             }
             $em->flush();
-            if ($files != null) {
-                $this->uploadOrderAttachment($files, $realisedOrder, $uploadsDirectory);
-            }
-            $em->flush();
-
             return $this->redirectToRoute('order_index');
         }
 

@@ -19,10 +19,10 @@ class Client
     private $id;
 
     #[ORM\Column(type: 'string', length: 255)]
-    private $telephone;
+    private $telephone = '';
 
     #[ORM\Column(type: 'string', length: 255)]
-    private $email;
+    private $email = '';
 
     #[ORM\Column(type: "string", length: 255, nullable: true)]
     private string $name = '';
@@ -90,8 +90,7 @@ class Client
 
     public function addOrders(Order $orders): self
     {
-        if (!$this->orders->contains($orders))
-        {
+        if (!$this->orders->contains($orders)) {
             $this->orders[] = $orders;
             $orders->setClient($this);
         }
@@ -101,11 +100,9 @@ class Client
 
     public function removeOrders(Order $orders): void
     {
-        if ($this->orders->removeElement($orders))
-        {
+        if ($this->orders->removeElement($orders)) {
             // set the owning side to null (unless already changed)
-            if ($orders->getClient() === $this)
-            {
+            if ($orders->getClient() === $this) {
                 $orders->setClient(null);
             }
         }
@@ -113,6 +110,6 @@ class Client
 
     public function __toString(): string
     {
-        return $this->email . ' ' . $this->telephone;
+        return $this->name . ' ' . $this->email . ' ' . $this->telephone;
     }
 }

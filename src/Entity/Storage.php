@@ -22,7 +22,7 @@ class Storage
     private ?string $name;
 
     #[ORM\Column(type: 'integer')]
-    private ?int $qunatity;
+    private ?int $quantity;
 
     #[ORM\Column(type: 'integer')]
     private ?int $alarmQuantity;
@@ -64,14 +64,14 @@ class Storage
         return $this;
     }
 
-    public function getQunatity(): ?int
+    public function getQuantity(): ?int
     {
-        return $this->qunatity;
+        return $this->quantity;
     }
 
-    public function setQunatity(int $qunatity): self
+    public function setQuantity(int $quantity): self
     {
-        $this->qunatity = $qunatity;
+        $this->quantity = $quantity;
 
         return $this;
     }

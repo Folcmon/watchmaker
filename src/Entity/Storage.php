@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\StorageRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 
@@ -33,6 +35,17 @@ class Storage
 
     #[ORM\Column(type: 'decimal')]
     private float $margin = 0.0;
+
+    /**
+     * @var Collection<int, StorageAttachment>
+     */
+    #[ORM\OneToMany(targetEntity: StorageAttachment::class, mappedBy: 'storage', orphanRemoval: true)]
+    private Collection $storageAttachments;
+
+    public function __construct()
+    {
+        $this->storageAttachments = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -126,5 +139,35 @@ class Storage
     public function __toString()
     {
         return $this->name;
+    }
+
+    /**
+     * @return Collection<int, StorageAttachment>
+     */
+    public function getStorageAttachments(): Collection
+    {
+        return $this->storageAttachments;
+    }
+
+    public function addStorageAttachment(StorageAttachment $storageAttachment): static
+    {
+        if (!$this->storageAttachments->contains($storageAttachment)) {
+            $this->storageAttachments->add($storageAttachment);
+            $storageAttachment->setStorage($this);
+        }
+
+        return $this;
+    }
+
+    public function removeStorageAttachment(StorageAttachment $storageAttachment): static
+    {
+        if ($this->storageAttachments->removeElement($storageAttachment)) {
+            // set the owning side to null (unless already changed)
+            if ($storageAttachment->getStorage() === $this) {
+                $storageAttachment->setStorage(null);
+            }
+        }
+
+        return $this;
     }
 }

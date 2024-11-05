@@ -1,11 +1,13 @@
 #Strurktura Programu
 
-Encja RealisedService reperezentuje obiekt realizowanej usługi, realizowana usługa jest na rzecz encji Klient (many to
-one relacja) i może mieć encje service attachment - załaczniki do usługi np zdjęcia.
+- Encja RealisedService reperezentuje obiekt realizowanej usługi, realizowana usługa jest na rzecz encji Klient (many to
+one relacja) i może mieć encje service attachment - załączniki do usługi np zdjęcia.
+- 
 
 # Do zrobienia
 
 - do formularza dodawania usługi dodać zapis do zużytych części i zminusować magazyn
+- dodać możliwość dodawania załączników do magazynu (np zdjęcia)
 - walidacja Formularzy
 
 # Przydatne komendy

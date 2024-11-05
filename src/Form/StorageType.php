@@ -17,7 +17,7 @@ class StorageType extends AbstractType
             ->add('name', TextType::class, [
                 'label' => 'Nazwa przedmiotu'
             ])
-            ->add('qunatity', NumberType::class, [
+            ->add('quantity', NumberType::class, [
                 'label' => 'Ilość',
                 'scale' => 0,
                 'html5' => true

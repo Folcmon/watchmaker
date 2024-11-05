@@ -154,7 +154,7 @@ class OrderController extends BaseController
         return $this->redirectToRoute('order_index');
     }
 
-    private function uploadOrderAttachment($files, $realisedOrder, $uploadsDirectory)
+    private function uploadOrderAttachment($files, $realisedOrder, $uploadsDirectory): void
     {
         if ($files != null) {
             /**

@@ -10,7 +10,6 @@ class DefaultController extends BaseController
     #[Route('/', name: 'index')]
     public function index(): Response
     {
-        return $this->render('default/index.html.twig', [
-        ]);
+        return $this->render('default/index.html.twig');
     }
 }

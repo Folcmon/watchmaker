@@ -93,7 +93,7 @@ class Order implements Loggable
     }
 
     /**
-     * @return Collection|ServiceAttachment[]
+     * @return Collection
      */
     public function getServiceAttachments(): Collection
     {
@@ -123,7 +123,7 @@ class Order implements Loggable
     }
 
     /**
-     * @return Collection|RealisedServiceUsedItem[]
+     * @return Collection
      */
     public function getRealisedServiceUsedItems(): Collection
     {

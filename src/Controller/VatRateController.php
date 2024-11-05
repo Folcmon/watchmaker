@@ -44,7 +44,7 @@ class VatRateController extends AbstractController
             return $this->redirectToRoute('app_vat_rate_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->renderForm('vat_rate/new.html.twig', [
+        return $this->render('vat_rate/new.html.twig', [
             'vat_rate' => $vatRate,
             'form' => $form,
         ]);

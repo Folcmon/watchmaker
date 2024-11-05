@@ -23,7 +23,6 @@ class VatRateType extends AbstractType
                 'scale' => 2,
                 'html5' => true
             ]);
-        ;
     }
 
     public function configureOptions(OptionsResolver $resolver): void

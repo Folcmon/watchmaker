@@ -2,6 +2,7 @@
 
 namespace App\DataFixtures;
 
+use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -16,9 +17,9 @@ class UserFixtures extends Fixture
         $this->passwordEncoder = $passwordHasher;
     }
 
-    public function load(ObjectManager $manager)
+    public function load(ObjectManager $manager): void
     {
-        $userRado = new \App\Entity\User();
+        $userRado = new User();
         $userRado->setEmail('Rado2004@wp.pl');
         $userRado->setPassword($this->passwordEncoder->hashPassword(
             $userRado,

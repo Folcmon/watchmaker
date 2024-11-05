@@ -6,8 +6,9 @@ use App\Repository\ClientRepository;
 use App\Repository\OrderRepository;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-#[\Symfony\Component\Security\Http\Attribute\IsGranted('ROLE_USER')]
+#[IsGranted('ROLE_USER')]
 class DashboardController extends BaseController
 {
     #[Route('/dashboard', name: 'dashboard')]
@@ -15,13 +16,13 @@ class DashboardController extends BaseController
     {
         $time = strtotime(date('Y-m-01 00:00:00')); // == 1338534000
         $firstDayOfMonth = date('Y-m-d H:i:s', $time); // == 2012-06-01 00:00:00
-        $allRealisedServices = $realisedServiceRepository->count([]);
+        $allRealisedServices = $realisedServiceRepository->count();
         $thisMonthRealisedServices = $realisedServiceRepository->createQueryBuilder('rs')
             ->andWhere('rs.createdAt >= :date')
             ->setParameter(':date',$firstDayOfMonth)
             ->getQuery()
             ->execute();
-        $numOfClients = $clientRepository->count([]);
+        $numOfClients = $clientRepository->count();
         $numOfNewClients = $clientRepository->createQueryBuilder('cr')
             ->andWhere('cr.createdAt >= :date')
             ->setParameter(':date',$firstDayOfMonth)

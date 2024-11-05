@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use App\Entity\Client;
 use App\Entity\Order;
-use App\Entity\RealisedServiceUsedItem;
 use App\Entity\ServiceAttachment;
 use App\Form\OrderType;
 use App\Repository\OrderRepository;
@@ -12,12 +11,12 @@ use App\Repository\StorageRepository;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
-use Symfony\Component\HttpFoundation\FileBag;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-#[\Symfony\Component\Security\Http\Attribute\IsGranted('ROLE_USER')]
+#[IsGranted('ROLE_USER')]
 #[Route('/orders')]
 class OrderController extends BaseController
 {

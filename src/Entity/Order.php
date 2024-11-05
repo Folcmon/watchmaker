@@ -6,11 +6,14 @@ use App\Repository\OrderRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Loggable\Loggable;
+use Gedmo\Mapping\Annotation as Gedmo;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 
 #[ORM\Entity(repositoryClass: OrderRepository::class)]
 #[ORM\Table(name: 'orders')]
-class Order
+#[Gedmo\Loggable]
+class Order implements Loggable
 {
     use TimestampableEntity;
 
@@ -20,13 +23,16 @@ class Order
     private ?int $id;
 
     #[ORM\Column(type: 'string', length: 255)]
+    #[Gedmo\Versioned]
     private ?string $description;
 
     #[ORM\ManyToOne(targetEntity: Client::class, inversedBy: 'orders')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Gedmo\Versioned]
     private ?Client $client;
 
     #[ORM\Column(type: 'string', length: 255)]
+    #[Gedmo\Versioned]
     private ?string $name;
 
     #[ORM\OneToMany(targetEntity: ServiceAttachment::class, mappedBy: 'service', cascade: ['all'], orphanRemoval: true)]
@@ -34,6 +40,10 @@ class Order
 
     #[ORM\OneToMany(targetEntity: RealisedServiceUsedItem::class, mappedBy: 'realisedService', cascade: ['persist', 'remove'])]
     private Collection $realisedServiceUsedItems;
+
+    #[ORM\Column(length: 255)]
+    #[Gedmo\Versioned]
+    private ?string $status = null;
 
     public function __construct()
     {
@@ -92,8 +102,7 @@ class Order
 
     public function addServiceAttachment(ServiceAttachment $serviceAttachment): self
     {
-        if (!$this->serviceAttachments->contains($serviceAttachment))
-        {
+        if (!$this->serviceAttachments->contains($serviceAttachment)) {
             $this->serviceAttachments[] = $serviceAttachment;
             $serviceAttachment->setService($this);
         }
@@ -103,11 +112,9 @@ class Order
 
     public function removeServiceAttachment(ServiceAttachment $serviceAttachment): self
     {
-        if ($this->serviceAttachments->removeElement($serviceAttachment))
-        {
+        if ($this->serviceAttachments->removeElement($serviceAttachment)) {
             // set the owning side to null (unless already changed)
-            if ($serviceAttachment->getService() === $this)
-            {
+            if ($serviceAttachment->getService() === $this) {
                 $serviceAttachment->setService(null);
             }
         }
@@ -125,8 +132,7 @@ class Order
 
     public function addRealisedServiceUsedItem(RealisedServiceUsedItem $realisedServiceUsedItem): self
     {
-        if (!$this->realisedServiceUsedItems->contains($realisedServiceUsedItem))
-        {
+        if (!$this->realisedServiceUsedItems->contains($realisedServiceUsedItem)) {
             $this->realisedServiceUsedItems[] = $realisedServiceUsedItem;
             $realisedServiceUsedItem->setRealisedService($this);
         }
@@ -136,14 +142,24 @@ class Order
 
     public function removeRealisedServiceUsedItem(RealisedServiceUsedItem $realisedServiceUsedItem): self
     {
-        if ($this->realisedServiceUsedItems->removeElement($realisedServiceUsedItem))
-        {
+        if ($this->realisedServiceUsedItems->removeElement($realisedServiceUsedItem)) {
             // set the owning side to null (unless already changed)
-            if ($realisedServiceUsedItem->getRealisedService() === $this)
-            {
+            if ($realisedServiceUsedItem->getRealisedService() === $this) {
                 $realisedServiceUsedItem->setRealisedService(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getStatus(): ?string
+    {
+        return $this->status;
+    }
+
+    public function setStatus(string $status): static
+    {
+        $this->status = $status;
 
         return $this;
     }

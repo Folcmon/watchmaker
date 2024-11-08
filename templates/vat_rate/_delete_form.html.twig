@@ -1,5 +1,5 @@
 <form method="post" action="{{ path('app_vat_rate_delete', {'id': vat_rate.id}) }}"
       onsubmit="return confirm('{{ 'Czy na pewno usunąć'|trans }}');">
     <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ vat_rate.id) }}">
-    <button class="btn btn-danger">{{ "Usuń"|trans }}</button>
+    <button class="btn btn-danger btn-lg">{{ "Usuń"|trans }}</button>
 </form>

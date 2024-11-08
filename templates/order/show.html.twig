@@ -1,82 +1,96 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ "Usługa"|trans }}{% endblock %}
+{% block title %}{{ "Usługi"|trans }}{% endblock %}
 
 {% block leftBody %}
     {% include '/shared/leftSidebar.html.twig' %}
 {% endblock %}
 
 {% block body %}
-    <h1>{{ "Usługa"|trans }}</h1>
-
-    <table class="table table-striped ">
-        <tbody>
-        <tr>
-            <th>{{ "Klient"|trans }}</th>
-            <td>{{ realised_order.client }}</td>
-        </tr>
-        <tr>
-            <th>{{ "Numer usługi"|trans }}</th>
-            <td>{{ realised_order.id }}</td>
-        </tr>
-        <tr>
-            <th>{{ "Opis"|trans }}</th>
-            <td>{{ realised_order.description }}</td>
-        </tr>
-        <tr>
-            <th>{{ "Utworzony"|trans }}</th>
-            <td>{{ realised_order.createdAt ? realised_order.createdAt|date('Y-m-d H:i:s') : '' }}</td>
-        </tr>
-        <tr>
-            <th>{{ "Zmodyfikowany" }}</th>
-            <td>{{ realised_order.updatedAt ? realised_order.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
-        </tr>
-        <tr>
-            <th>{{ "Status"|trans }}</th>
-            <td>{{ realised_order.status }}</td>
-        </tbody>
-    </table>
-    <div class="row mb-3">
-        <div class="col-xl-12">
-            {% for attachment in realised_order.serviceAttachments %}
-                <img class="img-thumbnail" src="{{ asset("uploads/service_attachment/") }}{{ attachment.getPath }}">
-            {% endfor %}
-        </div>
-    </div>
-    <div class="row mb-3">
-        <div class="col-xl-12">
-            <table class="table table-bordered">
-                <thead class="table-info">
-                <tr>
-                    <td>
-                        {{ "Użyte części"|trans }}
-                    </td>
-                </tr>
-                </thead>
-                {% for usedPart in realised_order.realisedServiceUsedItems %}
-                    <tr>
-                        <td>
-                            Nazwa: {{ usedPart.name }} Ilość: {{ usedPart.quantity }}
-                        </td>
-                    </tr>
-                {% endfor %}
-            </table>
-        </div>
-    </div>
+    <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">
+           <a href="{{ path('order_index') }}">{{ "Usługi"| trans }}</a> /</span> Numer {{ realised_order.id }} dla
+        klienta <a href="{{ path('client_show',{'id': realised_order.client.id}) }}">
+            {{ realised_order.client }}
+        </a>
+    </h4>
 
     <div class="row">
-        <div class="col-xl-6">
-            <a href="{{ path('order_edit', {'id': realised_order.id}) }}"
-               class="btn-primary btn btn-lg btn">{{ "Edycja"|trans }}</a>
-        </div>
-        <div class="col-lg-6">
-            {{ include('order/_delete_form.html.twig') }}
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-xl-12 text-right">
-            <a href="{{ path('order_index') }}"
-               class="btn btn-lg btn-primary">{{ "Powrót"|trans }}</a>
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row mb-4">
+                        <table class="table table-striped ">
+                            <tbody>
+                            <tr>
+                                <th>{{ "Klient"|trans }}</th>
+                                <td>{{ realised_order.client }}</td>
+                            </tr>
+                            <tr>
+                                <th>{{ "Numer usługi"|trans }}</th>
+                                <td>{{ realised_order.id }}</td>
+                            </tr>
+                            <tr>
+                                <th>{{ "Opis"|trans }}</th>
+                                <td>{{ realised_order.description }}</td>
+                            </tr>
+                            <tr>
+                                <th>{{ "Utworzony"|trans }}</th>
+                                <td>{{ realised_order.createdAt ? realised_order.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+                            </tr>
+                            <tr>
+                                <th>{{ "Zmodyfikowany" }}</th>
+                                <td>{{ realised_order.updatedAt ? realised_order.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
+                            </tr>
+                            <tr>
+                                <th>{{ "Status"|trans }}</th>
+                                <td>{{ realised_order.status }}</td>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-xl-12">
+                            {% for attachment in realised_order.serviceAttachments %}
+                                <img class="img-thumbnail"
+                                     src="{{ asset("uploads/service_attachment/") }}{{ attachment.getPath }}">
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-xl-12">
+                            <table class="table table-bordered">
+                                <thead class="table-info">
+                                <tr>
+                                    <td>
+                                        {{ "Użyte części"|trans }}
+                                    </td>
+                                </tr>
+                                </thead>
+                                {% for usedPart in realised_order.realisedServiceUsedItems %}
+                                    <tr>
+                                        <td>
+                                            Nazwa: {{ usedPart.name }} Ilość: {{ usedPart.quantity }}
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <a href="{{ path('order_edit', {'id': realised_order.id}) }}"
+                               class="btn-primary btn btn-lg btn float-end">{{ "Edycja"|trans }}</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer border-top pt-4">
+                    <div class="col-xl-12">
+                        <a href="{{ path('order_index') }}"
+                           class="btn btn-warning float-end btn-lg">{{ "Powrót"|trans }}</a>
+                        {{ include('order/_delete_form.html.twig') }}
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 {% endblock %}

@@ -45,6 +45,10 @@ class Order implements Loggable
     #[Gedmo\Versioned]
     private ?string $status = null;
 
+    #[ORM\Column(type: 'integer')]
+    #[Gedmo\Versioned]
+    private int $labor = 0;
+
     public function __construct()
     {
         $this->serviceAttachments = new ArrayCollection();
@@ -160,6 +164,18 @@ class Order implements Loggable
     public function setStatus(string $status): static
     {
         $this->status = $status;
+
+        return $this;
+    }
+
+    public function getLabor(): int
+    {
+        return $this->labor;
+    }
+
+    public function setLabor(int $labor): static
+    {
+        $this->labor = $labor;
 
         return $this;
     }

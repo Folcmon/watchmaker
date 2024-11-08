@@ -65,14 +65,30 @@
 {% block body_scripts %}
     {{ parent() }}
     <script>
+        let numOfRealisedServicesBYMonth = {{ numOfRealisedServicesBYMonth|raw }};
+        let valueOfRealisedServicesBYMonth = {{ valueOfRealisedServicesBYMonth|raw }};
         // Income Chart - Area chart
         // --------------------------------------------------------------------
         let cardColor, headingColor, axisColor, shadeColor, borderColor;
+        let numOfRealisedServicesBYMonthData = [];
+        let valueOfRealisedServicesBYMonthData = [];
+        for (let i = 0; i < 12; i++) {
+            numOfRealisedServicesBYMonthData.push(0);
+            valueOfRealisedServicesBYMonthData.push(0);
+        }
+        // iterate over the data numOfRealisedServicesBYMonth its an array of objects {value: 1, month: 1} and fill the data
+        for (let i = 0; i < numOfRealisedServicesBYMonth.length; i++) {
+            numOfRealisedServicesBYMonthData[numOfRealisedServicesBYMonth[i].month - 1] = numOfRealisedServicesBYMonth[i].counter * 1;
+        }
+        // iterate over the data valueOfRealisedServicesBYMonth its an array of objects {value: 1, month: 1} and fill the data
+        for (let i = 0; i < valueOfRealisedServicesBYMonth.length; i++) {
+            valueOfRealisedServicesBYMonthData[valueOfRealisedServicesBYMonth[i].month - 1] = valueOfRealisedServicesBYMonth[i].counter * 1;
+        }
         const incomeChartEl = document.querySelector('#yearNumOfServices'),
             incomeChartConfigValue = {
                 series: [
                     {
-                        data: [24, 21, 30, 22, 42, 26, 35, 29, 24, 21, 30, 22, 22]
+                        data: numOfRealisedServicesBYMonthData
                     }
                 ],
                 chart: {
@@ -136,7 +152,7 @@
                     }
                 },
                 xaxis: {
-                    categories: ['', '{{ "Styczeń"|trans }}', '{{ "Luty"|trans }}', '{{ "Marzec"|trans }}', '{{ "Kwiecień"|trans }}', '{{ "Maj"|trans }}', '{{ "Czerwiec"|trans }}', '{{ "Lipiec"|trans }}', '{{ "Sierpień"|trans }}', '{{ "Wrzesień"|trans }}', '{{ "Paźdźiernik"|trans }}', '{{ "Listopad"|trans }}', '{{ "Grudzień"|trans }}', ''],
+                    categories: ['{{ "Styczeń"|trans }}', '{{ "Luty"|trans }}', '{{ "Marzec"|trans }}', '{{ "Kwiecień"|trans }}', '{{ "Maj"|trans }}', '{{ "Czerwiec"|trans }}', '{{ "Lipiec"|trans }}', '{{ "Sierpień"|trans }}', '{{ "Wrzesień"|trans }}', '{{ "Paźdźiernik"|trans }}', '{{ "Listopad"|trans }}', '{{ "Grudzień"|trans }}', ''],
                     axisBorder: {
                         show: false
                     },
@@ -155,9 +171,10 @@
                     labels: {
                         show: false
                     },
-                    min: 10,
-                    max: 50,
-                    tickAmount: 4
+                    min: 0,
+                    max: Math.max(...numOfRealisedServicesBYMonthData) + 5,
+                    //tickAmount is the number of ticks to show on the y-axis max value of valueOfRealisedServicesBYMonthData array divided by 10 and rounded up
+                    tickAmount: Math.ceil(Math.max(...numOfRealisedServicesBYMonthData) / 10)
                 }
             };
         if (typeof incomeChartEl !== undefined && incomeChartEl !== null) {
@@ -173,7 +190,7 @@
             incomeChartConfig = {
                 series: [
                     {
-                        data: [24, 21, 30, 22, 42, 26, 35, 29, 24, 21, 30, 22, 22]
+                        data: valueOfRealisedServicesBYMonthData
                     }
                 ],
                 chart: {
@@ -237,7 +254,7 @@
                     }
                 },
                 xaxis: {
-                    categories: ['', '{{ "Styczeń"|trans }}', '{{ "Luty"|trans }}', '{{ "Marzec"|trans }}', '{{ "Kwiecień"|trans }}', '{{ "Maj"|trans }}', '{{ "Czerwiec"|trans }}', '{{ "Lipiec"|trans }}', '{{ "Sierpień"|trans }}', '{{ "Wrzesień"|trans }}', '{{ "Paźdźiernik"|trans }}', '{{ "Listopad"|trans }}', '{{ "Grudzień"|trans }}', ''],
+                    categories: ['{{ "Styczeń"|trans }}', '{{ "Luty"|trans }}', '{{ "Marzec"|trans }}', '{{ "Kwiecień"|trans }}', '{{ "Maj"|trans }}', '{{ "Czerwiec"|trans }}', '{{ "Lipiec"|trans }}', '{{ "Sierpień"|trans }}', '{{ "Wrzesień"|trans }}', '{{ "Paźdźiernik"|trans }}', '{{ "Listopad"|trans }}', '{{ "Grudzień"|trans }}', ''],
                     axisBorder: {
                         show: false
                     },
@@ -256,9 +273,9 @@
                     labels: {
                         show: false
                     },
-                    min: 10,
-                    max: 50,
-                    tickAmount: 4
+                    min: 0,
+                    max: Math.max(...valueOfRealisedServicesBYMonthData) + 5,
+                    tickAmount: Math.ceil(Math.max(...valueOfRealisedServicesBYMonthData) / 10)
                 }
             };
         if (typeof incomeChartElValue !== undefined && incomeChartElValue !== null) {

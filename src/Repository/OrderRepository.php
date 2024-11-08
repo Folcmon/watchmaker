@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Order;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\DBAL\Exception;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -17,6 +18,31 @@ class OrderRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Order::class);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function getCountByYearGroupByMonth(string $year): array
+    {
+        // SELECT COUNT(*) as count, MONTH(created_at) as month FROM order WHERE YEAR(created_at) = 2021 GROUP BY month ORDER BY month ASC example using raw sql
+        $sql = "SELECT COUNT(*) as counter, MONTH(created_at) as month FROM orders WHERE YEAR(created_at) = :year GROUP BY month ORDER BY month ASC";
+        $conn = $this->getEntityManager()->getConnection();
+        $stmt = $conn->prepare($sql);
+        $result = $stmt->executeQuery(['year' => $year]);
+        return $result->fetchAllAssociative();
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function getValueByYearGroupByMonth(string $year): array
+    {
+        $sql = "SELECT SUM(rsui.price * rsui.quantity) as counter, MONTH(rsui.created_at) as month FROM realised_service_used_item rsui JOIN orders rs ON rs.id = rsui.realised_service_id WHERE YEAR(rs.created_at) = :year GROUP BY month ORDER BY month ASC";
+        $conn = $this->getEntityManager()->getConnection();
+        $stmt = $conn->prepare($sql);
+        $result = $stmt->executeQuery(['year' => $year]);
+        return $result->fetchAllAssociative();
     }
 
     // /**

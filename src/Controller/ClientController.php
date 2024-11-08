@@ -20,14 +20,13 @@ class ClientController extends BaseController
     {
         $qb = $this->doctrine->createQueryBuilder();
 
-        if (!$request->get('search'))
-        {
-            $results = $clientRepository->findAll();
-        } else
-        {
+        if (!$request->get('search')) {
+            $results = $clientRepository->findBy([], ['createdAt' => 'DESC']);
+        } else {
             $results = $clientRepository->createQueryBuilder('c_e')
                 ->where($qb->expr()->like('c_e.email', ':search'))
                 ->orWhere($qb->expr()->like('c_e.telephone', ':search'))
+                ->orderBy('c_e.createdAt', 'DESC')
                 ->setParameter('search', "%" . $request->get('search') . "%");
         }
 
@@ -50,8 +49,7 @@ class ClientController extends BaseController
         $client = new Client();
         $form = $this->createForm(ClientType::class, $client);
         $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid())
-        {
+        if ($form->isSubmitted() && $form->isValid()) {
             $this->addFlash('notice', 'info');
             $this->addFlash('error', 'error');
             $entityManager = $this->doctrine;
@@ -81,8 +79,7 @@ class ClientController extends BaseController
         $form = $this->createForm(ClientType::class, $client);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid())
-        {
+        if ($form->isSubmitted() && $form->isValid()) {
             $this->doctrine->flush();
 
             return $this->redirectToRoute('client_index');
@@ -97,8 +94,7 @@ class ClientController extends BaseController
     #[Route('/{id}', name: 'client_delete', methods: ['POST'])]
     public function delete(Request $request, Client $client): Response
     {
-        if ($this->isCsrfTokenValid('delete' . $client->getId(), $request->request->get('_token')))
-        {
+        if ($this->isCsrfTokenValid('delete' . $client->getId(), $request->request->get('_token'))) {
             $entityManager = $this->doctrine;
             $entityManager->remove($client);
             $entityManager->flush();

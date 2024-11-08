@@ -19,7 +19,7 @@ class StorageController extends BaseController
     public function index(StorageRepository $storageRepository, PaginatorInterface $paginator, Request $request): Response
     {
         $pagination = $paginator->paginate(
-            $storageRepository->findAll(),
+            $storageRepository->findBy([], ['createdAt' => 'DESC']),
             $request->query->getInt('page', 1)
         );
         $pagination->setCustomParameters([
@@ -38,8 +38,7 @@ class StorageController extends BaseController
         $form = $this->createForm(StorageType::class, $storage);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid())
-        {
+        if ($form->isSubmitted() && $form->isValid()) {
             $entityManager = $this->doctrine;
             $entityManager->persist($storage);
             $entityManager->flush();
@@ -67,8 +66,7 @@ class StorageController extends BaseController
         $form = $this->createForm(StorageType::class, $storage);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid())
-        {
+        if ($form->isSubmitted() && $form->isValid()) {
             $this->doctrine->flush();
 
             return $this->redirectToRoute('storage_index');
@@ -83,8 +81,7 @@ class StorageController extends BaseController
     #[Route('/{id}', name: 'storage_delete', methods: ['POST'])]
     public function delete(Request $request, Storage $storage): Response
     {
-        if ($this->isCsrfTokenValid('delete' . $storage->getId(), $request->request->get('_token')))
-        {
+        if ($this->isCsrfTokenValid('delete' . $storage->getId(), $request->request->get('_token'))) {
             $entityManager = $this->doctrine;
             $entityManager->remove($storage);
             $entityManager->flush();

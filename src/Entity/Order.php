@@ -168,14 +168,14 @@ class Order implements Loggable
         return $this;
     }
 
-    public function getLabor(): int
+    public function getLabor(): float
     {
-        return $this->labor;
+        return $this->labor / 100;
     }
 
-    public function setLabor(int $labor): static
+    public function setLabor(float $labor): static
     {
-        $this->labor = $labor;
+        $this->labor = $labor * 100;
 
         return $this;
     }

@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Repository\ClientRepository;
 use App\Repository\OrderRepository;
+use Doctrine\DBAL\Exception;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
@@ -11,6 +12,9 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[IsGranted('ROLE_USER')]
 class DashboardController extends BaseController
 {
+    /**
+     * @throws Exception
+     */
     #[Route('/dashboard', name: 'dashboard')]
     public function index(OrderRepository $realisedServiceRepository, ClientRepository $clientRepository): Response
     {
@@ -19,20 +23,24 @@ class DashboardController extends BaseController
         $allRealisedServices = $realisedServiceRepository->count();
         $thisMonthRealisedServices = $realisedServiceRepository->createQueryBuilder('rs')
             ->andWhere('rs.createdAt >= :date')
-            ->setParameter(':date',$firstDayOfMonth)
+            ->setParameter(':date', $firstDayOfMonth)
             ->getQuery()
             ->execute();
         $numOfClients = $clientRepository->count();
         $numOfNewClients = $clientRepository->createQueryBuilder('cr')
             ->andWhere('cr.createdAt >= :date')
-            ->setParameter(':date',$firstDayOfMonth)
+            ->setParameter(':date', $firstDayOfMonth)
             ->getQuery()
             ->execute();
+        $numOfRealisedServicesBYMonth = $realisedServiceRepository->getCountByYearGroupByMonth(date('Y'));
+        $valueOfRealisedServicesBYMonth = $realisedServiceRepository->getValueByYearGroupByMonth(date('Y'));
         return $this->render('dashboard/index.html.twig', [
             'allRealisedServices' => $allRealisedServices,
             'thisMonthRealisedServices' => $thisMonthRealisedServices,
             'numOfClients' => $numOfClients,
-            'numOfNewClients' => $numOfNewClients
+            'numOfNewClients' => $numOfNewClients,
+            'numOfRealisedServicesBYMonth' => json_encode($numOfRealisedServicesBYMonth),
+            'valueOfRealisedServicesBYMonth' => json_encode($valueOfRealisedServicesBYMonth),
         ]);
     }
 }

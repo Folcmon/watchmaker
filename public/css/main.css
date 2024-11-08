@@ -1,0 +1,38 @@
+:root {
+    --bs-border-radius: 0;
+
+    .card {
+        --bs-card-border-radius: 0;
+    }
+
+    .navbar {
+        --bs-navbar-toggler-border-radius: var(--bs-border-radius);
+    }
+}
+
+.btn {
+    border-radius: 0;
+}
+
+.usedParts {
+    li {
+        list-style-type: none;
+    }
+}
+
+.select2-selection.select2-selection--single {
+    height: 38px;
+    padding: 6px 14px;
+}
+
+.layout-navbar.navbar-detached {
+    border-radius: 0;
+}
+
+.layout-wrapper:not(.layout-horizontal) .bg-menu-theme .menu-inner .menu-item .menu-link {
+    border-radius: 0;
+}
+
+.select2-container--default .select2-selection--single {
+    border-radius: 0;
+}

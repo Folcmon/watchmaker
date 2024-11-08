@@ -93,7 +93,7 @@ class Storage
      */
     public function getPrice(): float
     {
-        return $this->price / 1000;
+        return $this->price / 100;
     }
 
     /**
@@ -101,7 +101,7 @@ class Storage
      */
     public function setPrice(float $price): void
     {
-        $this->price = $price * 1000;
+        $this->price = $price * 100;
     }
 
     /**

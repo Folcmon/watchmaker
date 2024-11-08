@@ -36,12 +36,12 @@ class StorageType extends AbstractType
                 ]
             ])
             ->add('vat', NumberType::class, [
-                'label' => 'Kwota podatku VAT w procentach',
+                'label' => 'Kwota podatku VAT w %',
                 'scale' => 0,
                 'html5' => true
             ])
             ->add('margin', NumberType::class, [
-                'label' => 'Kwota marży w procentach',
+                'label' => 'Kwota marży w %',
                 'scale' => 0,
                 'html5' => true
             ]);

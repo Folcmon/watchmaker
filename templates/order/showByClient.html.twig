@@ -35,6 +35,7 @@
                                 <th>{{ "Opis usługi"|trans }}</th>
                                 <th>{{ "Utworzony"|trans }}</th>
                                 <th>{{ "Zmodyfikowany"|trans }}</th>
+                                <th>{{ "Status"|trans }}</th>
                                 <th>{{ "Akcje"|trans }}</th>
                             </tr>
                             </thead>
@@ -45,9 +46,10 @@
                                     <td>{{ order.description }}</td>
                                     <td>{{ order.createdAt ? order.createdAt|date('Y-m-d H:i:s') : '' }}</td>
                                     <td>{{ order.updatedAt ? order.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
+                                    <td>{{ order.status }}</td>
                                     <td>
                                         <a href="{{ path('order_show', {'id': order.id}) }}"
-                                           class="btn-secondary btn btn-sm">{{ "Wyświetl"|trans }}</a>
+                                           class="btn-success btn btn-sm">{{ "Wyświetl"|trans }}</a>
                                         <a href="{{ path('order_edit', {'id': order.id}) }}"
                                            class="btn-primary btn btn-sm">{{ "Edytuj"|trans }}</a>
                                     </td>

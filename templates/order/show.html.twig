@@ -31,6 +31,9 @@
             <th>{{ "Zmodyfikowany" }}</th>
             <td>{{ realised_order.updatedAt ? realised_order.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
         </tr>
+        <tr>
+            <th>{{ "Status"|trans }}</th>
+            <td>{{ realised_order.status }}</td>
         </tbody>
     </table>
     <div class="row mb-3">

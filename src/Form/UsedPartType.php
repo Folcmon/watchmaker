@@ -5,6 +5,7 @@ namespace App\Form;
 use App\Entity\Storage;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ButtonType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -17,11 +18,14 @@ class UsedPartType extends AbstractType
             ->add('usedPart', EntityType::class, [
                 'class' => Storage::class,
                 'label' => 'Część',
-                'label_attr' => ['class' => 'col-form-label']
+                'label_attr' => ['class' => '']
             ])
             ->add('quantity', NumberType::class, [
                 'label' => 'Ilość',
-                'label_attr' => ['class' => 'col-form-label']
+                'label_attr' => ['class' => '']
+            ])
+            ->add('delete', ButtonType::class, [
+                'label' => 'Usuń',
             ]);
     }
 

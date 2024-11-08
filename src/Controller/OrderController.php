@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Client;
 use App\Entity\Order;
+use App\Entity\RealisedServiceUsedItem;
 use App\Entity\ServiceAttachment;
 use App\Form\OrderType;
 use App\Repository\OrderRepository;
@@ -27,12 +28,13 @@ class OrderController extends BaseController
         $qb = $this->doctrine->createQueryBuilder();
 
         if (!$request->get('search')) {
-            $results = $orderRepository->findAll();
+            $results = $orderRepository->findBy([], ['createdAt' => 'DESC']);
         } else {
             $results = $orderRepository->createQueryBuilder('order')
                 ->join('order.client', 'client')
                 ->where($qb->expr()->like('client.email', ':search'))
                 ->orWhere($qb->expr()->like('client.telephone', ':search'))
+                ->orderBy('order.createdAt', 'DESC')
                 ->setParameter('search', "%" . $request->get('search') . "%");
         }
 
@@ -88,27 +90,28 @@ class OrderController extends BaseController
     public function edit(Request $request, Order $realisedOrder, StorageRepository $storageRepository): Response
     {
         $em = $this->doctrine;
+        foreach ($realisedOrder->getRealisedServiceUsedItems() as $oldOneOrderUsedItem) {
+            // $realisedOrder->removeRealisedServiceUsedItem($oldOneOrderUsedItem);
+        }
         $form = $this->createForm(OrderType::class, $realisedOrder);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $data = $form->getData();
-            /*            $usedParts = $request->request->get('order')['usedParts'];
-                        foreach ($realisedOrder->getRealisedServiceUsedItems() as $oldOneOrderUsedItem) {
-                            $realisedOrder->removeRealisedServiceUsedItem($oldOneOrderUsedItem);
-                        }
-                        $em->flush();
-                        foreach ($usedParts as $oneUsedPart) {
-                            $usedPartStorageEntity = $storageRepository->find($oneUsedPart['usedPart']);
-                            $usedPartStorageEntity->setQunatity($usedPartStorageEntity->getQunatity() - $oneUsedPart['quantity']);
-                            $realisedOrderUsedItem = new RealisedServiceUsedItem();
-                            $realisedOrderUsedItem->setName($usedPartStorageEntity->getName());
-                            $realisedOrderUsedItem->setQuantity($oneUsedPart['quantity']);
-                            $realisedOrderUsedItem->setPrice(0);// do zrobienia kalkulacja ceny feature na przyszłośc  cena albo 1 itemu bądz całkowita dla typu części  * ilosć
-                            $em->persist($realisedOrderUsedItem);
-                            $realisedOrder->addRealisedServiceUsedItem($realisedOrderUsedItem);
-                        }
-                        $em->flush();*/
-            $uploadsDirectory = $this->getParameter('uploadsDirectory');
+            $usedParts = $request->request->all('order')['usedParts'];
+            foreach ($realisedOrder->getRealisedServiceUsedItems() as $oldOneOrderUsedItem) {
+                $realisedOrder->removeRealisedServiceUsedItem($oldOneOrderUsedItem);
+            }
+            $em->flush();
+            foreach ($usedParts as $oneUsedPart) {
+                $usedPartStorageEntity = $storageRepository->find($oneUsedPart['usedPart']);
+                $usedPartStorageEntity->setQuantity($usedPartStorageEntity->getQuantity() - $oneUsedPart['quantity']);
+                $realisedOrderUsedItem = new RealisedServiceUsedItem();
+                $realisedOrderUsedItem->setName($usedPartStorageEntity->getName());
+                $realisedOrderUsedItem->setQuantity($oneUsedPart['quantity']);
+                $realisedOrderUsedItem->setPrice(0);// do zrobienia kalkulacja ceny feature na przyszłośc  cena albo 1 itemu bądz całkowita dla typu części  * ilosć
+                $em->persist($realisedOrderUsedItem);
+                $realisedOrder->addRealisedServiceUsedItem($realisedOrderUsedItem);
+            }
+            $em->flush();
             $files = $request->files->get('order')['serviceAttachments'];
             if ($files != null) {
                 $uploadsDirectory = $this->getParameter('uploadsDirectory');

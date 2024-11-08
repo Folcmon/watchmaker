@@ -1,3 +1,4 @@
+/*
 const addFormToCollection = (e) => {
     const collectionHolder = document.querySelector('.' + e.currentTarget.dataset.collectionHolderClass);
 
@@ -21,4 +22,4 @@ $(document).ready(function () {
         .forEach(btn => {
             btn.addEventListener("click", addFormToCollection)
         });
-});
+});*/

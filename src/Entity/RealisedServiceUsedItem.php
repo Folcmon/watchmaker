@@ -23,7 +23,7 @@ class RealisedServiceUsedItem
     private ?int $quantity;
 
     #[ORM\Column(type: 'integer')]
-    private ?int $price;
+    private int $price = 0;
 
     #[ORM\ManyToOne(targetEntity: Order::class, inversedBy: 'realisedServiceUsedItems')]
     private ?Order $realisedService;
@@ -57,7 +57,7 @@ class RealisedServiceUsedItem
         return $this;
     }
 
-    public function getPrice(): ?int
+    public function getPrice(): int
     {
         return $this->price;
     }

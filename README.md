@@ -6,14 +6,14 @@
 
 # Do zrobienia
 
-- do formularza dodawania usługi dodać zapis zużytych części i zminusować magazyn
+- Storage stawka vat z encji brana
+- Użyte części sie nie wyświetlają w widoku realizowanej usługi
 - dodać możliwość dodawania załączników do magazynu (np zdjęcia)
 - zrobienie ajaxa do dodawania załączników do usługi
 - zrobienie ajaxa do dodawania załączników do magazynu
 - walidacja Formularzy
 - Opisać w README.md jak zainstalować projekt
 - Opisać w README.md jakie założenia przyjęto przy tworzeniu projektu dla encji RealisedServiceUsedItem
-- dodać logowanie zmian w bazie danych
 
 # Przydatne komendy
 

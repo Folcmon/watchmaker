@@ -8,6 +8,7 @@ use Doctrine\Persistence\ObjectManager;
 
 class VatRatesFixtures extends Fixture
 {
+    const VAT_RATE_23_REFERENCE = 'vat-rate-23';
 
     public function load(ObjectManager $manager): void
     {
@@ -32,5 +33,7 @@ class VatRatesFixtures extends Fixture
         $manager->persist($vatRate4);
 
         $manager->flush();
+
+        $this->addReference(self::VAT_RATE_23_REFERENCE, $vatRate1);
     }
 }

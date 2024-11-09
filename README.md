@@ -1,6 +1,6 @@
 #Strurktura Programu
 
-- Encja RealisedService reperezentuje obiekt realizowanej usługi, realizowana usługa jest na rzecz encji Klient (many to
+- Encja "RealisedService" reprezentuje obiekt realizowanej usługi, realizowana usługa jest na rzecz encji Klient (many to
   one relacja) i może mieć encje service attachment - załączniki do usługi np zdjęcia.
 -
 

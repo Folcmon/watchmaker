@@ -13,6 +13,7 @@ use Gedmo\Timestampable\Traits\TimestampableEntity;
 class VatRate
 {
     use TimestampableEntity;
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -51,5 +52,10 @@ class VatRate
         $this->rateValue = $rateValue;
 
         return $this;
+    }
+
+    public function __toString(): string
+    {
+        return $this->rateName;
     }
 }

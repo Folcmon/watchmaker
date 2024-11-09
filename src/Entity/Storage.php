@@ -31,9 +31,6 @@ class Storage
     private int $price = 0;
 
     #[ORM\Column(type: 'decimal')]
-    private float $vat = 0.0;
-
-    #[ORM\Column(type: 'decimal')]
     private float $margin = 0.0;
 
     /**
@@ -41,6 +38,10 @@ class Storage
      */
     #[ORM\OneToMany(targetEntity: StorageAttachment::class, mappedBy: 'storage', orphanRemoval: true)]
     private Collection $storageAttachments;
+
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?vatRate $vatRate = null;
 
     public function __construct()
     {
@@ -107,22 +108,6 @@ class Storage
     /**
      * @return float
      */
-    public function getVat(): float
-    {
-        return $this->vat;
-    }
-
-    /**
-     * @param float $vat
-     */
-    public function setVat(float $vat): void
-    {
-        $this->vat = $vat;
-    }
-
-    /**
-     * @return float
-     */
     public function getMargin(): float
     {
         return $this->margin;
@@ -167,6 +152,18 @@ class Storage
                 $storageAttachment->setStorage(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getVatRate(): ?vatRate
+    {
+        return $this->vatRate;
+    }
+
+    public function setVatRate(?vatRate $vatRate): static
+    {
+        $this->vatRate = $vatRate;
 
         return $this;
     }

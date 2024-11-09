@@ -3,6 +3,8 @@
 namespace App\Form;
 
 use App\Entity\Storage;
+use App\Entity\VatRate;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -35,10 +37,9 @@ class StorageType extends AbstractType
                     'step' => 0.01
                 ]
             ])
-            ->add('vat', NumberType::class, [
+            ->add('vatRate', EntityType::class, [
                 'label' => 'Kwota podatku VAT w %',
-                'scale' => 0,
-                'html5' => true
+                'class' => VatRate::class,
             ])
             ->add('margin', NumberType::class, [
                 'label' => 'Kwota marży w %',

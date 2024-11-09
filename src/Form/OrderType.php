@@ -3,7 +3,9 @@
 namespace App\Form;
 
 use App\Entity\Order;
+use App\Entity\VatRate;
 use App\Enum\OrderStatusEnum;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
@@ -21,6 +23,10 @@ class OrderType extends AbstractType
         $builder
             ->add('name')
             ->add('labor', NumberType::class)
+            ->add('laborVatRate', EntityType::class, [
+                'class' => VatRate::class,
+                'placeholder' => 'Wybierz stawkę VAT',
+            ])
             ->add('description', TextAreaType::class)
             ->add('client')
             ->add('status', ChoiceType::class, [

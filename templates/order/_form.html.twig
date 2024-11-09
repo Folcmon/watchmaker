@@ -13,7 +13,7 @@
         </div>
         <div class="col-2">
             <div class="form-group">
-                {{ form_widget(form.delete, {'attr': {'class': 'btn btn-danger btn-lg delete-part-btn'}}) }}
+                {{ form_widget(form.delete, {'attr': {'class': 'btn btn-danger delete-part-btn'}}) }}
             </div>
         </div>
     </div>
@@ -30,6 +30,15 @@
         {{ form_errors(form.labor) }}
     </div>
     {{ form_widget(form.labor, {'attr':{'class':'form-control'}}) }}
+</div>
+<div class="form-group mb-4">
+    <label class="col-form-label">
+        {{ "Stopa VAT robocizny"|trans }}
+    </label>
+    <div class="">
+        {{ form_errors(form.laborVatRate) }}
+    </div>
+    {{ form_widget(form.laborVatRate, {'attr':{'class':'form-control'}}) }}
 </div>
 <div class="form-group mb-4">
     <label class="col-form-label">

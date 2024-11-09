@@ -1,12 +1,12 @@
-#Strurktura Programu
+# Strurktura Programu
 
+- Marża obliczana jest na podstawie ceny netto
 - Encja "RealisedService" reprezentuje obiekt realizowanej usługi, realizowana usługa jest na rzecz encji Klient (many to
   one relacja) i może mieć encje service attachment - załączniki do usługi np zdjęcia.
 -
 
 # Do zrobienia
 
-- Storage stawka vat z encji brana
 - Użyte części sie nie wyświetlają w widoku realizowanej usługi
 - dodać możliwość dodawania załączników do magazynu (np zdjęcia)
 - zrobienie ajaxa do dodawania załączników do usługi

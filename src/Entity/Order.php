@@ -49,6 +49,10 @@ class Order implements Loggable
     #[Gedmo\Versioned]
     private int $labor = 0;
 
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?VatRate $laborVatRate = null;
+
     public function __construct()
     {
         $this->serviceAttachments = new ArrayCollection();
@@ -127,7 +131,7 @@ class Order implements Loggable
     }
 
     /**
-     * @return Collection
+     * @return Collection <RealisedServiceUsedItem>
      */
     public function getRealisedServiceUsedItems(): Collection
     {
@@ -178,5 +182,26 @@ class Order implements Loggable
         $this->labor = $labor * 100;
 
         return $this;
+    }
+
+    public function getLaborVatRate(): ?VatRate
+    {
+        return $this->laborVatRate;
+    }
+
+    public function setLaborVatRate(?VatRate $laborVatRate): static
+    {
+        $this->laborVatRate = $laborVatRate;
+
+        return $this;
+    }
+
+    public function getTotalPrice(): float
+    {
+        $totalPrice = $this->labor * (1 + $this->getLaborVatRate()->getRateValue() / 100);
+        foreach ($this->getRealisedServiceUsedItems() as $realisedServiceUsedItem) {
+            $totalPrice += $realisedServiceUsedItem->getTotalPrice();
+        }
+        return $totalPrice;
     }
 }

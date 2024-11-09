@@ -26,6 +26,11 @@
                                 <td>{{ realised_order.client }}</td>
                             </tr>
                             <tr>
+                                <th>{{ "Cena całkowita naprawy" }}</th>
+                                <td>{{ (realised_order.getTotalPrice()/ 100) | number_format(2) }}zł
+                                </td>
+                            </tr>
+                            <tr>
                                 <th>{{ "Numer usługi"|trans }}</th>
                                 <td>{{ realised_order.id }}</td>
                             </tr>

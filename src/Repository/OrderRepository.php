@@ -38,10 +38,15 @@ class OrderRepository extends ServiceEntityRepository
      */
     public function getValueByYearGroupByMonth(string $year): array
     {
-        $sql = "SELECT SUM(rsui.price * rsui.quantity) as counter, MONTH(rsui.created_at) as month FROM realised_service_used_item rsui JOIN orders rs ON rs.id = rsui.realised_service_id WHERE YEAR(rs.created_at) = :year GROUP BY month ORDER BY month ASC";
-        $conn = $this->getEntityManager()->getConnection();
-        $stmt = $conn->prepare($sql);
-        $result = $stmt->executeQuery(['year' => $year]);
+        $qb = $this->createQueryBuilder('o');
+        $qb
+            ->andWhere('YEAR(o.createdAt) = :year')
+            ->groupBy('MONTH(o.createdAt) as month')
+            ->orderBy('month', 'ASC')
+            ->setParameter('year', $year);
+        $result = $qb->getQuery()->getResult();
+        dd($result);
+        //it should return an array of associative arrays [{value: 1/100, month: 1}, {value: 2, month: 2/100}, ...]
         return $result->fetchAllAssociative();
     }
 

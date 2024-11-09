@@ -60,15 +60,42 @@ class OrderController extends BaseController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $files = $request->files;
-            foreach ($files->getIterator() as $file) {
-                $uploadedFiles = $file['serviceAttachments'];
-                $uploadsDirectory = $this->getParameter('uploadsDirectory');
-                $this->uploadOrderAttachment($uploadedFiles, $realisedOrder, $uploadsDirectory);
-            }
-            $em->persist($realisedOrder);
-            $em->flush();
+            $usedParts = $request->request->all('order')['usedParts'] ?? null;
+            if ($usedParts != null) {
+                foreach ($realisedOrder->getRealisedServiceUsedItems() as $oldOneOrderUsedItem) {
+                    $realisedOrder->removeRealisedServiceUsedItem($oldOneOrderUsedItem);
+                }
+                $em->flush();
+                foreach ($usedParts as $oneUsedPart) {
+                    $usedPartStorageEntity = $storageRepository->find($oneUsedPart['usedPart']);
+                    $usedPartStorageEntity->setQuantity($usedPartStorageEntity->getQuantity() - $oneUsedPart['quantity']);
+                    $realisedOrderUsedItem = new RealisedServiceUsedItem();
+                    $realisedOrderUsedItem->setName($usedPartStorageEntity->getName());
+                    $realisedOrderUsedItem->setQuantity($oneUsedPart['quantity']);
+                    $calculatedPriceForOneItem = $usedPartStorageEntity->getTotalPrice() * $oneUsedPart['quantity'];
+                    $realisedOrderUsedItem->setPrice($calculatedPriceForOneItem);
+                    $realisedOrderUsedItem->setRealisedService($realisedOrder);
+                    $em->persist($realisedOrderUsedItem);
+                    $realisedOrder->addRealisedServiceUsedItem($realisedOrderUsedItem);
+                }
 
+            }
+            $em->flush();
+            $files = $request->files->get('order')['serviceAttachments'];
+            if ($files != null) {
+                $uploadsDirectory = $this->getParameter('uploadsDirectory');
+                $filesystem = new Filesystem();
+                if (!empty($realisedOrder->getServiceAttachments())) {
+                    foreach ($realisedOrder->getServiceAttachments() as $attachment) {
+                        $fileToRemove = $uploadsDirectory . DIRECTORY_SEPARATOR . ServiceAttachment::SERVICE_ATTACHMENT_STORE_FOLDER . DIRECTORY_SEPARATOR . $attachment->getPath();
+                        $filesystem->remove($fileToRemove);
+                        $this->doctrine->remove($attachment);
+                    }
+                }
+                $em->flush();
+                $this->uploadOrderAttachment($files, $realisedOrder, $uploadsDirectory);
+            }
+            $em->flush();
             return $this->redirectToRoute('order_index');
         }
 
@@ -90,9 +117,6 @@ class OrderController extends BaseController
     public function edit(Request $request, Order $realisedOrder, StorageRepository $storageRepository): Response
     {
         $em = $this->doctrine;
-        foreach ($realisedOrder->getRealisedServiceUsedItems() as $oldOneOrderUsedItem) {
-            // $realisedOrder->removeRealisedServiceUsedItem($oldOneOrderUsedItem);
-        }
         $form = $this->createForm(OrderType::class, $realisedOrder);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
@@ -108,10 +132,13 @@ class OrderController extends BaseController
                     $realisedOrderUsedItem = new RealisedServiceUsedItem();
                     $realisedOrderUsedItem->setName($usedPartStorageEntity->getName());
                     $realisedOrderUsedItem->setQuantity($oneUsedPart['quantity']);
-                    $realisedOrderUsedItem->setPrice(0);// do zrobienia kalkulacja ceny feature na przyszłośc  cena albo 1 itemu bądz całkowita dla typu części  * ilosć
+                    $calculatedPriceForOneItem = $usedPartStorageEntity->getTotalPrice() * $oneUsedPart['quantity'];
+                    $realisedOrderUsedItem->setPrice($calculatedPriceForOneItem);
+                    $realisedOrderUsedItem->setRealisedService($realisedOrder);
                     $em->persist($realisedOrderUsedItem);
                     $realisedOrder->addRealisedServiceUsedItem($realisedOrderUsedItem);
                 }
+
             }
             $em->flush();
             $files = $request->files->get('order')['serviceAttachments'];

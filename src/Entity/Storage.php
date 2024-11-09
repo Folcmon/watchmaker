@@ -167,4 +167,9 @@ class Storage
 
         return $this;
     }
+
+    public function getTotalPrice(): float
+    {
+        return ($this->price * (1 + $this->getVatRate()->getRateValue() / 100)) * (1 + $this->margin / 100);
+    }
 }

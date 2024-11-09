@@ -82,7 +82,7 @@
         }
         // iterate over the data valueOfRealisedServicesBYMonth its an array of objects {value: 1, month: 1} and fill the data
         for (let i = 0; i < valueOfRealisedServicesBYMonth.length; i++) {
-            valueOfRealisedServicesBYMonthData[valueOfRealisedServicesBYMonth[i].month - 1] = valueOfRealisedServicesBYMonth[i].counter * 1;
+            valueOfRealisedServicesBYMonthData[valueOfRealisedServicesBYMonth[i].month - 1] = valueOfRealisedServicesBYMonth[i].counter * 1.0;
         }
         const incomeChartEl = document.querySelector('#yearNumOfServices'),
             incomeChartConfigValue = {
@@ -203,7 +203,10 @@
                     type: 'area'
                 },
                 dataLabels: {
-                    enabled: true
+                    enabled: true,
+                    formatter: function (val, opt) {
+                        return val + ' zł';
+                    },
                 },
                 stroke: {
                     width: 2,

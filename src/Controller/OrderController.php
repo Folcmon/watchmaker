@@ -55,28 +55,18 @@ class OrderController extends BaseController
     public function new(Request $request, StorageRepository $storageRepository): Response
     {
         $em = $this->doctrine;
-        $realisedOrder = new Order();
-        $form = $this->createForm(OrderType::class, $realisedOrder);
+        $order = new Order();
+        $form = $this->createForm(OrderType::class, $order);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $usedParts = $request->request->all('order')['usedParts'] ?? null;
+            $usedParts = $order->getRealisedServiceUsedItems() ?? null;
             if ($usedParts != null) {
-                foreach ($realisedOrder->getRealisedServiceUsedItems() as $oldOneOrderUsedItem) {
-                    $realisedOrder->removeRealisedServiceUsedItem($oldOneOrderUsedItem);
-                }
-                $em->flush();
                 foreach ($usedParts as $oneUsedPart) {
-                    $usedPartStorageEntity = $storageRepository->find($oneUsedPart['usedPart']);
+                    $usedPartStorageEntity = $storageRepository->find($oneUsedPart->getStorage()->getId());
                     $usedPartStorageEntity->setQuantity($usedPartStorageEntity->getQuantity() - $oneUsedPart['quantity']);
-                    $realisedOrderUsedItem = new RealisedServiceUsedItem();
-                    $realisedOrderUsedItem->setName($usedPartStorageEntity->getName());
-                    $realisedOrderUsedItem->setQuantity($oneUsedPart['quantity']);
                     $calculatedPriceForOneItem = $usedPartStorageEntity->getTotalPrice() * $oneUsedPart['quantity'];
-                    $realisedOrderUsedItem->setPrice($calculatedPriceForOneItem);
-                    $realisedOrderUsedItem->setRealisedService($realisedOrder);
-                    $em->persist($realisedOrderUsedItem);
-                    $realisedOrder->addRealisedServiceUsedItem($realisedOrderUsedItem);
+                    $oneUsedPart->setPrice($calculatedPriceForOneItem);
                 }
 
             }
@@ -85,22 +75,22 @@ class OrderController extends BaseController
             if ($files != null) {
                 $uploadsDirectory = $this->getParameter('uploadsDirectory');
                 $filesystem = new Filesystem();
-                if (!empty($realisedOrder->getServiceAttachments())) {
-                    foreach ($realisedOrder->getServiceAttachments() as $attachment) {
+                if (!empty($order->getServiceAttachments())) {
+                    foreach ($order->getServiceAttachments() as $attachment) {
                         $fileToRemove = $uploadsDirectory . DIRECTORY_SEPARATOR . ServiceAttachment::SERVICE_ATTACHMENT_STORE_FOLDER . DIRECTORY_SEPARATOR . $attachment->getPath();
                         $filesystem->remove($fileToRemove);
                         $this->doctrine->remove($attachment);
                     }
                 }
                 $em->flush();
-                $this->uploadOrderAttachment($files, $realisedOrder, $uploadsDirectory);
+                $this->uploadOrderAttachment($files, $order, $uploadsDirectory);
             }
             $em->flush();
             return $this->redirectToRoute('order_index');
         }
 
         return $this->render('order/new.html.twig', [
-            'realised_order' => $realisedOrder,
+            'order' => $order,
             'form' => $form->createView(),
         ]);
     }
@@ -109,34 +99,24 @@ class OrderController extends BaseController
     public function show(Order $realisedOrder): Response
     {
         return $this->render('order/show.html.twig', [
-            'realised_order' => $realisedOrder,
+            'order' => $realisedOrder,
         ]);
     }
 
     #[Route('/{id}/edit', name: 'order_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Order $realisedOrder, StorageRepository $storageRepository): Response
+    public function edit(Request $request, Order $order, StorageRepository $storageRepository): Response
     {
         $em = $this->doctrine;
-        $form = $this->createForm(OrderType::class, $realisedOrder);
+        $form = $this->createForm(OrderType::class, $order);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $usedParts = $request->request->all('order')['usedParts'] ?? null;
+            $usedParts = $order->getRealisedServiceUsedItems() ?? null;
             if ($usedParts != null) {
-                foreach ($realisedOrder->getRealisedServiceUsedItems() as $oldOneOrderUsedItem) {
-                    $realisedOrder->removeRealisedServiceUsedItem($oldOneOrderUsedItem);
-                }
-                $em->flush();
                 foreach ($usedParts as $oneUsedPart) {
-                    $usedPartStorageEntity = $storageRepository->find($oneUsedPart['usedPart']);
-                    $usedPartStorageEntity->setQuantity($usedPartStorageEntity->getQuantity() - $oneUsedPart['quantity']);
-                    $realisedOrderUsedItem = new RealisedServiceUsedItem();
-                    $realisedOrderUsedItem->setName($usedPartStorageEntity->getName());
-                    $realisedOrderUsedItem->setQuantity($oneUsedPart['quantity']);
-                    $calculatedPriceForOneItem = $usedPartStorageEntity->getTotalPrice() * $oneUsedPart['quantity'];
-                    $realisedOrderUsedItem->setPrice($calculatedPriceForOneItem);
-                    $realisedOrderUsedItem->setRealisedService($realisedOrder);
-                    $em->persist($realisedOrderUsedItem);
-                    $realisedOrder->addRealisedServiceUsedItem($realisedOrderUsedItem);
+                    $usedPartStorageEntity = $storageRepository->find($oneUsedPart->getStorage()->getId());
+                    $usedPartStorageEntity->setQuantity($usedPartStorageEntity->getQuantity() - $oneUsedPart->getQuantity());
+                    $calculatedPriceForOneItem = $usedPartStorageEntity->getTotalPrice() * $oneUsedPart->getQuantity();
+                    $oneUsedPart->setPrice($calculatedPriceForOneItem);
                 }
 
             }
@@ -145,22 +125,22 @@ class OrderController extends BaseController
             if ($files != null) {
                 $uploadsDirectory = $this->getParameter('uploadsDirectory');
                 $filesystem = new Filesystem();
-                if (!empty($realisedOrder->getServiceAttachments())) {
-                    foreach ($realisedOrder->getServiceAttachments() as $attachment) {
+                if (!empty($order->getServiceAttachments())) {
+                    foreach ($order->getServiceAttachments() as $attachment) {
                         $fileToRemove = $uploadsDirectory . DIRECTORY_SEPARATOR . ServiceAttachment::SERVICE_ATTACHMENT_STORE_FOLDER . DIRECTORY_SEPARATOR . $attachment->getPath();
                         $filesystem->remove($fileToRemove);
                         $this->doctrine->remove($attachment);
                     }
                 }
                 $em->flush();
-                $this->uploadOrderAttachment($files, $realisedOrder, $uploadsDirectory);
+                $this->uploadOrderAttachment($files, $order, $uploadsDirectory);
             }
             $em->flush();
             return $this->redirectToRoute('order_index');
         }
 
         return $this->render('order/edit.html.twig', [
-            'realised_order' => $realisedOrder,
+            'order' => $order,
             'form' => $form->createView(),
         ]);
     }
@@ -222,7 +202,7 @@ class OrderController extends BaseController
 
         return $this->render('order/showByClient.html.twig', [
             'pagination' => $pagination,
-            'realised_orders' => $realisedOrders,
+            'orders' => $realisedOrders,
             'client' => $client
         ]);
     }

@@ -12,12 +12,12 @@
 
 - Encja "RealisedService" reprezentuje obiekt realizowanej usługi, realizowana usługa jest na rzecz encji Klient (many
   to
-  one relacja) i może mieć encje service attachment - załączniki do usługi np zdjęcia.
+  one relacja) i może mieć encje service attachment- załączniki do usługi np. zdjęcia.
 -
 
 # Do zrobienia
 
-- Użyte części sie nie wyświetlają w widoku realizowanej usługi
+- Napisać testy jednostkowe i end to end za pomocą playwritha
 - dodać możliwości obsługi klientów firmowych
 - dodać możliwość dodawania załączników do magazynu (np zdjęcia)
 - zrobienie ajaxa do dodawania załączników do usługi

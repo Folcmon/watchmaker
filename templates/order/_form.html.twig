@@ -2,7 +2,7 @@
     <div class="row used-part-item mb-4">
         <div class="col-8">
             <div class="form-group">
-                {{ form_widget(form.usedPart, {'attr': {'class': 'select2'}}) }}
+                {{ form_widget(form.storage, {'attr': {'class': 'select2'}}) }}
 
             </div>
         </div>
@@ -95,15 +95,14 @@
     </div>
     <div class="row mb-4">
         <div class="col-md-12 used-parts-container"
-             data-prototype="{{ formTheme.printUsedPartsRow(form.usedParts.vars.prototype)|e('html_attr') }}">
+             data-prototype="{{ formTheme.printUsedPartsRow(form.realisedServiceUsedItems.vars.prototype)|e('html_attr') }}">
             <div class="row">
                 <div class="col-md-12 mb-4">
                     <span class="btn btn-success used-part-addition-button btn-lg"
                           data-collection-holder-class="usedParts">{{ "Dodaj użytą część"|trans }}</span>
                 </div>
-                {% for usedPart in form.usedParts %}
-                    {{ dump(form.usedPart) }}
-                    {{ formTheme.printUsedPartsRow(usedPart) }}
+                {% for part in form.realisedServiceUsedItems %}
+                    {{ formTheme.printUsedPartsRow(part) }}
                 {% endfor %}
             </div>
         </div>
@@ -118,7 +117,7 @@
 
         // Prototype formularza
         let prototype = container.dataset.prototype;
-        let index = {{ form.usedParts|length }};
+        let index = {{ form.realisedServiceUsedItems|length }};
         // Dodanie nowej części
         addButton.addEventListener('click', function () {
             let newForm = prototype.replace(/__name__/g, index);

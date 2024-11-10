@@ -2,6 +2,7 @@
 
 namespace App\Form;
 
+use App\Entity\RealisedServiceUsedItem;
 use App\Entity\Storage;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
@@ -15,10 +16,10 @@ class UsedPartType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('usedPart', EntityType::class, [
+            ->add('storage', EntityType::class, [
                 'class' => Storage::class,
-                'label' => 'Część',
-                'label_attr' => ['class' => '']
+                'placeholder' => 'Wybierz część',
+                'attr' => ['class' => 'select2'],
             ])
             ->add('quantity', NumberType::class, [
                 'label' => 'Ilość',
@@ -32,7 +33,7 @@ class UsedPartType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            // Configure your form options here
+            'data_class' => RealisedServiceUsedItem::class,
         ]);
     }
 }

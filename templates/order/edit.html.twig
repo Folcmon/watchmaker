@@ -15,18 +15,6 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-body">
-                    {% for item in realised_order.realisedServiceUsedItems %}
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="alert alert-success" role="alert">
-                                    <h4 class="alert-heading">{{ item.name }}</h4>
-                                    <p>{{ item.quantity }}</p>
-                                    <hr>
-                                    <p class="mb-0">{{ item.price }} zł</p>
-                                </div>
-                            </div>
-                        </div>
-                    {% endfor %}
                     {{ include('order/_form.html.twig') }}
                 </div>
                 <div class="card-footer border-top pt-4">

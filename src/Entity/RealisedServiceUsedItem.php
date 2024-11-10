@@ -16,9 +16,6 @@ class RealisedServiceUsedItem
     #[ORM\Column(type: 'integer')]
     private ?int $id;
 
-    #[ORM\Column(type: 'string', length: 255)]
-    private ?string $name;
-
     #[ORM\Column(type: 'integer')]
     private ?int $quantity;
 
@@ -28,21 +25,13 @@ class RealisedServiceUsedItem
     #[ORM\ManyToOne(targetEntity: Order::class, inversedBy: 'realisedServiceUsedItems')]
     private ?Order $realisedService;
 
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Storage $storage = null;
+
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getName(): ?string
-    {
-        return $this->name;
-    }
-
-    public function setName(string $name): self
-    {
-        $this->name = $name;
-
-        return $this;
     }
 
     public function getQuantity(): ?int
@@ -84,5 +73,17 @@ class RealisedServiceUsedItem
     public function getTotalPrice(): int
     {
         return $this->price * $this->quantity;
+    }
+
+    public function getStorage(): ?Storage
+    {
+        return $this->storage;
+    }
+
+    public function setStorage(?Storage $storage): static
+    {
+        $this->storage = $storage;
+
+        return $this;
     }
 }

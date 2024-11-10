@@ -8,9 +8,9 @@
 
 {% block body %}
     <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">
-           <a href="{{ path('order_index') }}">{{ "Usługi"| trans }}</a> /</span> Numer {{ realised_order.id }} dla
-        klienta <a href="{{ path('client_show',{'id': realised_order.client.id}) }}">
-            {{ realised_order.client }}
+           <a href="{{ path('order_index') }}">{{ "Usługi"| trans }}</a> /</span> Numer {{ order.id }} dla
+        klienta <a href="{{ path('client_show',{'id': order.client.id}) }}">
+            {{ order.client }}
         </a>
     </h4>
 
@@ -23,38 +23,38 @@
                             <tbody>
                             <tr>
                                 <th>{{ "Klient"|trans }}</th>
-                                <td>{{ realised_order.client }}</td>
+                                <td>{{ order.client }}</td>
                             </tr>
                             <tr>
                                 <th>{{ "Cena całkowita naprawy" }}</th>
-                                <td>{{ (realised_order.getTotalPrice()/ 100) | number_format(2) }}zł
+                                <td>{{ (order.getTotalPrice()/ 100) | number_format(2) }}zł
                                 </td>
                             </tr>
                             <tr>
                                 <th>{{ "Numer usługi"|trans }}</th>
-                                <td>{{ realised_order.id }}</td>
+                                <td>{{ order.id }}</td>
                             </tr>
                             <tr>
                                 <th>{{ "Opis"|trans }}</th>
-                                <td>{{ realised_order.description }}</td>
+                                <td>{{ order.description }}</td>
                             </tr>
                             <tr>
                                 <th>{{ "Utworzony"|trans }}</th>
-                                <td>{{ realised_order.createdAt ? realised_order.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+                                <td>{{ order.createdAt ? order.createdAt|date('Y-m-d H:i:s') : '' }}</td>
                             </tr>
                             <tr>
                                 <th>{{ "Zmodyfikowany" }}</th>
-                                <td>{{ realised_order.updatedAt ? realised_order.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
+                                <td>{{ order.updatedAt ? order.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
                             </tr>
                             <tr>
                                 <th>{{ "Status"|trans }}</th>
-                                <td>{{ realised_order.status }}</td>
+                                <td>{{ order.status }}</td>
                             </tbody>
                         </table>
                     </div>
                     <div class="row mb-3">
                         <div class="col-xl-12">
-                            {% for attachment in realised_order.serviceAttachments %}
+                            {% for attachment in order.serviceAttachments %}
                                 <img class="img-thumbnail"
                                      src="{{ asset("uploads/service_attachment/") }}{{ attachment.getPath }}">
                             {% endfor %}
@@ -70,10 +70,10 @@
                                     </td>
                                 </tr>
                                 </thead>
-                                {% for usedPart in realised_order.realisedServiceUsedItems %}
+                                {% for usedPart in order.realisedServiceUsedItems %}
                                     <tr>
                                         <td>
-                                            Nazwa: {{ usedPart.name }} Ilość: {{ usedPart.quantity }}
+                                            Nazwa: {{ usedPart.storage.name }} Ilość: {{ usedPart.quantity }}
                                         </td>
                                     </tr>
                                 {% endfor %}
@@ -83,7 +83,7 @@
 
                     <div class="row">
                         <div class="col-md-12">
-                            <a href="{{ path('order_edit', {'id': realised_order.id}) }}"
+                            <a href="{{ path('order_edit', {'id': order.id}) }}"
                                class="btn-primary btn btn-lg btn float-end">{{ "Edycja"|trans }}</a>
                         </div>
                     </div>

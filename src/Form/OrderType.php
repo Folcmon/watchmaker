@@ -34,11 +34,11 @@ class OrderType extends AbstractType
                 'label' => 'Status',
             ])
             ->add('serviceAttachments', FileType::class, ['multiple' => true, 'mapped' => false, 'required' => false])
-            ->add('usedParts', CollectionType::class, [
+            ->add('realisedServiceUsedItems', CollectionType::class, [
                 'attr' => ['class' => 'usedParts-collection form-inline'],
                 'label' => false,
                 'entry_type' => UsedPartType::class,
-                'mapped' => false,
+                'mapped' => true,
                 'allow_add' => true,
                 'allow_delete' => true,
                 'prototype' => true,

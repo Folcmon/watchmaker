@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 
 #[ORM\Entity(repositoryClass: StorageRepository::class)]
+#[ORM\UniqueConstraint(name: 'name_unique', columns: ['name'])]
 class Storage
 {
     use TimestampableEntity;
@@ -31,7 +32,7 @@ class Storage
     private int $price = 0;
 
     #[ORM\Column(type: 'decimal')]
-    private float $margin = 0.0;
+    private string $margin = '0.0';
 
     /**
      * @var Collection<int, StorageAttachment>
@@ -106,9 +107,9 @@ class Storage
     }
 
     /**
-     * @return float
+     * @return string
      */
-    public function getMargin(): float
+    public function getMargin(): string
     {
         return $this->margin;
     }
@@ -116,7 +117,7 @@ class Storage
     /**
      * @param float $margin
      */
-    public function setMargin(float $margin): void
+    public function setMargin(string $margin): void
     {
         $this->margin = $margin;
     }

@@ -7,9 +7,10 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 
 /**
- * Describie available VAT rates in all system 23% == vatValue 23
+ * Describe available VAT rates in all system 23% == vatValue 23
  */
 #[ORM\Entity(repositoryClass: VatRateRepository::class)]
+#[ORM\UniqueConstraint(name: 'rate_name_unique', columns: ['rate_name', 'rate_value'])]
 class VatRate
 {
     use TimestampableEntity;

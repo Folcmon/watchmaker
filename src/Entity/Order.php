@@ -11,6 +11,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 
 #[ORM\Entity(repositoryClass: OrderRepository::class)]
+#[ORM\UniqueConstraint(name: 'name_unique', columns: ['name'])]
 #[ORM\Table(name: 'orders')]
 #[Gedmo\Loggable]
 class Order implements Loggable

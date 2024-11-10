@@ -24,7 +24,7 @@
     <div class="menu-inner-shadow"></div>
 
     <ul class="menu-inner py-1">
-        <li class="menu-item active">
+        <li class="menu-item {% if app.current_route == 'dashboard' %} active {% endif %}">
             <a href="{{ path("dashboard") }}" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-home-circle"></i>
                 <div data-i18n="Analytics">{{ "Ekran główny"|trans }}</div>
@@ -33,19 +33,19 @@
         <li class="menu-header small text-uppercase"><span
                     class="menu-header-text">{{ "Serwis"| trans }}</span></li>
 
-        <li class="menu-item">
+        <li class="menu-item {% if app.current_route == 'client_index' %} active {% endif %}">
             <a href="{{ path('client_index') }}" class="menu-link">
                 <i class='bx bxs-user-detail mx-2'></i>
                 <div>{{ "Klienci"| trans }}</div>
             </a>
         </li>
-        <li class="menu-item">
+        <li class="menu-item {% if app.current_route == 'order_index' %} active {% endif %}">
             <a href="{{ path('order_index') }}" class="menu-link">
                 <i class='bx bxs-extension mx-2'></i>
                 <div>{{ "Zlecenia"|trans }}</div>
             </a>
         </li>
-        <li class="menu-item">
+        <li class="menu-item {% if app.current_route == 'storage_index' %} active {% endif %}">
             <a href="{{ path('storage_index') }}" class="menu-link">
                 <i class='bx bxs-store-alt mx-2'></i>
                 <div>{{ "Magazyn"| trans }}</div>
@@ -53,7 +53,7 @@
         </li>
         <li class="menu-header small text-uppercase"><span
                     class="menu-header-text">{{ "Administracja"| trans }}</span></li>
-        <li class="menu-item">
+        <li class="menu-item {% if app.current_route == 'app_vat_rate_index' %} active {% endif %}">
             <a href="{{ path('app_vat_rate_index') }}" class="menu-link">
                 <i class='bx bxs-bank mx-2'></i>
                 <div>{{ "Stawki VAT"| trans }}</div>

@@ -42,7 +42,7 @@ class Storage
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
-    private ?vatRate $vatRate = null;
+    private ?VatRate $vatRate = null;
 
     public function __construct()
     {
@@ -157,12 +157,12 @@ class Storage
         return $this;
     }
 
-    public function getVatRate(): ?vatRate
+    public function getVatRate(): ?VatRate
     {
         return $this->vatRate;
     }
 
-    public function setVatRate(?vatRate $vatRate): static
+    public function setVatRate(?VatRate $vatRate): static
     {
         $this->vatRate = $vatRate;
 

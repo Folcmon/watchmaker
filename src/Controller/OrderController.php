@@ -189,8 +189,12 @@ class OrderController extends BaseController
     }
 
     #[Route('/client/{id}', name: 'order_show_by_client', methods: ['GET'])]
-    public function showByClient(Client $client, OrderRepository $realisedOrderRepository, PaginatorInterface $paginator, Request $request): Response
-    {
+    public function showByClient(
+        Client $client,
+        OrderRepository $realisedOrderRepository,
+        PaginatorInterface $paginator,
+        Request $request
+    ): Response {
         $realisedOrders = $realisedOrderRepository->findBy(['client' => $client]);
 
         $pagination = $paginator->paginate(

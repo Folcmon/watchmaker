@@ -15,8 +15,11 @@ use Symfony\Component\Routing\Attribute\Route;
 class VatRateController extends AbstractController
 {
     #[Route('/', name: 'app_vat_rate_index', methods: ['GET'])]
-    public function index(VatRateRepository $vatRateRepository, Request $request, PaginatorInterface $paginator): Response
-    {
+    public function index(
+        VatRateRepository $vatRateRepository,
+        Request $request,
+        PaginatorInterface $paginator
+    ): Response {
         $results = $vatRateRepository->findAll();
         $pagination = $paginator->paginate(
             $results,

@@ -16,8 +16,11 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 class StorageController extends BaseController
 {
     #[Route('/', name: 'storage_index', methods: ['GET'])]
-    public function index(StorageRepository $storageRepository, PaginatorInterface $paginator, Request $request): Response
-    {
+    public function index(
+        StorageRepository $storageRepository,
+        PaginatorInterface $paginator,
+        Request $request
+    ): Response {
         $pagination = $paginator->paginate(
             $storageRepository->findBy([], ['createdAt' => 'DESC']),
             $request->query->getInt('page', 1)

@@ -39,7 +39,10 @@ class Order implements Loggable
     #[ORM\OneToMany(targetEntity: ServiceAttachment::class, mappedBy: 'service', cascade: ['all'], orphanRemoval: true)]
     private Collection|array $serviceAttachments;
 
-    #[ORM\OneToMany(targetEntity: RealisedServiceUsedItem::class, mappedBy: 'realisedService', cascade: ['persist', 'remove'])]
+    #[ORM\OneToMany(targetEntity: RealisedServiceUsedItem::class, mappedBy: 'realisedService', cascade: [
+        'persist',
+        'remove'
+    ])]
     private Collection $realisedServiceUsedItems;
 
     #[ORM\Column(length: 255)]

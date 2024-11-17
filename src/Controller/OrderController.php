@@ -94,6 +94,29 @@ class OrderController extends BaseController
         ]);
     }
 
+    private function uploadOrderAttachment($files, $realisedOrder, $uploadsDirectory): void
+    {
+        if ($files != null) {
+            /**
+             * @var $oneFileAttachment UploadedFile
+             */
+            foreach ($files as $oneFileAttachment) {
+                $directory = $uploadsDirectory . DIRECTORY_SEPARATOR . ServiceAttachment::SERVICE_ATTACHMENT_STORE_FOLDER;
+                $extension = $oneFileAttachment->guessExtension();
+                if (!$extension) {
+                    $extension = 'bin';
+                }
+                $filename = md5(microtime()) . '.' . $extension;
+                $oneFileAttachment->move($directory, $filename);
+                $orderAttachment = new ServiceAttachment();
+                $orderAttachment->setPath($filename);
+                $orderAttachment->setService($realisedOrder);
+                $this->doctrine->persist($orderAttachment);
+                $this->doctrine->flush();
+            }
+        }
+    }
+
     #[Route('/{id}', name: 'order_show', methods: ['GET'])]
     public function show(Order $realisedOrder): Response
     {
@@ -163,29 +186,6 @@ class OrderController extends BaseController
         }
 
         return $this->redirectToRoute('order_index');
-    }
-
-    private function uploadOrderAttachment($files, $realisedOrder, $uploadsDirectory): void
-    {
-        if ($files != null) {
-            /**
-             * @var $oneFileAttachment UploadedFile
-             */
-            foreach ($files as $oneFileAttachment) {
-                $directory = $uploadsDirectory . DIRECTORY_SEPARATOR . ServiceAttachment::SERVICE_ATTACHMENT_STORE_FOLDER;
-                $extension = $oneFileAttachment->guessExtension();
-                if (!$extension) {
-                    $extension = 'bin';
-                }
-                $filename = md5(microtime()) . '.' . $extension;
-                $oneFileAttachment->move($directory, $filename);
-                $orderAttachment = new ServiceAttachment();
-                $orderAttachment->setPath($filename);
-                $orderAttachment->setService($realisedOrder);
-                $this->doctrine->persist($orderAttachment);
-                $this->doctrine->flush();
-            }
-        }
     }
 
     #[Route('/client/{id}', name: 'order_show_by_client', methods: ['GET'])]

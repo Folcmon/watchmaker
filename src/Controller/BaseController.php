@@ -11,8 +11,8 @@ class BaseController extends AbstractController
 {
     public function __construct(
         protected readonly EntityManagerInterface $doctrine,
-        protected readonly ParameterBagInterface           $parameterBag,
-        protected readonly RequestStack                    $requestStack
+        protected readonly ParameterBagInterface  $parameterBag,
+        protected readonly RequestStack           $requestStack
     )
     {
     }

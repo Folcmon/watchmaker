@@ -131,14 +131,6 @@ class Order implements Loggable
         return $this;
     }
 
-    /**
-     * @return Collection <RealisedServiceUsedItem>
-     */
-    public function getRealisedServiceUsedItems(): Collection
-    {
-        return $this->realisedServiceUsedItems;
-    }
-
     public function addRealisedServiceUsedItem(RealisedServiceUsedItem $realisedServiceUsedItem): self
     {
         if (!$this->realisedServiceUsedItems->contains($realisedServiceUsedItem)) {
@@ -185,6 +177,15 @@ class Order implements Loggable
         return $this;
     }
 
+    public function getTotalPrice(): float
+    {
+        $totalPrice = $this->labor * (1 + $this->getLaborVatRate()->getRateValue() / 100);
+        foreach ($this->getRealisedServiceUsedItems() as $realisedServiceUsedItem) {
+            $totalPrice += $realisedServiceUsedItem->getTotalPrice();
+        }
+        return $totalPrice;
+    }
+
     public function getLaborVatRate(): ?VatRate
     {
         return $this->laborVatRate;
@@ -197,12 +198,11 @@ class Order implements Loggable
         return $this;
     }
 
-    public function getTotalPrice(): float
+    /**
+     * @return Collection <RealisedServiceUsedItem>
+     */
+    public function getRealisedServiceUsedItems(): Collection
     {
-        $totalPrice = $this->labor * (1 + $this->getLaborVatRate()->getRateValue() / 100);
-        foreach ($this->getRealisedServiceUsedItems() as $realisedServiceUsedItem) {
-            $totalPrice += $realisedServiceUsedItem->getTotalPrice();
-        }
-        return $totalPrice;
+        return $this->realisedServiceUsedItems;
     }
 }

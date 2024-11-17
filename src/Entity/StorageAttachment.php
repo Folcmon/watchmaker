@@ -13,6 +13,7 @@ class StorageAttachment
 {
     const STORAGE_ATTACHMENT_STORE_FOLDER = 'storage_attachment';
     use TimestampableEntity;
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]

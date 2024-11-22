@@ -31,6 +31,12 @@ class Client
     #[ORM\OneToMany(targetEntity: Order::class, mappedBy: 'client')]
     private Collection $orders;
 
+    #[ORM\Column]
+    private ?bool $isCompany = false;
+
+    #[ORM\OneToOne(mappedBy: 'client', cascade: ['persist', 'remove'])]
+    private ?Company $company = null;
+
     public function __construct()
     {
         $this->orders = new ArrayCollection();
@@ -112,5 +118,22 @@ class Client
     public function __toString(): string
     {
         return $this->name . ' ' . $this->email . ' ' . $this->telephone;
+    }
+
+    public function isCompany(): ?bool
+    {
+        return $this->isCompany;
+    }
+
+    public function setCompany(bool $isCompany): static
+    {
+        $this->isCompany = $isCompany;
+
+        return $this;
+    }
+
+    public function getCompany(): ?Company
+    {
+        return $this->company;
     }
 }

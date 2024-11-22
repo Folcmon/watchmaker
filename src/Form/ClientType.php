@@ -25,7 +25,9 @@ class ClientType extends AbstractType
             ->add('email', EmailType::class, [
                 'label' => 'Adres e-mail',
                 'attr' => ['placeholder' => 'Adres e-mail']
-            ]);
+            ])
+            ->add('company')
+        ;
     }
 
     public function configureOptions(OptionsResolver $resolver): void

@@ -28,6 +28,7 @@ class ClientType extends AbstractType
                 'attr' => ['placeholder' => 'Adres e-mail']
             ])
             ->add('isCompany', CheckboxType::class, [
+                'required' => false,
                 'label' => 'Klient firmowy',
                 'attr' => ['placeholder' => 'Klient firmowy']
             ])

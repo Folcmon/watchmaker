@@ -63,8 +63,8 @@ class OrderController extends BaseController
             if ($usedParts != null) {
                 foreach ($usedParts as $oneUsedPart) {
                     $usedPartStorageEntity = $storageRepository->find($oneUsedPart->getStorage()->getId());
-                    $usedPartStorageEntity->setQuantity($usedPartStorageEntity->getQuantity() - $oneUsedPart['quantity']);
-                    $calculatedPriceForOneItem = $usedPartStorageEntity->getTotalPrice() * $oneUsedPart['quantity'];
+                    $usedPartStorageEntity->setQuantity($usedPartStorageEntity->getQuantity() - $oneUsedPart->getQuantity());
+                    $calculatedPriceForOneItem = $usedPartStorageEntity->getTotalPrice() * $oneUsedPart->getQuantity();
                     $oneUsedPart->setPrice($calculatedPriceForOneItem);
                 }
 

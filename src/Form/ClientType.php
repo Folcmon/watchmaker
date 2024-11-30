@@ -32,11 +32,11 @@ class ClientType extends AbstractType
                 'label' => 'Klient firmowy',
                 'attr' => ['placeholder' => 'Klient firmowy']
             ])
-            ->add('company', CompanyType::class, [
+/*            ->add('company', CompanyType::class, [
                 'label' => 'Dane firmy',
                 'row_attr' => ['class' => 'client_company_section'],
                 'required' => false
-            ]);
+            ])*/;
 
     }
 

@@ -33,6 +33,7 @@ class ClientType extends AbstractType
             ])
             ->add('company', CompanyType::class, [
                 'label' => 'Dane firmy',
+                'row_attr' => ['class' => 'client_company_section'],
                 'required' => false
             ]);
 

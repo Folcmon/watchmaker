@@ -39,6 +39,12 @@ class CompanyType extends AbstractType
             ->add('bankAccount', TextType::class, [
                 'label' => 'Numer konta bankowego',
                 'attr' => ['placeholder' => 'Numer konta bankowego']
+            ])
+            ->add('client', EntityType::class, [
+                'class' => Client::class,
+                'choice_label' => 'name',
+                'label' => 'Klient',
+                'attr' => ['placeholder' => 'Klient']
             ]);
     }
 

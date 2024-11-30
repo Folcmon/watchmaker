@@ -125,9 +125,9 @@ class Client
         return $this->isCompany;
     }
 
-    public function setCompany(bool $isCompany): static
+    public function setCompany(Company $company): static
     {
-        $this->isCompany = $isCompany;
+        $this->company = $company;
 
         return $this;
     }
@@ -135,5 +135,15 @@ class Client
     public function getCompany(): ?Company
     {
         return $this->company;
+    }
+
+    public function getIsCompany(): ?bool
+    {
+        return $this->isCompany;
+    }
+
+    public function setIsCompany(?bool $isCompany): void
+    {
+        $this->isCompany = $isCompany;
     }
 }

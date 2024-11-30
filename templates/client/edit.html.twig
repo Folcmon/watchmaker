@@ -28,3 +28,26 @@
         </div>
     </div>
 {% endblock %}
+
+{% block body_scripts %}
+    {{ parent() }}
+    <script>
+        $(document).ready(function () {
+            let isCompany = $('#client_isCompany');
+            let companySection = $('.client_company_section');
+            isCompany.change(function () {
+                if ($(this).is(':checked')) {
+                    companySection.show();
+                } else {
+                    companySection.hide();
+                }
+            });
+            if (isCompany.is(':checked')) {
+                companySection.show();
+            } else {
+                companySection.hide();
+            }
+        });
+    </script>
+{% endblock %}
+

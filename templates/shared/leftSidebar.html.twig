@@ -51,8 +51,15 @@
                 <div>{{ "Magazyn"| trans }}</div>
             </a>
         </li>
-        <li class="menu-header small text-uppercase"><span
-                    class="menu-header-text">{{ "Administracja"| trans }}</span></li>
+        <li class="menu-item {% if app.current_route == 'task_index' %} active {% endif %}">
+            <a href="{{ path('task_index') }}" class="menu-link">
+                <i class='bx bx-task mx-2'></i>
+                <div>{{ "Zadania"| trans }}</div>
+            </a>
+        </li>
+        <li class="menu-header small text-uppercase">
+            <span class="menu-header-text">{{ "Administracja"| trans }}</span>
+        </li>
         <li class="menu-item {% if app.current_route == 'app_vat_rate_index' %} active {% endif %}">
             <a href="{{ path('app_vat_rate_index') }}" class="menu-link">
                 <i class='bx bxs-bank mx-2'></i>

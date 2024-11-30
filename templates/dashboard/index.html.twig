@@ -44,6 +44,22 @@
     <div class="row">
         <div class="col-md-12">
             <div class="card mb-3">
+                <div class="card-header mb-3">{{ "Zadania do wykonania"|trans }} {{ "now"|date('Y-m-d') }}</div>
+                <div class="card-body">
+                    <ul class="list-group">
+                        {% for task in todayDueDateTasks %}
+                            <li class="list-group-item list-group-item-danger">
+                                <a href="{{ path('task_show', {'id': task.id}) }}">{{ task.title }}</a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card mb-3">
                 <div class="card-header mb-3">{{ "Zrealizowane usługi"|trans }} {{ "now"|date('Y') }}</div>
                 <div class="card-body">
                     <div id="yearNumOfServices"></div>

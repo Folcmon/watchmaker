@@ -25,6 +25,8 @@
 - walidacja Formularzy
 - Opisać w README.md jak zainstalować projekt
 - Opisać w README.md jakie założenia przyjęto przy tworzeniu projektu dla encji RealisedServiceUsedItem
+- Statystyki wykonanych usług i sprzedaży części
+- Wysyłka powiadomień email i sms
 
 # Przydatne komendy
 

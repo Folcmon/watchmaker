@@ -55,6 +55,7 @@ class OrderController extends BaseController
     {
         $em = $this->doctrine;
         $order = new Order();
+        $em->persist($order);
         $form = $this->createForm(OrderType::class, $order);
         $form->handleRequest($request);
 

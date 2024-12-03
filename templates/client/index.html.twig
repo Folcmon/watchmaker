@@ -22,7 +22,7 @@
                                 <div class="row mb-4">
                                     <div class="col-xl-12">
                                         <div class="form-group">
-                                            <label class="label inline">{{ "Email użytkownika lub numer telefonu"|trans }}</label>
+                                            <label class="label inline">{{ "Imię i nazwisko, Email użytkownika lub numer telefonu"|trans }}</label>
                                             <input type="text" name="search" class="form-control"
                                                    value="{{ app.request.query.get('search') }}">
                                         </div>
@@ -46,6 +46,9 @@
                             <thead>
                             <tr>
                                 <th>{{ "Numer klienta"|trans }}</th>
+                                <th>
+                                    {{ "Imię i nazwisko"| trans }}
+                                </th>
                                 <th>{{ "Telefon"|trans }}</th>
                                 <th>{{ "Adres email"|trans }}</th>
                                 <th>{{ "Utworzony"|trans }}</th>
@@ -56,6 +59,7 @@
                             {% for client in pagination %}
                                 <tr>
                                     <td>{{ client.id }}</td>
+                                    <td>{{ client.name }}</td>
                                     <td>{{ client.telephone }}</td>
                                     <td>{{ client.email }}</td>
                                     <td>{{ client.createdAt ? client.createdAt|date('Y-m-d H:i:s') : '' }}</td>

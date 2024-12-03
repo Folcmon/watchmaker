@@ -33,6 +33,7 @@ class OrderController extends BaseController
                 ->join('order.client', 'client')
                 ->where($qb->expr()->like('client.email', ':search'))
                 ->orWhere($qb->expr()->like('client.telephone', ':search'))
+                ->orWhere($qb->expr()->like('client.name', ':search'))
                 ->orderBy('order.createdAt', 'DESC')
                 ->setParameter('search', "%" . $request->get('search') . "%");
         }
@@ -191,11 +192,12 @@ class OrderController extends BaseController
 
     #[Route('/client/{id}', name: 'order_show_by_client', methods: ['GET'])]
     public function showByClient(
-        Client $client,
-        OrderRepository $realisedOrderRepository,
+        Client             $client,
+        OrderRepository    $realisedOrderRepository,
         PaginatorInterface $paginator,
-        Request $request
-    ): Response {
+        Request            $request
+    ): Response
+    {
         $realisedOrders = $realisedOrderRepository->findBy(['client' => $client]);
 
         $pagination = $paginator->paginate(

@@ -8,6 +8,9 @@ use Doctrine\Persistence\ObjectManager;
 
 class ClientFixtures extends Fixture
 {
+    const CLIENT_1_REFERENCE = 'client-1';
+    const CLIENT_2_REFERENCE = 'client-2';
+    const CLIENT_3_REFERENCE = 'client-3';
 
     public function load(ObjectManager $manager)
     {
@@ -31,5 +34,9 @@ class ClientFixtures extends Fixture
         $manager->persist($client3);
 
         $manager->flush();
+
+        $this->addReference(self::CLIENT_1_REFERENCE, $client1);
+        $this->addReference(self::CLIENT_2_REFERENCE, $client2);
+        $this->addReference(self::CLIENT_3_REFERENCE, $client3);
     }
 }

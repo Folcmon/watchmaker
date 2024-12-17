@@ -33,7 +33,7 @@ class OrderType extends AbstractType
                 'class' => VatRate::class,
                 'placeholder' => 'Wybierz stawkę VAT',
             ])
-            ->add('description', TextAreaType::class)
+            ->add('description', TextAreaType::class, ['required' => false])
             ->add('client')
             ->add('status', ChoiceType::class, [
                 'choices' => OrderStatusEnum::getChoices(),

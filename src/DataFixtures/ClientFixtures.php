@@ -30,7 +30,7 @@ class ClientFixtures extends Fixture
         $client3 = new Client();
         $client3->setName("Krzysztof Krawczyk");
         $client3->setEmail("krzysztof.krawczyk@it.pl");
-        $client3->setTelephone("123456789");
+        $client3->setTelephone("123456788");
         $manager->persist($client3);
 
         $manager->flush();

@@ -23,7 +23,7 @@ class Order implements Loggable
     #[ORM\Column(type: 'integer')]
     private ?int $id;
 
-    #[ORM\Column(type: 'string', length: 255)]
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
     #[Gedmo\Versioned]
     private ?string $description;
 

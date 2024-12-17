@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 
 #[ORM\Entity(repositoryClass: ClientRepository::class)]
-#[ORM\UniqueConstraint(name: 'phone_unique', columns: ['phone'])]
+#[ORM\UniqueConstraint(name: 'telephone_unique', columns: ['telephone'])]
 class Client
 {
     use TimestampableEntity;

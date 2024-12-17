@@ -19,7 +19,11 @@
             <div class="card">
                 <div class="card-body">
                     <div class="row mb-4">
-                        <p>
+                        <p class="mb-4">
+                            <a href="" class="btn btn-primary float-end btn-lg btn-lg mx-2">{{ "Protokół odbioru" }}</a>
+                            <a href="" class="btn btn-primary float-end btn-lg btn-lg">{{ "Protokół przyjęcia" }}</a>
+                        </p>
+                        <p class="">
                             {{ "Link do podglądu statusu"|trans }}: <a
                                     href="{{ url('app_status_order', {'order': order.id}) }}">{{ url('app_status_order', {'order': order.id}) }}</a>
                         </p>

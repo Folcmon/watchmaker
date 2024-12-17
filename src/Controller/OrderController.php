@@ -90,7 +90,7 @@ class OrderController extends BaseController
                 $this->uploadOrderAttachment($files, $order, $uploadsDirectory);
             }
             $em->flush();
-            return $this->redirectToRoute('order_index');
+            return $this->redirectToRoute('order_show', ['id' => $order->getId()]);
         }
 
         return $this->render('order/new.html.twig', [
@@ -163,7 +163,7 @@ class OrderController extends BaseController
                 $this->uploadOrderAttachment($files, $order, $uploadsDirectory);
             }
             $em->flush();
-            return $this->redirectToRoute('order_index');
+            return $this->redirectToRoute('order_show', ['id' => $order->getId()]);
         }
 
         return $this->render('order/edit.html.twig', [

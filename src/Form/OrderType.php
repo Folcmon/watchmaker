@@ -32,6 +32,7 @@ class OrderType extends AbstractType
             ->add('status', ChoiceType::class, [
                 'choices' => OrderStatusEnum::getChoices(),
                 'label' => 'Status',
+                'required' => false,
             ])
             ->add('serviceAttachments', FileType::class, ['multiple' => true, 'mapped' => false, 'required' => false])
             ->add('realisedServiceUsedItems', CollectionType::class, [
@@ -43,6 +44,7 @@ class OrderType extends AbstractType
                 'allow_delete' => true,
                 'prototype' => true,
                 'by_reference' => false,
+                'required' => false,
             ]);
     }
 

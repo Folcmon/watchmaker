@@ -17,7 +17,8 @@ class ClientType extends AbstractType
         $builder
             ->add('name', TextType::class, [
                 'label' => 'Imię i nazwisko',
-                'attr' => ['placeholder' => 'Imię i nazwisko']
+                'attr' => ['placeholder' => 'Imię i nazwisko'],
+                'required' => false,
             ])
             ->add('telephone', TextType::class, [
                 'label' => 'Telefon',
@@ -25,7 +26,8 @@ class ClientType extends AbstractType
             ])
             ->add('email', EmailType::class, [
                 'label' => 'Adres e-mail',
-                'attr' => ['placeholder' => 'Adres e-mail']
+                'attr' => ['placeholder' => 'Adres e-mail'],
+                'required' => false,
             ])
             ->add('isCompany', CheckboxType::class, [
                 'required' => false,

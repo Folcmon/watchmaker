@@ -51,11 +51,14 @@ class OrderController extends BaseController
         ]);
     }
 
-    #[Route('/new', name: 'order_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, StorageRepository $storageRepository): Response
+    #[Route('/new/{client}', name: 'order_new', methods: ['GET', 'POST'])]
+    public function new(Request $request, StorageRepository $storageRepository, ?Client $client = null): Response
     {
         $em = $this->doctrine;
         $order = new Order();
+        if ($client !== null) {
+            $order->setClient($client);
+        }
         $em->persist($order);
         $form = $this->createForm(OrderType::class, $order);
         $form->handleRequest($request);

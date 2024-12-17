@@ -68,6 +68,7 @@
                                            class="btn-success btn btn-sm">{{ "Wyświetl"|trans }}</a>
                                         <a href="{{ path('client_edit', {'id': client.id}) }}"
                                            class="btn-primary btn btn-sm">{{ "Edytuj"|trans }}</a>
+                                        <a href="{{ path('order_new',{'client': client.id}) }}" class="btn-success btn btn-sm"> Nowe zlecenie</a>
                                     </td>
                                 </tr>
                             {% else %}

@@ -57,7 +57,7 @@ class Order implements Loggable
     #[ORM\JoinColumn(nullable: false)]
     private ?VatRate $laborVatRate = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $orderAcceptanceDate = null;
 
     public function __construct()

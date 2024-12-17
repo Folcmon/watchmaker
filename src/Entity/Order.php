@@ -57,7 +57,7 @@ class Order implements Loggable
     #[ORM\JoinColumn(nullable: false)]
     private ?VatRate $laborVatRate = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true, options: ['default' => 'CURRENT_TIMESTAMP'])]
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true, options: ['default' => '2024-12-03 09:37:06'])]
     private ?\DateTimeInterface $orderAcceptanceDate = null;
 
     public function __construct()

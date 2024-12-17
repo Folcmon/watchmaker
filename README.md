@@ -16,7 +16,7 @@
 -
 
 # Do zrobienia
-
+- Dodać kamerę do usługi do dodawania 
 - Dodać generowanie przyjęcia dokumentu.
 - Napisać testy jednostkowe i end to end za pomocą playwritha
 - dodać możliwości obsługi klientów firmowych

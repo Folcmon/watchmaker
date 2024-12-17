@@ -28,6 +28,10 @@
                         <table class="table table-striped ">
                             <tbody>
                             <tr>
+                                <th>{{ "Data przyjęcia do realizacji"|trans }}</th>
+                                <td>{{ order.orderAcceptanceDate | date('Y-m-d H:i:s') : '' }}</td>
+                            </tr>
+                            <tr>
                                 <th>{{ "Klient"|trans }}</th>
                                 <td>{{ order.client }}</td>
                             </tr>

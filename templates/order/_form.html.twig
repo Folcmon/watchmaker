@@ -31,6 +31,17 @@
     </div>
     {{ form_widget(form.labor, {'attr':{'class':'form-control'}}) }}
 </div>
+
+<div class="form-group mb-4">
+    <label class="col-form-label">
+        {{ "Data przyjęcia do serwisu"|trans }}
+    </label>
+    <div class="">
+        {{ form_errors(form.orderAcceptanceDate) }}
+    </div>
+    {{ form_widget(form.orderAcceptanceDate, {'attr':{'class':'form-control'}}) }}
+</div>
+
 <div class="form-group mb-4">
     <label class="col-form-label">
         {{ "Stopa VAT robocizny"|trans }}

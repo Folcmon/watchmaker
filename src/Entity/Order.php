@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\OrderRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Loggable\Loggable;
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -55,6 +56,9 @@ class Order implements Loggable
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
     private ?VatRate $laborVatRate = null;
+
+    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    private ?\DateTimeInterface $orderAcceptanceDate = null;
 
     public function __construct()
     {
@@ -206,5 +210,17 @@ class Order implements Loggable
     public function getRealisedServiceUsedItems(): Collection
     {
         return $this->realisedServiceUsedItems;
+    }
+
+    public function getOrderAcceptanceDate(): ?\DateTimeInterface
+    {
+        return $this->orderAcceptanceDate;
+    }
+
+    public function setOrderAcceptanceDate(\DateTimeInterface $orderAcceptanceDate): static
+    {
+        $this->orderAcceptanceDate = $orderAcceptanceDate;
+
+        return $this;
     }
 }

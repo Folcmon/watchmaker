@@ -46,6 +46,7 @@
                             <tr>
                                 <th>{{ "Numer usługi"|trans }}</th>
                                 <th>{{ "Klient"|trans }}</th>
+                                <th>{{ "Data przyjęcia do serwisu" }}</th>
                                 <th>{{ "Opis usługi"|trans }}</th>
                                 <th>{{ "Utworzony"|trans }}</th>
                                 <th>{{ "Zmodyfikowany"|trans }}</th>
@@ -58,6 +59,7 @@
                                 <tr>
                                     <td>{{ order.id }}</td>
                                     <td>{{ order.client ? order.client.name : '' }} {{ order.client? order.client.telephone: '' }}</td>
+                                    <td>{{ order.orderAcceptanceDate? order.orderAcceptanceDate|date('Y-m-d H:i:s') : '' }}</td>
                                     <td>{{ order.description }}</td>
                                     <td>{{ order.createdAt ? order.createdAt|date('Y-m-d H:i:s') : '' }}</td>
                                     <td>{{ order.updatedAt ? order.updatedAt|date('Y-m-d H:i:s') : '' }}</td>

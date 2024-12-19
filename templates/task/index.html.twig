@@ -41,53 +41,55 @@
                             </form>
                         </div>
                     </div>
-                    <div class="mb-4">
-                        <table class="table table-striped">
-                            <thead>
-                            <tr>
-                                <th>{{ "Numer"|trans }}</th>
-                                <th>{{ "Tytuł"|trans }}</th>
-                                <th>{{ "Termin wykonania"|trans }}</th>
-                                <th>{{ "Czy wykonane"|trans }}</th>
-                                <th>{{ "Utworzony"|trans }}</th>
-                                <th>{{ "Zmodyfikowany"|trans }}</th>
-                                <th>{{ "Akcje"|trans }}</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            {% for task in pagination %}
+                    <div class="row mb-4">
+                        <div class="col-xl-12">
+                            <a href="{{ path('task_new') }}"
+                               class="btn btn-success float-end btn-lg">{{ "Dodaj zadanie"|trans }}</a>
+                        </div>
+                    </div>
+                    <div class="row mb-4">
+                        <div class="col-xl-12">
+                            <table class="table table-striped">
+                                <thead>
                                 <tr>
-                                    <td>{{ task.id }}</td>
-                                    <td>{{ task.title }}</td>
-                                    <td>{{ task.dueDate |date('Y-m-d H:i:s') }}</td>
-                                    <td>{{ task.completed? 'Tak'|trans: 'Nie'|trans }}</td>
-                                    <td>{{ task.createdAt ? task.createdAt|date('Y-m-d H:i:s') : '' }}</td>
-                                    <td>{{ task.updatedAt ? task.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
-                                    <td>
-                                        <a href="{{ path('task_show', {'id': task.id}) }}"
-                                           class="btn-success btn btn-sm">{{ "Wyświetl"|trans }}</a>
-                                        <a href="{{ path('task_edit', {'id': task.id}) }}"
-                                           class="btn-primary btn btn-sm">{{ "Edytuj"|trans }}</a>
-                                    </td>
+                                    <th>{{ "Numer"|trans }}</th>
+                                    <th>{{ "Tytuł"|trans }}</th>
+                                    <th>{{ "Termin wykonania"|trans }}</th>
+                                    <th>{{ "Czy wykonane"|trans }}</th>
+                                    <th>{{ "Utworzony"|trans }}</th>
+                                    <th>{{ "Zmodyfikowany"|trans }}</th>
+                                    <th>{{ "Akcje"|trans }}</th>
                                 </tr>
-                            {% else %}
-                                <tr>
-                                    <td colspan="7">{{ "Brak zadań"|trans }}</td>
-                                </tr>
-                            {% endfor %}
-                            </tbody>
-                        </table>
+                                </thead>
+                                <tbody>
+                                {% for task in pagination %}
+                                    <tr>
+                                        <td>{{ task.id }}</td>
+                                        <td>{{ task.title }}</td>
+                                        <td>{{ task.dueDate |date('Y-m-d H:i:s') }}</td>
+                                        <td>{{ task.completed? 'Tak'|trans: 'Nie'|trans }}</td>
+                                        <td>{{ task.createdAt ? task.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+                                        <td>{{ task.updatedAt ? task.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
+                                        <td>
+                                            <a href="{{ path('task_show', {'id': task.id}) }}"
+                                               class="btn-success btn btn-sm">{{ "Wyświetl"|trans }}</a>
+                                            <a href="{{ path('task_edit', {'id': task.id}) }}"
+                                               class="btn-primary btn btn-sm">{{ "Edytuj"|trans }}</a>
+                                        </td>
+                                    </tr>
+                                {% else %}
+                                    <tr>
+                                        <td colspan="7">{{ "Brak zadań"|trans }}</td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                     <div class="row">
                         <div class="col-md-12">
                             {{ knp_pagination_render(pagination) }}
                         </div>
-                    </div>
-                </div>
-                <div class="card-footer border-top pt-4">
-                    <div class="col-xl-12">
-                        <a href="{{ path('task_new') }}"
-                           class="btn btn-success float-end btn-lg">{{ "Dodaj zadanie"|trans }}</a>
                     </div>
                 </div>
             </div>

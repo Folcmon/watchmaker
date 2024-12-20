@@ -7,9 +7,12 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ClientRepository::class)]
 #[ORM\UniqueConstraint(name: 'telephone_unique', columns: ['telephone'])]
+#[UniqueEntity(fields: ['telephone'], message: 'Klient o podanym numerze telefonu już istnieje')]
 class Client
 {
     use TimestampableEntity;
@@ -20,13 +23,15 @@ class Client
     private ?int $id;
 
     #[ORM\Column(type: 'string', length: 255)]
+    #[Assert\NotBlank(message: 'Numer telefonu jest wymagany')]
+    #[Assert\Length(min: 9, max: 15, minMessage: 'Numer telefonu musi mieć co najmniej 9 znaków', maxMessage: 'Numer telefonu może mieć maksymalnie 15 znaków')]
     private string $telephone = '';
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private ?string $email = '';
+    private ?string $email = null;
 
     #[ORM\Column(type: "string", length: 255, nullable: true)]
-    private string $name = '';
+    private ?string $name = null;
 
     #[ORM\OneToMany(targetEntity: Order::class, mappedBy: 'client')]
     private Collection $orders;
@@ -82,7 +87,7 @@ class Client
     /**
      * @param string $name
      */
-    public function setName(string $name): void
+    public function setName(?string $name): void
     {
         $this->name = $name;
     }

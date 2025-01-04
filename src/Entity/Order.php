@@ -60,10 +60,17 @@ class Order implements Loggable
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true, options: ['default' => '2024-12-03 09:37:06'])]
     private ?\DateTimeInterface $orderAcceptanceDate = null;
 
+    /**
+     * @var Collection<int, Document>
+     */
+    #[ORM\OneToMany(targetEntity: Document::class, mappedBy: 'associated_order', orphanRemoval: true)]
+    private Collection $document;
+
     public function __construct()
     {
         $this->serviceAttachments = new ArrayCollection();
         $this->realisedServiceUsedItems = new ArrayCollection();
+        $this->document = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -221,6 +228,35 @@ class Order implements Loggable
     {
         $this->orderAcceptanceDate = $orderAcceptanceDate;
 
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Document>
+     */
+    public function getDocument(): Collection
+    {
+        return $this->document;
+    }
+
+    public function addDocument(Document $type): static
+    {
+        if (!$this->document->contains($type)) {
+            $this->document->add($type);
+            $type->setAssociatedOrder($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDocument(Document $type): static
+    {
+        if ($this->document->removeElement($type)) {
+            // set the owning side to null (unless already changed)
+            if ($type->getAssociatedOrder() === $this) {
+                $type->setAssociatedOrder(null);
+            }
+        }
         return $this;
     }
 }

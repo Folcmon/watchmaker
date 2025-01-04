@@ -3,6 +3,8 @@
 ## założenia
 
 - Marża obliczana jest na podstawie ceny netto
+- Sposób realizacji obliczania marży zależny jest od ustawień w konfiguracji (.env zmienna STORAGE_MARGIN_TYPE może być
+  wartość percentage lub value)
 
 
 - Unikalność "Klienta" sprawdzana jest na podstawie numeru telefonu
@@ -16,8 +18,10 @@
 -
 
 # Do zrobienia
-- Dodać kamerę do usługi do dodawania 
+
 - Dodać generowanie przyjęcia dokumentu.
+- Marża może być również w formie wartości np. 10 zł
+- Dodać kamerę do usługi do dodawania
 - Napisać testy jednostkowe i end to end za pomocą playwritha
 - dodać możliwości obsługi klientów firmowych
 - dodać możliwość dodawania załączników do magazynu (np zdjęcia)

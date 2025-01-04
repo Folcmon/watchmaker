@@ -8,7 +8,7 @@
                 <span class="app-brand-text demo menu-text fw-bolder ms-2">Serwis</span>
             </a>
         {% else %}
-            <a href=" {{ path('index') }}" class="app-brand-link">
+            <a href=" {{ path('app_index') }}" class="app-brand-link">
               <span class="app-brand-logo demo">
                     <i class='bx bxs-key'></i>
               </span>
@@ -33,8 +33,8 @@
         <li class="menu-header small text-uppercase"><span
                     class="menu-header-text">{{ "Serwis"| trans }}</span></li>
 
-        <li class="menu-item {% if app.current_route == 'client_index' %} active {% endif %}">
-            <a href="{{ path('client_index') }}" class="menu-link">
+        <li class="menu-item {% if app.current_route == 'app_client_index' %} active {% endif %}">
+            <a href="{{ path('app_client_index') }}" class="menu-link">
                 <i class='bx bxs-user-detail mx-2'></i>
                 <div>{{ "Klienci"| trans }}</div>
             </a>

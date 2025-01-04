@@ -8,7 +8,7 @@
 
 {% block body %}
     <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">
-           <a href="{{ path('client_index') }}">{{ "Klienci"| trans }}</a>
+           <a href="{{ path('app_client_index') }}">{{ "Klienci"| trans }}</a>
         </span>
     </h4>
 
@@ -32,7 +32,7 @@
                                     <div class="col-xl-12">
                                         <div class="form-group">
                                             <a class="btn btn-danger btn-lg"
-                                               href="{{ url('client_index') }}">{{ "Resetowanie wyników"|trans }}</a>
+                                               href="{{ url('app_client_index') }}">{{ "Resetowanie wyników"|trans }}</a>
                                             <input type="submit" value="{{ "Szukaj "|trans }}"
                                                    class="btn btn-primary float-end btn-lg btn-lg">
                                         </div>
@@ -43,7 +43,7 @@
                     </div>
                     <div class="row mb-4">
                         <div class="col-xl-12">
-                            <a href="{{ path('client_new') }}"
+                            <a href="{{ path('app_client_new') }}"
                                class="btn btn-success float-end btn-lg">{{ "Dodaj klienta"|trans }}</a>
                         </div>
                     </div>
@@ -71,9 +71,9 @@
                                         <td>{{ client.email }}</td>
                                         <td>{{ client.createdAt ? client.createdAt|date('Y-m-d H:i:s') : '' }}</td>
                                         <td>
-                                            <a href="{{ path('client_show', {'id': client.id}) }}"
+                                            <a href="{{ path('app_client_show', {'id': client.id}) }}"
                                                class="btn-success btn btn-sm">{{ "Wyświetl"|trans }}</a>
-                                            <a href="{{ path('client_edit', {'id': client.id}) }}"
+                                            <a href="{{ path('app_client_edit', {'id': client.id}) }}"
                                                class="btn-primary btn btn-sm">{{ "Edytuj"|trans }}</a>
                                             <a href="{{ path('order_new',{'client': client.id}) }}"
                                                class="btn-success btn btn-sm"> Nowe zlecenie</a>

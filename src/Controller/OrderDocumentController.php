@@ -7,11 +7,13 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-class OrderAcceptanceController extends AbstractController
+#[Route('order/document', name: 'app_order_document_')]
+class OrderDocumentController extends AbstractController
 {
-    #[Route('/order/acceptance/{order}}', name: 'app_order_acceptance')]
+    #[Route('/acceptance/{order:id}', name: 'acceptance')]
     public function index(Order $order): Response
     {
+        dd($order);
         return $this->render('order_acceptance/index.html.twig', [
             'order' => $order,
         ]);

@@ -9,7 +9,7 @@
 {% block body %}
     <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">
            <a href="{{ path('order_index') }}">{{ "Usługi"| trans }}</a> /</span> Numer {{ order.id }} dla
-        klienta <a href="{{ path('client_show',{'id': order.client.id}) }}">
+        klienta <a href="{{ path('app_client_show',{'id': order.client.id}) }}">
             {{ order.client }}
         </a>
     </h4>

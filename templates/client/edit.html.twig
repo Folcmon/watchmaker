@@ -8,7 +8,7 @@
 
 {% block body %}
     <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">
-           <a href="{{ path('client_index') }}">{{ "Klienci"| trans }}</a> /</span> {{ "Edytuj" |trans }}
+           <a href="{{ path('app_client_index') }}">{{ "Klienci"| trans }}</a> /</span> {{ "Edytuj" |trans }}
     </h4>
 
     <div class="row">
@@ -19,7 +19,7 @@
                 </div>
                 <div class="card-footer border-top pt-4">
                     <div class="col-xl-12">
-                        <a href="{{ path('client_index') }}" class="btn btn-warning float-end btn-lg">
+                        <a href="{{ path('app_client_index') }}" class="btn btn-warning float-end btn-lg">
                             {{ "Powrót"|trans }}
                         </a>
                         {{ include('client/_delete_form.html.twig') }}

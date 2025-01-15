@@ -19,10 +19,10 @@ final class Version20231206102459 extends AbstractMigration
 
     public function up(Schema $schema): void
     {
-        $this->addSql('Insert into vat_rate (rate_name,rate_value) values ("23%", 23)');
-        $this->addSql('Insert into vat_rate (rate_name,rate_value) values ("8%", 8)');
-        $this->addSql('Insert into vat_rate (rate_name,rate_value) values ("5%", 5)');
-        $this->addSql('Insert into vat_rate (rate_name,rate_value) values ("0%", 0)');
+        $this->addSql('Insert into vat_rate (rate_name,rate_value,created_at,updated_at) values ("23%", 23, now(), now())');
+        $this->addSql('Insert into vat_rate (rate_name,rate_value,created_at,updated_at) values ("8%", 8,now(), now())');
+        $this->addSql('Insert into vat_rate (rate_name,rate_value,created_at,updated_at) values ("5%", 5,now(), now())');
+        $this->addSql('Insert into vat_rate (rate_name,rate_value,created_at,updated_at) values ("0%", 0,now(), now())');
 
     }
 

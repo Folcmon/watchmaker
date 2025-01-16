@@ -18,7 +18,7 @@
 -
 
 # Do zrobienia
-
+- Opublikować projekt na web
 - Dodać generowanie przyjęcia dokumentu.
 - Marża może być również w formie wartości np. 10 zł
 - Dodać kamerę do usługi do dodawania

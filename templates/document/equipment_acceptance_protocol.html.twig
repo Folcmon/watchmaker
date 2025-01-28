@@ -1,0 +1,131 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ "Protokół przyjęcia"|trans }}{% endblock %}
+
+{% block stylesheets %}
+    <style>
+        /* Stylowanie dla wydruku */
+        @media print {
+            body {
+                font-family: Arial, sans-serif;
+                color: #000;
+            }
+
+            .container, .row, .col-md-12, .card {
+                width: 100%;
+                margin: 0;
+                padding: 0;
+            }
+
+            h4, .btn, .card-footer, .sidebar, .layout-navbar, .page-title-header {
+                display: none !important; /* Ukrycie menu, nawigacji i zbędnych przycisków */
+            }
+
+            hr {
+                border-top: 1px solid #000;
+            }
+
+            .text-center {
+                text-align: center;
+            }
+
+            .border-top {
+                border-top: 1px solid #000 !important;
+            }
+        }
+
+        /* Style widoczne na ekranie */
+        .container {
+            max-width: 800px;
+        }
+
+        .border-top {
+            height: 50px;
+            margin-top: 20px;
+        }
+
+        h1 {
+            font-size: 24px;
+            font-weight: bold;
+        }
+    </style>
+{% endblock %}
+
+{% block leftBody %}
+    {% include '/shared/leftSidebar.html.twig' %}
+{% endblock %}
+
+{% block body %}
+    <h4 class="fw-bold py-3 mb-4 page-title-header"><span class="text-muted fw-light">
+           <a href="{{ path('order_show',{'id': order.id}) }}">{{ "Zlecenie"| trans }}</a> /</span> Numer {{ order.id }}
+        dla
+        klienta <a href="{{ path('app_client_show',{'id': order.client.id}) }}">
+            {{ order.client }}
+        </a> - {{ "protokół przyjęcia"|trans }}
+    </h4>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <h1 class="text-center mb-4">Protokół przyjęcia sprzętu do serwisu</h1>
+                    {{ form_start(form) }}
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            {{ form_row(form.device_type, {'label_attr': {'class': 'form-label'}, 'attr': {'class': 'form-control'}}) }}
+                        </div>
+                        <div class="col-md-6">
+                            {{ form_row(form.brand, {'label_attr': {'class': 'form-label'}, 'attr': {'class': 'form-control'}}) }}
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            {{ form_row(form.model, {'label_attr': {'class': 'form-label'}, 'attr': {'class': 'form-control'}}) }}
+                        </div>
+                        <div class="col-md-6">
+                            {{ form_row(form.serial_number, {'label_attr': {'class': 'form-label'}, 'attr': {'class': 'form-control'}}) }}
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        {{ form_row(form.fault_description, {'label_attr': {'class': 'form-label'}, 'attr': {'class': 'form-control'}}) }}
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            {{ form_row(form.customer_name, {'label_attr': {'class': 'form-label'}, 'attr': {'class': 'form-control'}}) }}
+                        </div>
+                        <div class="col-md-6">
+                            {{ form_row(form.customer_phone, {'label_attr': {'class': 'form-label'}, 'attr': {'class': 'form-control'}}) }}
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        {{ form_row(form.date_received, {'label_attr': {'class': 'form-label'}, 'attr': {'class': 'form-control'}}) }}
+                    </div>
+                    <hr>
+                    <div class="row mt-4">
+                        <div class="col-md-6 text-center">
+                            <p>Podpis przyjmującego</p>
+                            <div class="border-top mt-4" style="height: 50px;"></div>
+                        </div>
+                        <div class="col-md-6 text-center">
+                            <p>Podpis odbierającego</p>
+                            <div class="border-top mt-4" style="height: 50px;"></div>
+                        </div>
+                    </div>
+                    <div class="row mt-4 mb-5">
+                        <input type="submit" class="btn btn-primary float-end" value="Zapisz protokół"/>
+                    </div>
+                    {{ form_end(form) }}
+                </div>
+                <div class="card-footer border-top pt-4">
+                    <div class="col-xl-12">
+                        <a href="#" onclick="window.print()" class="btn btn-primary float-start btn-lg">
+                            {{ "Drukuj"|trans }}
+                        </a>
+                        <a href="{{ path('order_show',{'id': order.id}) }}"
+                           class="btn btn-warning float-end btn-lg">{{ "Powrót"|trans }}</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -20,8 +20,10 @@
                 <div class="card-body">
                     <div class="row mb-4">
                         <p class="mb-4">
-                            <a href="" class="btn btn-primary float-end btn-lg btn-lg mx-2">{{ "Protokół odbioru" }}</a>
-                            <a href="" class="btn btn-primary float-end btn-lg btn-lg">{{ "Protokół przyjęcia" }}</a>
+                            <a href="{{ path('app_order_document_equipment_return_protocol', {'order': order.id}) }}"
+                               class="btn btn-primary float-end btn-lg btn-lg mx-2">{{ "Przygotuj protokół odbioru"| trans }}</a>
+                            <a href="{{ path('app_order_document_equipment_acceptance_protocol', {'order': order.id}) }}"
+                               class="btn btn-primary float-end btn-lg btn-lg">{{ "Przygotuj protokół przyjęcia"| trans }}</a>
                         </p>
                         <p class="">
                             {{ "Link do podglądu statusu"|trans }}: <a

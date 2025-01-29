@@ -70,34 +70,56 @@
                 <div class="card-body">
                     <h1 class="text-center mb-4">Protokół przyjęcia sprzętu do serwisu</h1>
                     {{ form_start(form) }}
-                    <div class="row mb-3">
-                        <div class="col-md-6">
+                    <div class="row mb-4">
+                        <div class="col-md-12">
+                            {{ form_row(form.service_provider, {'label_attr': {'class': 'form-label'}, 'attr': {'class': 'form-control'}}) }}
+                        </div>
+                    </div>
+                    <div class="row mb-4">
+                        <div class="col-md-12">
+                            {{ form_row(form.service_provider_address, {'label_attr': {'class': 'form-label'}, 'attr': {'class': 'form-control'}}) }}
+                        </div>
+                    </div>
+                    <div class="row mb-4">
+                        <div class="col-md-12">
+                            {{ form_row(form.service_provider_phone, {'label_attr': {'class': 'form-label'}, 'attr': {'class': 'form-control'}}) }}
+                        </div>
+                    </div>
+                    <div class="row mb-4">
+                        <div class="col-md-12">
                             {{ form_row(form.device_type, {'label_attr': {'class': 'form-label'}, 'attr': {'class': 'form-control'}}) }}
                         </div>
-                        <div class="col-md-6">
+                    </div>
+                    <div class="row mb-4">
+                        <div class="col-md-12">
                             {{ form_row(form.brand, {'label_attr': {'class': 'form-label'}, 'attr': {'class': 'form-control'}}) }}
                         </div>
                     </div>
-                    <div class="row mb-3">
-                        <div class="col-md-6">
+                    <div class="row mb-4">
+                        <div class="col-md-12">
                             {{ form_row(form.model, {'label_attr': {'class': 'form-label'}, 'attr': {'class': 'form-control'}}) }}
                         </div>
-                        <div class="col-md-6">
+                    </div>
+                    <div class="row mb-4">
+                        <div class="col-md-12">
                             {{ form_row(form.serial_number, {'label_attr': {'class': 'form-label'}, 'attr': {'class': 'form-control'}}) }}
                         </div>
                     </div>
-                    <div class="mb-3">
+                    <div class="mb-4">
                         {{ form_row(form.fault_description, {'label_attr': {'class': 'form-label'}, 'attr': {'class': 'form-control'}}) }}
                     </div>
-                    <div class="row mb-3">
-                        <div class="col-md-6">
+                    <div class="row mb-4">
+                        <div class="col-md-12">
                             {{ form_row(form.customer_name, {'label_attr': {'class': 'form-label'}, 'attr': {'class': 'form-control'}}) }}
                         </div>
-                        <div class="col-md-6">
+
+                    </div>
+                    <div class="row mb-4">
+                        <div class="col-md-12">
                             {{ form_row(form.customer_phone, {'label_attr': {'class': 'form-label'}, 'attr': {'class': 'form-control'}}) }}
                         </div>
                     </div>
-                    <div class="mb-3">
+                    <div class="mb-4">
                         {{ form_row(form.date_received, {'label_attr': {'class': 'form-label'}, 'attr': {'class': 'form-control'}}) }}
                     </div>
                     <hr>

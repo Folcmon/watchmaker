@@ -17,47 +17,65 @@ class OrderEquipmentAcceptanceProtocolType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
+            ->add('service_provider', TextType::class, [
+                'label' => 'Wykonawca',
+                'required' => true,
+                'data' => 'Salon zegarmistrzowski Radosław Kasperiuk'
+
+            ])
+            ->add('service_provider_address', TextType::class, [
+                'label' => 'Adres wykonawcy',
+                'required' => true,
+                'data' => 'Białystok . Suraska1 lok1'
+
+            ])
+            ->add('service_provider_phone', TextType::class, [
+                'label' => 'Telefon wykonawcy',
+                'required' => true,
+
+            ])
             ->add('device_type', TextType::class, [
                 'label' => 'Rodzaj sprzętu',
                 'required' => true,
-                'attr' => ['class' => 'form-control'],
+
                 'data' => 'Zegarek'
             ])
             ->add('brand', TextType::class, [
                 'label' => 'Marka',
                 'required' => true,
-                'attr' => ['class' => 'form-control']
+
             ])
             ->add('model', TextType::class, [
                 'label' => 'Model',
                 'required' => true,
-                'attr' => ['class' => 'form-control']
+
             ])
             ->add('serial_number', TextType::class, [
                 'label' => 'Numer seryjny',
                 'required' => false,
-                'attr' => ['class' => 'form-control']
+
             ])
             ->add('fault_description', TextareaType::class, [
                 'label' => 'Opis usterki',
                 'required' => true,
-                'attr' => ['class' => 'form-control']
+
             ])
             ->add('customer_name', TextType::class, [
                 'label' => 'Dane klienta',
                 'required' => true,
-                'attr' => ['class' => 'form-control']
+
             ])
             ->add('customer_phone', TextType::class, [
                 'label' => 'Telefon',
                 'required' => true,
-                'attr' => ['class' => 'form-control']
+
             ])
             ->add('date_received', DateType::class, [
                 'label' => 'Data przyjęcia',
                 'widget' => 'single_text',
                 'required' => true,
-                'attr' => ['class' => 'form-control']
+
+                'data' => new \DateTime()
             ])/*
             ->add('save', SubmitType::class, [
         'label' => 'Zapisz protokół',

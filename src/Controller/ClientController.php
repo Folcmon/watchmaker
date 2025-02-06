@@ -102,4 +102,30 @@ class ClientController extends BaseController
 
         return $this->redirectToRoute('app_client_index');
     }
+
+    //add client new ajax request get for return form post for save
+    #[Route('/new/ajax', name: 'new_ajax', methods: ['GET', 'POST'])]
+    public function newAjax(Request $request): Response
+    {
+        $client = new Client();
+        $form = $this->createForm(ClientType::class, $client);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager = $this->doctrine;
+            $entityManager->persist($client);
+            $entityManager->flush();
+
+            return $this->json([
+                'status' => 'success',
+                'message' => 'Client created successfully',
+                'client' => $client->toArray()
+            ], 201);
+        }
+
+        return $this->render('client/new_ajax.html.twig', [
+            'client' => $client,
+            'form' => $form->createView(),
+        ]);
+    }
+
 }

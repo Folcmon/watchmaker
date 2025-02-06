@@ -85,7 +85,12 @@
     <div class="">
         {{ form_errors(form.client) }}
     </div>
-    {{ form_widget(form.client, {'attr':{'class':'form-control select2'}}) }}
+    <div class="input-group">
+        {{ form_widget(form.client, {'attr':{'class':'form-control select2'}}) }}
+        <span class="input-group-text add-client-button">
+            <i class='bx bx-folder-plus'></i>
+        </span>
+    </div>
 </div>
 
 <div class="form-group mb-4">
@@ -119,8 +124,28 @@
         </div>
     </div>
 </div>
+<div class="form-group mb-4">
+    <button class="btn btn-primary float-end btn-lg btn-lg">{{ "Zapisz"|trans }}</button>
+</div>
+{{ form_end(form) }}
+<div id="client-add-modal" class="modal fade" tabindex="-1" aria-labelledby="client-modal" aria-hidden="true">
+    <div>
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">{{ "Dodaj klienta"|trans }}</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 <script>
+    let modal = new bootstrap.Modal($('#client-add-modal')[0]);
     document.addEventListener('DOMContentLoaded', function () {
         // Elementy referencyjne
         let container = document.querySelector('.used-parts-container');
@@ -144,9 +169,34 @@
             }
         });
     });
+    //when user click on add button make ajax call for add client form
+    $(document).ready(function () {
+        // Add client button
+        $('.add-client-button').on('click', function () {
+            let url = '{{ path('app_client_new_ajax') }}';
+            $.get(url, function (data) {
+                let html = $(data);
+                $('#client-add-modal .modal-body').html(html);
+                modal.show();
+            });
+        });
+        // Add client form submit
+        $(document).on('submit', '#client-form', function (event) {
+            event.preventDefault();
+            event.stopPropagation();
+            let form = $('#client-add-modal form');
+            let url = "{{ path('app_client_new_ajax') }}";
+            let data = form.serialize();
+            $.post(url, data, function (response) {
+                if (response.status === 'success') {
+                    let client = response.client;
+                    let option = new Option(client.name, client.id, true, true);
+                    $('#order_client').append(option).trigger('change');
+                    modal.hide();
+                } else {
+                    $('#client-add-modal .modal-body').html(response);
+                }
+            });
+        });
+    });
 </script>
-
-<div class="form-group mb-4">
-    <button class="btn btn-primary float-end btn-lg btn-lg">{{ "Zapisz"|trans }}</button>
-</div>
-{{ form_end(form) }}

@@ -151,4 +151,16 @@ class Client
     {
         $this->isCompany = $isCompany;
     }
+
+    public function toArray(): array
+    {
+        return [
+            'id' => $this->id,
+            'telephone' => $this->telephone,
+            'email' => $this->email,
+            'name' => $this->name,
+            'isCompany' => $this->isCompany,
+            'company' => $this->company?->toArray()
+        ];
+    }
 }

@@ -12,6 +12,7 @@ use Gedmo\Timestampable\Traits\TimestampableEntity;
 class Company
 {
     use TimestampableEntity;
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -126,5 +127,18 @@ class Company
         $this->bankAccount = $bankAccount;
 
         return $this;
+    }
+
+    public function toArray(): array
+    {
+        return [
+            'id' => $this->getId(),
+            'name' => $this->getName(),
+            'address' => $this->getAddress(),
+            'taxId' => $this->getTaxId(),
+            'phone' => $this->getPhone(),
+            'email' => $this->getEmail(),
+            'bankAccount' => $this->getBankAccount(),
+        ];
     }
 }

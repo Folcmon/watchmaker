@@ -18,6 +18,9 @@
 -
 
 # Do zrobienia
+
+- Dodać marki i modele do menu i zrobić backend do dodawania
+- Dodać Marki i modele do części
 - Opublikować projekt na web
 - Dodać generowanie przyjęcia dokumentu.
 - Marża może być również w formie wartości np. 10 zł

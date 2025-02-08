@@ -1,0 +1,196 @@
+{
+  "brands": [
+    {
+      "name": "Rolex",
+      "models": ["Submariner", "Daytona", "Datejust", "GMT-Master II"]
+    },
+    {
+      "name": "Omega",
+      "models": ["Speedmaster", "Seamaster", "Constellation", "De Ville"]
+    },
+    {
+      "name": "Tag Heuer",
+      "models": ["Carrera", "Monaco", "Aquaracer", "Formula 1"]
+    },
+    {
+      "name": "Patek Philippe",
+      "models": ["Nautilus", "Aquanaut", "Calatrava", "Grand Complications"]
+    },
+    {
+      "name": "Audemars Piguet",
+      "models": ["Royal Oak", "Royal Oak Offshore", "Millenary", "Code 11.59"]
+    },
+    {
+      "name": "Breitling",
+      "models": ["Navitimer", "Chronomat", "Superocean", "Avenger"]
+    },
+    {
+      "name": "Seiko",
+      "models": ["Prospex", "Presage", "Astron", "Seiko 5"]
+    },
+    {
+      "name": "Casio",
+      "models": ["G-Shock", "Edifice", "Pro Trek", "Baby-G"]
+    },
+    {
+      "name": "Tissot",
+      "models": ["T-Touch", "Le Locle", "PRX", "Seastar"]
+    },
+    {
+      "name": "Citizen",
+      "models": ["Eco-Drive", "Promaster", "Satellite Wave", "Chronomaster"]
+    },
+    {
+      "name": "Jaeger-LeCoultre",
+      "models": ["Reverso", "Master Control", "Polaris", "Rendez-Vous", "Duomètre"]
+    },
+    {
+      "name": "IWC Schaffhausen",
+      "models": ["Portugieser", "Pilot's Watch", "Ingenieur", "Aquatimer", "Da Vinci"]
+    },
+    {
+      "name": "Cartier",
+      "models": ["Tank", "Santos", "Ballon Bleu", "Pasha", "Drive"]
+    },
+    {
+      "name": "Hublot",
+      "models": ["Big Bang", "Classic Fusion", "Spirit of Big Bang", "King Power", "MP Collection"]
+    },
+    {
+      "name": "A. Lange & Söhne",
+      "models": ["Lange 1", "Saxonia", "Zeitwerk", "1815", "Richard Lange"]
+    },
+    {
+      "name": "Panerai",
+      "models": ["Luminor", "Radiomir", "Submersible", "Luminor Due", "Luminor Marina"]
+    },
+    {
+      "name": "Vacheron Constantin",
+      "models": ["Patrimony", "Overseas", "Traditionnelle", "Historiques", "Malte"]
+    },
+    {
+      "name": "Chopard",
+      "models": ["L.U.C", "Mille Miglia", "Happy Sport", "Imperiale", "Classic Racing"]
+    },
+    {
+      "name": "Breguet",
+      "models": ["Classique", "Marine", "Tradition", "Type XX", "Reine de Naples"]
+    },
+    {
+      "name": "Richard Mille",
+      "models": ["RM 011", "RM 027", "RM 035", "RM 055", "RM 056"]
+    },
+    {
+      "name": "Longines",
+      "models": ["HydroConquest", "Conquest", "Master Collection", "DolceVita", "Flagship"]
+    },
+    {
+      "name": "Montblanc",
+      "models": ["TimeWalker", "Heritage", "Star", "1858", "Summit"]
+    },
+    {
+      "name": "Bell & Ross",
+      "models": ["BR 01", "BR 03", "BR 05", "BR V2", "BR S"]
+    },
+    {
+      "name": "F.P. Journe",
+      "models": ["Chronomètre Bleu", "Octa Lune", "Elegante", "Tourbillon Souverain", "Centigraphe"]
+    },
+    {
+      "name": "Girard-Perregaux",
+      "models": ["Laureato", "Bridges", "1966", "Vintage 1945", "Cat's Eye"]
+    },
+    {
+      "name": "Zenith",
+      "models": ["El Primero", "Defy", "Pilot", "Chronomaster", "Elite"]
+    },
+    {
+      "name": "Rado",
+      "models": ["Captain Cook", "HyperChrome", "True", "Centrix", "DiaMaster"]
+    },
+    {
+      "name": "Sinn",
+      "models": ["U1", "U2", "556", "104", "EZM"]
+    },
+    {
+      "name": "Oris",
+      "models": ["Aquis", "Big Crown", "Divers Sixty-Five", "ProPilot", "Artelier"]
+    },
+    {
+      "name": "Hamilton",
+      "models": ["Khaki Field", "Khaki Aviation", "Jazzmaster", "Ventura", "American Classic"]
+    },
+    {
+      "name": "Bulgari",
+      "models": ["Octo", "Serpenti", "Diagono", "Bvlgari Bvlgari", "Lvcea"]
+    },
+    {
+      "name": "Maurice Lacroix",
+      "models": ["Aikon", "Pontos", "Eliros", "Masterpiece", "Les Classiques"]
+    },
+    {
+      "name": "Ulysse Nardin",
+      "models": ["Marine", "Diver", "Executive", "Classico", "Freak"]
+    },
+    {
+      "name": "Corum",
+      "models": ["Admiral", "Bubble", "Golden Bridge", "Heritage", "Coin"]
+    },
+    {
+      "name": "Vostok",
+      "models": ["Amphibia", "Komandirskie", "Neptune", "Gaz-14", "K-34"]
+    },
+    {
+      "name": "Bamford",
+      "models": ["Mayfair", "GMT", "Submariner", "Daytona", "Aquaracer"]
+    },
+    {
+      "name": "Akribos",
+      "models": ["XXIV", "Skeleton", "Automatic", "Diamond", "Chronograph"]
+    },
+    {
+      "name": "Junghans",
+      "models": ["Max Bill", "Meister", "Form", "Force", "Spektrum"]
+    },
+    {
+      "name": "Tudor",
+      "models": ["Black Bay", "Pelagos", "Heritage", "Glamour", "Style"]
+    },
+    {
+      "name": "Nomos Glashütte",
+      "models": ["Tangente", "Orion", "Ludwig", "Metro", "Club"]
+    },
+    {
+      "name": "Mido",
+      "models": ["Ocean Star", "Commander", "Baroncelli", "Multifort", "Belluna"]
+    },
+    {
+      "name": "Fossil",
+      "models": ["Grant", "Nate", "Townsman", "Machine", "Q Explorist"]
+    },
+    {
+      "name": "Diesel",
+      "models": ["Mr. Daddy", "Mega Chief", "Double Down", "Little Daddy", "Rasp"]
+    },
+    {
+      "name": "Invicta",
+      "models": ["Pro Diver", "Bolt", "Venom", "Grand Diver", "Reserve"]
+    },
+    {
+      "name": "Michael Kors",
+      "models": ["Runway", "Lexington", "Bradshaw", "Slim Runway", "Access"]
+    },
+    {
+      "name": "Skagen",
+      "models": ["Hagen", "Holst", "Ancher", "Signatur", "Melbye"]
+    },
+    {
+      "name": "Luminox",
+      "models": ["Navy SEAL", "Atacama", "Bear Grylls", "Recon", "Leatherback"]
+    },
+    {
+      "name": "Glycine",
+      "models": ["Combat", "Airman", "Incursore", "Lagunaire", "F104"]
+    }
+  ]
+}

@@ -5,6 +5,14 @@
         --bs-card-border-radius: 0;
     }
 
+    .pagination {
+        --bs-pagination-border-radius: 0;
+
+        .page-item {
+            --bs-pagination-border-radius: 0;
+        }
+    }
+
     .navbar {
         --bs-navbar-toggler-border-radius: var(--bs-border-radius);
     }

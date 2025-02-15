@@ -1,3 +1,9 @@
+# Wymagania systemowe
+
+- PHP 8.2
+- Composer
+- MariaDB 10.4
+
 # Strurktura Programu
 
 ## założenia

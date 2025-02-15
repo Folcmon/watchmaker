@@ -19,6 +19,17 @@ class ClientRepository extends ServiceEntityRepository
         parent::__construct($registry, Client::class);
     }
 
+    public function newClientsBeetweenDates(\DateTime $startDate, \DateTime $endDate)
+    {
+        return $this->createQueryBuilder('c')
+            ->andWhere('c.createdAt >= :startDate')
+            ->andWhere('c.createdAt <= :endDate')
+            ->setParameter(':startDate', $startDate)
+            ->setParameter(':endDate', $endDate)
+            ->getQuery()
+            ->execute();
+    }
+
     // /**
     //  * @return Client[] Returns an array of Client objects
     //  */

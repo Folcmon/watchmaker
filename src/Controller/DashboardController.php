@@ -18,27 +18,23 @@ class DashboardController extends BaseController
      */
     #[Route('/dashboard', name: 'dashboard')]
     public function index(
-        OrderRepository $realisedServiceRepository,
+        OrderRepository  $orderRepository,
         ClientRepository $clientRepository,
-        TaskRepository $taskRepository
-    ): Response {
-        $time = strtotime(date('Y-m-01 00:00:00')); // == 1338534000
-        $firstDayOfMonth = date('Y-m-d H:i:s', $time); // == 2012-06-01 00:00:00
-        $allRealisedServices = $realisedServiceRepository->count();
-        $thisMonthRealisedServices = $realisedServiceRepository->createQueryBuilder('rs')
-            ->andWhere('rs.createdAt >= :date')
-            ->setParameter(':date', $firstDayOfMonth)
-            ->getQuery()
-            ->execute();
+        TaskRepository   $taskRepository
+    ): Response
+    {
+        $firstDayOfMonth = new \DateTime(date('Y-m-01 00:00:00'));
+        $allRealisedServices = $orderRepository->count();
+        $thisMonthRealisedServices = $orderRepository->getOrdersBetweenDates($firstDayOfMonth, new \DateTime());
+
         $numOfClients = $clientRepository->count();
-        $numOfNewClients = $clientRepository->createQueryBuilder('cr')
-            ->andWhere('cr.createdAt >= :date')
-            ->setParameter(':date', $firstDayOfMonth)
-            ->getQuery()
-            ->execute();
-        $numOfRealisedServicesBYMonth = $realisedServiceRepository->getCountByYearGroupByMonth(date('Y'));
-        $valueOfRealisedServicesBYMonth = $realisedServiceRepository->getValueByYearGroupByMonth(date('Y'));
+        $numOfNewClients = $clientRepository->newClientsBeetweenDates($firstDayOfMonth, new \DateTime());
+
+        $numOfRealisedServicesBYMonth = $orderRepository->getCountByYearGroupByMonth(date('Y'));
+        $valueOfRealisedServicesBYMonth = $orderRepository->getValueByYearGroupByMonth(date('Y'));
+
         $todayDueDateTasks = $taskRepository->getTodayDueDateTasks();
+
         return $this->render('dashboard/index.html.twig', [
             'allRealisedServices' => $allRealisedServices,
             'thisMonthRealisedServices' => $thisMonthRealisedServices,

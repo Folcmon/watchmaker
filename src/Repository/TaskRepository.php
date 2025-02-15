@@ -27,6 +27,17 @@ class TaskRepository extends ServiceEntityRepository
             ->execute();
     }
 
+    public function getTasksByDueDate(\DateTime $startDate, \DateTime $endDate)
+    {
+        return $this->createQueryBuilder('t')
+            ->andWhere('t.dueDate >= :startDate')
+            ->andWhere('t.dueDate <= :endDate')
+            ->setParameter(':startDate', $startDate)
+            ->setParameter(':endDate', $endDate)
+            ->getQuery()
+            ->execute();
+    }
+
     //    /**
     //     * @return Task[] Returns an array of Task objects
     //     */

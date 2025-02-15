@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use _PHPStan_fd6a0f275\Nette\Utils\DateTime;
 use App\Entity\Order;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\DBAL\Exception;
@@ -57,6 +58,17 @@ class OrderRepository extends ServiceEntityRepository
         //it should return an array of associative arrays [{value: 1/100, month: 1}, {value: 2, month: 2/100}, ...]
         // dd($returnResult);
         return $returnResult;
+    }
+
+    public function getOrdersBetweenDates(\DateTime $startDate, \DateTime $endDate = new DateTime()): array
+    {
+        $qb = $this->createQueryBuilder('o');
+        $qb->where('o.createdAt >= :startDate')
+            ->andWhere('o.createdAt <= :endDate')
+            ->setParameter('startDate', $startDate)
+            ->setParameter('endDate', $endDate);
+
+        return $qb->getQuery()->getResult();
     }
 
     // /**

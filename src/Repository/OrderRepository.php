@@ -25,12 +25,14 @@ class OrderRepository extends ServiceEntityRepository
      */
     public function getCountByYearGroupByMonth(string $year): array
     {
-        // SELECT COUNT(*) as count, MONTH(created_at) as month FROM order WHERE YEAR(created_at) = 2021 GROUP BY month ORDER BY month ASC example using raw sql
-        $sql = "SELECT COUNT(*) as counter, MONTH(created_at) as month FROM orders WHERE YEAR(created_at) = :year GROUP BY month ORDER BY month ASC";
-        $conn = $this->getEntityManager()->getConnection();
-        $stmt = $conn->prepare($sql);
-        $result = $stmt->executeQuery(['year' => $year]);
-        return $result->fetchAllAssociative();
+        $qb = $this->createQueryBuilder('o');
+        $qb->select('COUNT(o.id) as counter, MONTH(o.createdAt) as month')
+            ->where('YEAR(o.createdAt) = :year')
+            ->groupBy('month')
+            ->orderBy('month', 'ASC')
+            ->setParameter('year', $year);
+
+        return $qb->getQuery()->getResult();
     }
 
     /**

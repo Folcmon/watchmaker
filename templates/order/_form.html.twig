@@ -79,6 +79,21 @@
     {{ form_widget(form.serviceAttachments, {'attr':{'class':'form-control'}}) }}
 </div>
 <div class="form-group mb-4">
+    <p>{{ "Wybierz metodę dodania zdjęcia"|trans }}:</p>
+    <button type="button" class="btn btn-success btn-lg" id="useCamera">📷 {{ "Użyj kamery"| trans }}</button>
+    <button type="button" class="btn btn-success btn-lg" id="uploadFile">📂 {{ "Wybierz z plików"|trans }}</button>
+
+    <video id="video" width="300" autoplay style="display:none;"></video>
+    <button type="button" id="takePhoto" class="btn btn-success btn-lg"
+            style="display:none !important;">{{ "Zrób zdjęcie"|trans }}</button>
+    <canvas id="canvas" class="border-1" width="300" height="200" style="display:none;"></canvas>
+
+    <input type="file" id="photoInput" name="photos[]" accept="image/*" multiple style="display:none;">
+    <input type="hidden" id="photoData" name="photoData">
+
+    <div id="preview"></div>
+</div>
+<div class="form-group mb-4">
     <label class="col-form-label">
         {{ "Klient"|trans }}
     </label>
@@ -197,6 +212,78 @@
                     $('#client-add-modal .modal-body').html(response);
                 }
             });
+        });
+    });
+</script>
+<script>
+    $(document).ready(function () {
+        let video = document.getElementById('video');
+        let canvas = document.getElementById('canvas');
+        let context = canvas.getContext('2d');
+        let photosArray = [];
+
+        // 📷 Opcja WebRTC - Kamera
+        $('#useCamera').click(function () {
+            navigator.mediaDevices.getUserMedia({video: true})
+                .then(function (stream) {
+                    video.srcObject = stream;
+                    video.style.display = 'block';
+                    $('#takePhoto').show();
+                })
+                .catch(function (error) {
+                    alert("Nie udało się uzyskać dostępu do kamery: " + error);
+                });
+        });
+
+        // 📸 Zrób zdjęcie i zapisz do formularza
+        $('#takePhoto').click(function () {
+            context.drawImage(video, 0, 0, canvas.width, canvas.height);
+            let photoData = canvas.toDataURL('image/png'); // Zapis zdjęcia jako Base64
+            let imageId = 'image_' + photosArray.length;
+            photosArray.push({id: imageId, data: photoData});
+            updatePreview();
+            video.srcObject.getTracks().forEach(track => track.stop()); // Wyłączenie kamery
+            video.style.display = 'none';
+            $('#takePhoto').hide();
+        });
+
+        // 📂 Opcja Upload - Z plików
+        $('#uploadFile').click(function () {
+            $('#photoInput').click();
+        });
+
+        // 📂 Obsługa podglądu wybranych zdjęć
+        $('#photoInput').change(function (event) {
+            let files = event.target.files;
+            for (let i = 0; i < files.length; i++) {
+                let file = files[i];
+                let reader = new FileReader();
+                reader.onload = function (e) {
+                    let imageId = 'image_' + photosArray.length;
+                    photosArray.push({id: imageId, data: e.target.result});
+                    updatePreview();
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Aktualizacja podglądu
+        function updatePreview() {
+            $('#preview').html("");
+            photosArray.forEach(photo => {
+                let imgHtml = '<div id="' + photo.id + '" style="display: inline-block; position: relative; margin: 5px;">' +
+                    '<img src="' + photo.data + '" width="200">' +
+                    '<button type="button" class="remove-photo" data-id="' + photo.id + '" style="position: absolute; top: 5px; right: 5px;">X</button>' +
+                    '</div>';
+                $('#preview').append(imgHtml);
+            });
+        }
+
+        // Usuwanie zdjęcia
+        $(document).on('click', '.remove-photo', function () {
+            let imageId = $(this).data('id');
+            photosArray = photosArray.filter(photo => photo.id !== imageId);
+            updatePreview();
         });
     });
 </script>

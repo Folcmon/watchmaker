@@ -27,10 +27,12 @@
 
 - Dodać generowanie przyjęcia dokumentu.
 - Marża może być również w formie wartości np. 10 zł
-- Dodać marki i modele do menu i zrobić backend do dodawania
+- Do widoku marki dodać możliwość dodawania modeli
 - Dodać Marki i modele do części
 - Opublikować projekt na web
 - Dodać kamerę do usługi do dodawania
+- Przycisk zrób zdjęcie nie znika po zrobieniu zdjęcia
+- Zrobić refactor OrderController - usunąć powtarzający się kod
 - Napisać testy jednostkowe i end to end za pomocą playwritha
 - dodać możliwości obsługi klientów firmowych
 - dodać możliwość dodawania załączników do magazynu (np. zdjęcia)

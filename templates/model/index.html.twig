@@ -1,0 +1,96 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ "Modele"|trans }}{% endblock %}
+
+{% block leftBody %}
+    {% include '/shared/leftSidebar.html.twig' %}
+{% endblock %}
+
+{% block body %}
+    <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">
+           <a href="{{ path('app_model_index') }}">{{ "Modele"| trans }}</a>
+        </span>
+    </h4>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row mb-4">
+                        <div class="col-xl-12">
+                            <form method="get" class="form">
+                                <div class="row mb-4">
+                                    <div class="col-xl-12">
+                                        <div class="form-group">
+                                            <label class="label inline" for="search">{{ "Nazwa"|trans }}</label>
+                                            <input type="text" name="search" id="search" class="form-control"
+                                                   value="{{ app.request.query.get('search') }}">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-xl-12">
+                                        <div class="form-group">
+                                            <a class="btn btn-danger btn-lg"
+                                               href="{{ url('app_model_index') }}">{{ "Resetowanie wyników"|trans }}</a>
+                                            <input type="submit" value="{{ "Szukaj "|trans }}"
+                                                   class="btn btn-primary float-end btn-lg">
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="row mb-4">
+                        <div class="col-xl-12">
+                            <a href="{{ path('app_model_new') }}"
+                               class="btn btn-success float-end btn-lg">{{ "Dodaj model"|trans }}</a>
+                        </div>
+                    </div>
+                    <div class="row mb-4">
+                        <div class="col-xl-12">
+                            <table class="table table-striped">
+                                <thead>
+                                <tr>
+                                    <th>{{ "Numer"|trans }}</th>
+                                    <th>{{ "Nazwa"|trans }}</th>
+                                    <th>{{ "Marka"|trans }}</th>
+                                    <th>{{ "Utworzony"|trans }}</th>
+                                    <th>{{ "Zmodyfikowany"|trans }}</th>
+                                    <th>{{ "Akcje"|trans }}</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for model in pagination %}
+                                    <tr>
+                                        <td>{{ model.id }}</td>
+                                        <td>{{ model.name }}</td>
+                                        <td>{{ model.brand ? model.brand.name : '' }}</td>
+                                        <td>{{ model.createdAt ? model.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+                                        <td>{{ model.updatedAt ? model.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
+                                        <td>
+                                            <a href="{{ path('app_model_show', {'id': model.id}) }}"
+                                               class="btn-success btn btn-sm">{{ "Wyświetl"|trans }}</a>
+                                            <a href="{{ path('app_model_edit', {'id': model.id}) }}"
+                                               class="btn-primary btn btn-sm">{{ "Edytuj"|trans }}</a>
+                                        </td>
+                                    </tr>
+                                {% else %}
+                                    <tr>
+                                        <td colspan="7">{{ "Brak modeli"|trans }}</td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            {{ knp_pagination_render(pagination) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

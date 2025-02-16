@@ -5,12 +5,15 @@ namespace App\Controller;
 use App\Entity\Client;
 use App\Entity\Order;
 use App\Entity\ServiceAttachment;
+use App\Enum\OrderStatusEnum;
 use App\Form\OrderType;
 use App\Repository\OrderRepository;
 use App\Repository\StorageRepository;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -54,45 +57,15 @@ class OrderController extends BaseController
     #[Route('/new/{client}', name: 'order_new', methods: ['GET', 'POST'])]
     public function new(Request $request, StorageRepository $storageRepository, ?Client $client = null): Response
     {
-        $em = $this->doctrine;
         $order = new Order();
+        $order->setStatus(OrderStatusEnum::NEW->value);
         if ($client !== null) {
             $order->setClient($client);
         }
-        $em->persist($order);
+        $this->entityManager->persist($order);
         $form = $this->createForm(OrderType::class, $order);
         $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $usedParts = $order->getRealisedServiceUsedItems() ?? null;
-            if ($usedParts != null) {
-                foreach ($usedParts as $oneUsedPart) {
-                    $usedPartStorageEntity = $storageRepository->find($oneUsedPart->getStorage()->getId());
-                    $usedPartStorageEntity->setQuantity($usedPartStorageEntity->getQuantity() - $oneUsedPart->getQuantity());
-                    $calculatedPriceForOneItem = $usedPartStorageEntity->getTotalPrice() * $oneUsedPart->getQuantity();
-                    $oneUsedPart->setPrice($calculatedPriceForOneItem);
-                }
-
-            }
-            $em->flush();
-            $files = $request->files->get('order')['serviceAttachments'];
-            if ($files != null) {
-                $uploadsDirectory = $this->getParameter('uploadsDirectory');
-                $filesystem = new Filesystem();
-                if (!empty($order->getServiceAttachments())) {
-                    foreach ($order->getServiceAttachments() as $attachment) {
-                        $fileToRemove = $uploadsDirectory . DIRECTORY_SEPARATOR . ServiceAttachment::SERVICE_ATTACHMENT_STORE_FOLDER . DIRECTORY_SEPARATOR . $attachment->getPath();
-                        $filesystem->remove($fileToRemove);
-                        $this->doctrine->remove($attachment);
-                    }
-                }
-                $em->flush();
-                $this->uploadOrderAttachment($files, $order, $uploadsDirectory);
-            }
-            $em->flush();
-            return $this->redirectToRoute('order_show', ['id' => $order->getId()]);
-        }
-
+        $this->saveOrder($form, $request, $order, $storageRepository);
         return $this->render('order/new.html.twig', [
             'order' => $order,
             'form' => $form->createView(),
@@ -133,38 +106,9 @@ class OrderController extends BaseController
     #[Route('/{id}/edit', name: 'order_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Order $order, StorageRepository $storageRepository): Response
     {
-        $em = $this->doctrine;
         $form = $this->createForm(OrderType::class, $order);
         $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            $usedParts = $order->getRealisedServiceUsedItems() ?? null;
-            if ($usedParts != null) {
-                foreach ($usedParts as $oneUsedPart) {
-                    $usedPartStorageEntity = $storageRepository->find($oneUsedPart->getStorage()->getId());
-                    $usedPartStorageEntity->setQuantity($usedPartStorageEntity->getQuantity() - $oneUsedPart->getQuantity());
-                    $calculatedPriceForOneItem = $usedPartStorageEntity->getTotalPrice() * $oneUsedPart->getQuantity();
-                    $oneUsedPart->setPrice($calculatedPriceForOneItem);
-                }
-
-            }
-            $em->flush();
-            $files = $request->files->get('order')['serviceAttachments'];
-            if ($files != null) {
-                $uploadsDirectory = $this->getParameter('uploadsDirectory');
-                $filesystem = new Filesystem();
-                if (!empty($order->getServiceAttachments())) {
-                    foreach ($order->getServiceAttachments() as $attachment) {
-                        $fileToRemove = $uploadsDirectory . DIRECTORY_SEPARATOR . ServiceAttachment::SERVICE_ATTACHMENT_STORE_FOLDER . DIRECTORY_SEPARATOR . $attachment->getPath();
-                        $filesystem->remove($fileToRemove);
-                        $this->doctrine->remove($attachment);
-                    }
-                }
-                $em->flush();
-                $this->uploadOrderAttachment($files, $order, $uploadsDirectory);
-            }
-            $em->flush();
-            return $this->redirectToRoute('order_show', ['id' => $order->getId()]);
-        }
+        $this->saveOrder($form, $request, $order, $storageRepository);
 
         return $this->render('order/edit.html.twig', [
             'order' => $order,
@@ -214,6 +158,39 @@ class OrderController extends BaseController
             'orders' => $realisedOrders,
             'client' => $client
         ]);
+    }
+
+    private function saveOrder(FormInterface $form, Request $request, Order $order, StorageRepository $storageRepository): void
+    {
+        if ($form->isSubmitted() && $form->isValid()) {
+            $usedParts = $order->getRealisedServiceUsedItems() ?? null;
+            if ($usedParts != null) {
+                foreach ($usedParts as $oneUsedPart) {
+                    $usedPartStorageEntity = $storageRepository->find($oneUsedPart->getStorage()->getId());
+                    $usedPartStorageEntity->setQuantity($usedPartStorageEntity->getQuantity() - $oneUsedPart->getQuantity());
+                    $calculatedPriceForOneItem = $usedPartStorageEntity->getTotalPrice() * $oneUsedPart->getQuantity();
+                    $oneUsedPart->setPrice($calculatedPriceForOneItem);
+                }
+
+            }
+            $this->entityManager->flush();
+            $files = $request->files->get('order')['serviceAttachments'];
+            if ($files != null) {
+                $uploadsDirectory = $this->getParameter('uploadsDirectory');
+                $filesystem = new Filesystem();
+                if (!empty($order->getServiceAttachments())) {
+                    foreach ($order->getServiceAttachments() as $attachment) {
+                        $fileToRemove = $uploadsDirectory . DIRECTORY_SEPARATOR . ServiceAttachment::SERVICE_ATTACHMENT_STORE_FOLDER . DIRECTORY_SEPARATOR . $attachment->getPath();
+                        $filesystem->remove($fileToRemove);
+                        $this->doctrine->remove($attachment);
+                    }
+                }
+                $this->entityManager->flush();
+                $this->uploadOrderAttachment($files, $order, $uploadsDirectory);
+            }
+            $this->entityManager->flush();
+            $this->redirectToRoute('order_show', ['id' => $order->getId()]);
+        }
     }
 
 }

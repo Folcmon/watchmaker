@@ -60,6 +60,18 @@
         <li class="menu-header small text-uppercase">
             <span class="menu-header-text">{{ "Administracja"| trans }}</span>
         </li>
+        <li class="menu-item {% if app.current_route == 'brand_index' %} active {% endif %}">
+            <a href="{{ path('app_brand_index') }}" class="menu-link">
+                <i class='bx bxs-briefcase mx-2'></i>
+                <div>{{ "Marka"| trans }}</div>
+            </a>
+        </li>
+        <li class="menu-item {% if app.current_route == 'model_index' %} active {% endif %}">
+            <a href="{{ path('app_model_index') }}" class="menu-link">
+                <i class='bx bxs-car mx-2'></i>
+                <div>{{ "Model"| trans }}</div>
+            </a>
+        </li>
         <li class="menu-item {% if app.current_route == 'app_vat_rate_index' %} active {% endif %}">
             <a href="{{ path('app_vat_rate_index') }}" class="menu-link">
                 <i class='bx bxs-bank mx-2'></i>

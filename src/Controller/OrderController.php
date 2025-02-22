@@ -188,6 +188,10 @@ class OrderController extends BaseController
                 $this->entityManager->flush();
                 $this->uploadOrderAttachment($files, $order, $uploadsDirectory);
             }
+            $photos = $request->files->get('order')['photos'];
+            $photosFromCamera = $request->files->get('order')['photosFromCamera'];
+            dump($photos, $photosFromCamera);
+            die();
             $this->entityManager->flush();
             $this->redirectToRoute('order_show', ['id' => $order->getId()]);
         }

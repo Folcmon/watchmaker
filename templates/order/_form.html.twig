@@ -89,6 +89,7 @@
     <canvas id="canvas" class="border-1" width="300" height="200" style="display:none;"></canvas>
 
     <input type="file" id="photoInput" name="photos[]" accept="image/*" multiple style="display:none;">
+    <input type="hidden" name="photosFromCamera" id="photosFromCamera" value="">
     <input type="hidden" id="photoData" name="photoData">
 
     <div id="preview"></div>
@@ -244,6 +245,8 @@
             updatePreview();
             video.srcObject.getTracks().forEach(track => track.stop()); // Wyłączenie kamery
             video.style.display = 'none';
+            //append photo data to hidden input
+            $('#photosFromCamera').val(photoData);
             $('#takePhoto').hide();
         });
 

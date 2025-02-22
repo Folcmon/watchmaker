@@ -20,7 +20,7 @@ class OrderEquipmentAcceptanceProtocolType extends AbstractType
             ->add('service_provider', TextType::class, [
                 'label' => 'Wykonawca',
                 'required' => true,
-                'data' => 'Salon zegarmistrzowski Radosław Kasperiuk'
+                'data' => 'Salon zegarmistrzowski Radosław Krzysztof Kasperiuk'
 
             ])
             ->add('service_provider_address', TextType::class, [

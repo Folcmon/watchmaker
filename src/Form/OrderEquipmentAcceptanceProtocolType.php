@@ -32,6 +32,7 @@ class OrderEquipmentAcceptanceProtocolType extends AbstractType
             ->add('service_provider_phone', TextType::class, [
                 'label' => 'Telefon wykonawcy',
                 'required' => true,
+                'data' => '693 980 385'
 
             ])
             ->add('device_type', TextType::class, [

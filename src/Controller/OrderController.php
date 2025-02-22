@@ -4,9 +4,10 @@ namespace App\Controller;
 
 use App\Entity\Client;
 use App\Entity\Order;
-use App\Entity\ServiceAttachment;
+use App\Entity\OrderAttachment;
 use App\Enum\OrderStatusEnum;
 use App\Form\OrderType;
+use App\Repository\FileRepository;
 use App\Repository\OrderRepository;
 use App\Repository\StorageRepository;
 use Knp\Component\Pager\PaginatorInterface;
@@ -55,17 +56,18 @@ class OrderController extends BaseController
     }
 
     #[Route('/new/{client}', name: 'order_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, StorageRepository $storageRepository, ?Client $client = null): Response
+    public function new(Request $request, StorageRepository $storageRepository, FileRepository $fileRepository, ?Client $client = null): Response
     {
         $order = new Order();
         $order->setStatus(OrderStatusEnum::NEW->value);
+        $order->setOrderAcceptanceDate(new \DateTime());
         if ($client !== null) {
             $order->setClient($client);
         }
         $this->entityManager->persist($order);
         $form = $this->createForm(OrderType::class, $order);
         $form->handleRequest($request);
-        $this->saveOrder($form, $request, $order, $storageRepository);
+        $this->saveOrder($form, $request, $order, $storageRepository, $fileRepository);
         return $this->render('order/new.html.twig', [
             'order' => $order,
             'form' => $form->createView(),
@@ -79,16 +81,16 @@ class OrderController extends BaseController
              * @var $oneFileAttachment UploadedFile
              */
             foreach ($files as $oneFileAttachment) {
-                $directory = $uploadsDirectory . DIRECTORY_SEPARATOR . ServiceAttachment::SERVICE_ATTACHMENT_STORE_FOLDER;
+                $directory = $uploadsDirectory . DIRECTORY_SEPARATOR . OrderAttachment::SERVICE_ATTACHMENT_STORE_FOLDER;
                 $extension = $oneFileAttachment->guessExtension();
                 if (!$extension) {
                     $extension = 'bin';
                 }
                 $filename = md5(microtime()) . '.' . $extension;
                 $oneFileAttachment->move($directory, $filename);
-                $orderAttachment = new ServiceAttachment();
+                $orderAttachment = new OrderAttachment();
                 $orderAttachment->setPath($filename);
-                $orderAttachment->setService($realisedOrder);
+                $orderAttachment->setOrder($realisedOrder);
                 $this->doctrine->persist($orderAttachment);
                 $this->doctrine->flush();
             }
@@ -104,11 +106,11 @@ class OrderController extends BaseController
     }
 
     #[Route('/{id}/edit', name: 'order_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Order $order, StorageRepository $storageRepository): Response
+    public function edit(Request $request, Order $order, StorageRepository $storageRepository, FileRepository $fileRepository): Response
     {
         $form = $this->createForm(OrderType::class, $order);
         $form->handleRequest($request);
-        $this->saveOrder($form, $request, $order, $storageRepository);
+        $this->saveOrder($form, $request, $order, $storageRepository, $fileRepository);
 
         return $this->render('order/edit.html.twig', [
             'order' => $order,
@@ -123,9 +125,9 @@ class OrderController extends BaseController
             $em = $this->doctrine;
             $uploadsDirectory = $this->getParameter('uploadsDirectory');
             $filesystem = new Filesystem();
-            if (!empty($realisedOrder->getServiceAttachments())) {
-                foreach ($realisedOrder->getServiceAttachments() as $attachment) {
-                    $fileToRemove = $uploadsDirectory . DIRECTORY_SEPARATOR . ServiceAttachment::SERVICE_ATTACHMENT_STORE_FOLDER . DIRECTORY_SEPARATOR . $attachment->getPath();
+            if (!empty($realisedOrder->getOrderAttachments())) {
+                foreach ($realisedOrder->getOrderAttachments() as $attachment) {
+                    $fileToRemove = $uploadsDirectory . DIRECTORY_SEPARATOR . OrderAttachment::SERVICE_ATTACHMENT_STORE_FOLDER . DIRECTORY_SEPARATOR . $attachment->getPath();
                     $filesystem->remove($fileToRemove);
                     $this->doctrine->remove($attachment);
                 }
@@ -160,7 +162,13 @@ class OrderController extends BaseController
         ]);
     }
 
-    private function saveOrder(FormInterface $form, Request $request, Order $order, StorageRepository $storageRepository): void
+    private function saveOrder(
+        FormInterface     $form,
+        Request           $request,
+        Order             $order,
+        StorageRepository $storageRepository,
+        FileRepository    $fileRepository
+    ): void
     {
         if ($form->isSubmitted() && $form->isValid()) {
             $usedParts = $order->getRealisedServiceUsedItems() ?? null;
@@ -174,25 +182,16 @@ class OrderController extends BaseController
 
             }
             $this->entityManager->flush();
-            $files = $request->files->get('order')['serviceAttachments'];
+            $files = $request->get('order')['orderAttachments'];
             if ($files != null) {
-                $uploadsDirectory = $this->getParameter('uploadsDirectory');
-                $filesystem = new Filesystem();
-                if (!empty($order->getServiceAttachments())) {
-                    foreach ($order->getServiceAttachments() as $attachment) {
-                        $fileToRemove = $uploadsDirectory . DIRECTORY_SEPARATOR . ServiceAttachment::SERVICE_ATTACHMENT_STORE_FOLDER . DIRECTORY_SEPARATOR . $attachment->getPath();
-                        $filesystem->remove($fileToRemove);
-                        $this->doctrine->remove($attachment);
-                    }
+                foreach ($files as $file) {
+                    $orderAttachment = new OrderAttachment();
+                    $orderAttachment->setFile($fileRepository->find($file));
+                    $orderAttachment->setOrder($order);
+                    $this->entityManager->persist($orderAttachment);
                 }
                 $this->entityManager->flush();
-                $this->uploadOrderAttachment($files, $order, $uploadsDirectory);
             }
-            $photos = $request->files->get('order')['photos'];
-            $photosFromCamera = $request->files->get('order')['photosFromCamera'];
-            dump($photos, $photosFromCamera);
-            die();
-            $this->entityManager->flush();
             $this->redirectToRoute('order_show', ['id' => $order->getId()]);
         }
     }

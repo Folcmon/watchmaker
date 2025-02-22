@@ -73,26 +73,75 @@
     <label class="col-form-label">
         {{ "Załączniki"|trans }}
     </label>
+    <!------------upload nowy plików----------------->
+    <div id="upload-area"></div>
+    <script>
+        const uppy = new Uppy.Uppy(
+                {
+                    debug: true,
+                    autoProceed:
+                        false, // Użytkownik sam zatwierdza upload
+                    restrictions:
+                        {
+                            maxNumberOfFiles: 5, allowedFileTypes:
+                                ['image/*']
+                        },
+                    locale: Uppy.locales.pl_PL,
+                }
+            )
+        ;
+
+        uppy.use(Uppy.Dashboard, {
+            inline: true,
+            target: '#upload-area',
+            showProgressDetails: true,
+            proudlyDisplayPoweredByUppy: false
+        });
+
+        // Obsługa kamery 📸
+        uppy.use(Uppy.Webcam, {target: Uppy.Dashboard});
+
+        // Wysyłanie na backend Symfony
+        uppy.use(Uppy.XHRUpload, {
+            endpoint: '{{ path('file_upload') }}', // API backendu Symfony
+            fieldName: 'file', // Musi pasować do klucza w $_FILES
+            formData: true
+        });
+
+        // Obsługa zakończonego uploadu
+        uppy.on('complete', (result) => {
+            //add uploaded files ids to input as order['orderAttachments'][] array as prototype form
+            let uploadedFiles = result.successful.map(file => file.response.body.fileId);
+            let input = document.querySelector('input[name="order[orderAttachments][]"]');
+            //if input exist add hidden inputs with uploaded files ids else create new input
+            if (input) {
+                uploadedFiles.forEach(fileId => {
+                    let hiddenInput = document.createElement('input');
+                    hiddenInput.type = 'hidden';
+                    hiddenInput.name = 'order[orderAttachments][]';
+                    hiddenInput.value = fileId;
+                    input.after(hiddenInput);
+                });
+            } else {
+                let hiddenInputs = uploadedFiles.map(fileId => {
+                    let hiddenInput = document.createElement('input');
+                    hiddenInput.type = 'hidden';
+                    hiddenInput.name = 'order[orderAttachments][]';
+                    hiddenInput.value = fileId;
+                    return hiddenInput;
+                });
+                hiddenInputs.forEach(hiddenInput => {
+                    document.querySelector('form').appendChild(hiddenInput);
+                });
+            }
+            console.log('Upload zakończony!', result.successful);
+        });
+    </script>
+    <!------------upload nowy plików----------------->
     <div class="">
-        {{ form_errors(form.serviceAttachments) }}
+        {{ form_errors(form.orderAttachments) }}
     </div>
-    {{ form_widget(form.serviceAttachments, {'attr':{'class':'form-control'}}) }}
-</div>
-<div class="form-group mb-4">
-    <p>{{ "Wybierz metodę dodania zdjęcia"|trans }}:</p>
-    <button type="button" class="btn btn-success btn-lg" id="useCamera">📷 {{ "Użyj kamery"| trans }}</button>
-    <button type="button" class="btn btn-success btn-lg" id="uploadFile">📂 {{ "Wybierz z plików"|trans }}</button>
-
-    <video id="video" width="300" autoplay style="display:none;"></video>
-    <button type="button" id="takePhoto" class="btn btn-success btn-lg"
-            style="display:none !important;">{{ "Zrób zdjęcie"|trans }}</button>
-    <canvas id="canvas" class="border-1" width="300" height="200" style="display:none;"></canvas>
-
-    <input type="file" id="photoInput" name="photos[]" accept="image/*" multiple style="display:none;">
-    <input type="hidden" name="photosFromCamera" id="photosFromCamera" value="">
-    <input type="hidden" id="photoData" name="photoData">
-
-    <div id="preview"></div>
+    {{ form_widget(form.orderAttachments, {'attr':{'class':'hidden'}}) }}
 </div>
 <div class="form-group mb-4">
     <label class="col-form-label">
@@ -213,80 +262,6 @@
                     $('#client-add-modal .modal-body').html(response);
                 }
             });
-        });
-    });
-</script>
-<script>
-    $(document).ready(function () {
-        let video = document.getElementById('video');
-        let canvas = document.getElementById('canvas');
-        let context = canvas.getContext('2d');
-        let photosArray = [];
-
-        // 📷 Opcja WebRTC - Kamera
-        $('#useCamera').click(function () {
-            navigator.mediaDevices.getUserMedia({video: true})
-                .then(function (stream) {
-                    video.srcObject = stream;
-                    video.style.display = 'block';
-                    $('#takePhoto').show();
-                })
-                .catch(function (error) {
-                    alert("Nie udało się uzyskać dostępu do kamery: " + error);
-                });
-        });
-
-        // 📸 Zrób zdjęcie i zapisz do formularza
-        $('#takePhoto').click(function () {
-            context.drawImage(video, 0, 0, canvas.width, canvas.height);
-            let photoData = canvas.toDataURL('image/png'); // Zapis zdjęcia jako Base64
-            let imageId = 'image_' + photosArray.length;
-            photosArray.push({id: imageId, data: photoData});
-            updatePreview();
-            video.srcObject.getTracks().forEach(track => track.stop()); // Wyłączenie kamery
-            video.style.display = 'none';
-            //append photo data to hidden input
-            $('#photosFromCamera').val(photoData);
-            $('#takePhoto').hide();
-        });
-
-        // 📂 Opcja Upload - Z plików
-        $('#uploadFile').click(function () {
-            $('#photoInput').click();
-        });
-
-        // 📂 Obsługa podglądu wybranych zdjęć
-        $('#photoInput').change(function (event) {
-            let files = event.target.files;
-            for (let i = 0; i < files.length; i++) {
-                let file = files[i];
-                let reader = new FileReader();
-                reader.onload = function (e) {
-                    let imageId = 'image_' + photosArray.length;
-                    photosArray.push({id: imageId, data: e.target.result});
-                    updatePreview();
-                };
-                reader.readAsDataURL(file);
-            }
-        });
-
-        // Aktualizacja podglądu
-        function updatePreview() {
-            $('#preview').html("");
-            photosArray.forEach(photo => {
-                let imgHtml = '<div id="' + photo.id + '" style="display: inline-block; position: relative; margin: 5px;">' +
-                    '<img src="' + photo.data + '" width="200">' +
-                    '<button type="button" class="remove-photo" data-id="' + photo.id + '" style="position: absolute; top: 5px; right: 5px;">X</button>' +
-                    '</div>';
-                $('#preview').append(imgHtml);
-            });
-        }
-
-        // Usuwanie zdjęcia
-        $(document).on('click', '.remove-photo', function () {
-            let imageId = $(this).data('id');
-            photosArray = photosArray.filter(photo => photo.id !== imageId);
-            updatePreview();
         });
     });
 </script>

@@ -2,21 +2,21 @@
 
 namespace App\Repository;
 
-use App\Entity\ServiceAttachment;
+use App\Entity\OrderAttachment;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @method ServiceAttachment|null find($id, $lockMode = null, $lockVersion = null)
- * @method ServiceAttachment|null findOneBy(array $criteria, array $orderBy = null)
- * @method ServiceAttachment[]    findAll()
- * @method ServiceAttachment[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method OrderAttachment|null find($id, $lockMode = null, $lockVersion = null)
+ * @method OrderAttachment|null findOneBy(array $criteria, array $orderBy = null)
+ * @method OrderAttachment[]    findAll()
+ * @method OrderAttachment[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class ServiceAttachementRepository extends ServiceEntityRepository
+class OrderAttachementRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, ServiceAttachment::class);
+        parent::__construct($registry, OrderAttachment::class);
     }
 
     // /**

@@ -3,6 +3,23 @@
 - PHP 8.2
 - Composer
 - MariaDB 10.4
+- Node.js v22.13.1
+
+# Instalacja
+
+- Sklonuj repozytorium
+- Zainstaluj zależności za pomocą komendy `composer install`
+- Skonfiguruj plik .env.local
+- Utwórz bazę danych za pomocą komendy `php bin/console doctrine:database:create`
+- Wykonaj migracje za pomocą komendy `php bin/console doctrine:migrations:migrate`
+- w katalogu public utwórz katalog uploads
+- w katalogu public wykonaj komende npm install
+
+# Uruchomienie
+
+- Załaduj dane testowe za pomocą komendy `php bin/console doctrine:fixtures:load`
+- Uruchom serwer deweloperski za pomocą komendy `symfony server:start`
+- Aplikacja dostępna jest pod adresem `http://localhost:8000`
 
 # Strurktura Programu
 
@@ -21,11 +38,10 @@
 - Encja "RealisedService" reprezentuje obiekt realizowanej usługi, realizowana usługa jest na rzecz encji Klient (many
   to
   one relacja) i może mieć encje service attachment- załączniki do usługi np. zdjęcia.
--
 
 # Do zrobienia
 
-- Dodać generowanie przyjęcia dokumentu.
+- Dodać generowanie odebrania.
 - Marża może być również w formie wartości np. 10 zł
 - Do widoku marki dodać możliwość dodawania modeli
 - Dodać Marki i modele do części

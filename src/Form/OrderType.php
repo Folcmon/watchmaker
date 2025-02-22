@@ -3,6 +3,7 @@
 namespace App\Form;
 
 use App\Entity\Order;
+use App\Entity\OrderAttachment;
 use App\Entity\VatRate;
 use App\Enum\OrderStatusEnum;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -10,7 +11,6 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
-use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -40,7 +40,12 @@ class OrderType extends AbstractType
                 'label' => 'Status',
                 'required' => false,
             ])
-            ->add('serviceAttachments', FileType::class, ['multiple' => true, 'mapped' => false, 'required' => false])
+            ->add('orderAttachments', CollectionType::class,
+                [
+                    'required' => false,
+                    'allow_add' => true,
+                    'mapped' => false,
+                ])
             ->add('realisedServiceUsedItems', CollectionType::class, [
                 'attr' => ['class' => 'usedParts-collection form-inline'],
                 'label' => false,

@@ -2,12 +2,12 @@
 
 namespace App\Entity;
 
-use App\Repository\ServiceAttachementRepository;
+use App\Repository\OrderAttachementRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 
-#[ORM\Entity(repositoryClass: ServiceAttachementRepository::class)]
-class ServiceAttachment
+#[ORM\Entity(repositoryClass: OrderAttachementRepository::class)]
+class OrderAttachment
 {
     const SERVICE_ATTACHMENT_STORE_FOLDER = 'service_attachment';
     use TimestampableEntity;
@@ -17,37 +17,38 @@ class ServiceAttachment
     #[ORM\Column(type: 'integer')]
     private ?int $id;
 
-    #[ORM\Column(type: 'string', length: 255)]
-    private ?string $path;
-
     #[ORM\ManyToOne(targetEntity: Order::class, cascade: ['persist'], inversedBy: 'serviceAttachments')]
-    private ?Order $service;
+    private ?Order $order;
+
+    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?File $file = null;
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getPath(): ?string
+    public function getOrder(): ?Order
     {
-        return $this->path;
+        return $this->order;
     }
 
-    public function setPath(string $path): self
+    public function setOrder(?Order $order): self
     {
-        $this->path = $path;
+        $this->order = $order;
 
         return $this;
     }
 
-    public function getService(): ?Order
+    public function getFile(): ?File
     {
-        return $this->service;
+        return $this->file;
     }
 
-    public function setService(?Order $service): self
+    public function setFile(File $file): static
     {
-        $this->service = $service;
+        $this->file = $file;
 
         return $this;
     }

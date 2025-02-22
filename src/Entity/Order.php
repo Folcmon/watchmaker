@@ -30,8 +30,8 @@ class Order
     #[ORM\Column(type: 'string', length: 255)]
     private ?string $name;
 
-    #[ORM\OneToMany(targetEntity: ServiceAttachment::class, mappedBy: 'service', cascade: ['all'], orphanRemoval: true)]
-    private Collection|array $serviceAttachments;
+    #[ORM\OneToMany(targetEntity: OrderAttachment::class, mappedBy: 'order', cascade: ['all'], orphanRemoval: true)]
+    private Collection|array $orderAttachments;
 
     #[ORM\OneToMany(targetEntity: RealisedServiceUsedItem::class, mappedBy: 'realisedService', cascade: [
         'persist',
@@ -60,7 +60,7 @@ class Order
 
     public function __construct()
     {
-        $this->serviceAttachments = new ArrayCollection();
+        $this->orderAttachments = new ArrayCollection();
         $this->realisedServiceUsedItems = new ArrayCollection();
         $this->document = new ArrayCollection();
     }
@@ -109,27 +109,27 @@ class Order
     /**
      * @return Collection
      */
-    public function getServiceAttachments(): Collection
+    public function getOrderAttachments(): Collection
     {
-        return $this->serviceAttachments;
+        return $this->orderAttachments;
     }
 
-    public function addServiceAttachment(ServiceAttachment $serviceAttachment): self
+    public function addOrderAttachment(OrderAttachment $orderAttachment): self
     {
-        if (!$this->serviceAttachments->contains($serviceAttachment)) {
-            $this->serviceAttachments[] = $serviceAttachment;
-            $serviceAttachment->setService($this);
+        if (!$this->orderAttachments->contains($orderAttachment)) {
+            $this->orderAttachments[] = $orderAttachment;
+            $orderAttachment->setOrder($this);
         }
 
         return $this;
     }
 
-    public function removeServiceAttachment(ServiceAttachment $serviceAttachment): self
+    public function removeOrderAttachment(OrderAttachment $orderAttachment): self
     {
-        if ($this->serviceAttachments->removeElement($serviceAttachment)) {
+        if ($this->orderAttachments->removeElement($orderAttachment)) {
             // set the owning side to null (unless already changed)
-            if ($serviceAttachment->getService() === $this) {
-                $serviceAttachment->setService(null);
+            if ($orderAttachment->getOrder() === $this) {
+                $orderAttachment->setOrder(null);
             }
         }
 

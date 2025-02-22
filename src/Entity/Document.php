@@ -26,7 +26,7 @@ class Document
     #[ORM\Column(enumType: DocumentTypeEnum::class)]
     private ?DocumentTypeEnum $document_type = null;
 
-    #[ORM\Column]
+    #[ORM\Column(type: 'json')]
     private array $document_data = [];
 
     public function getId(): ?int

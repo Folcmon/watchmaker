@@ -6,6 +6,8 @@ use App\Entity\Document;
 use App\Entity\Order;
 use App\Enum\DocumentTypeEnum;
 use App\Form\OrderEquipmentAcceptanceProtocolType;
+use App\Repository\BrandRepository;
+use App\Repository\ModelRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,8 +17,12 @@ use Symfony\Component\Routing\Attribute\Route;
 class OrderDocumentController extends BaseController
 {
     #[Route('/equipment-acceptance-protocol/{order:id}', name: 'equipment_acceptance_protocol')]
-    public function index(Order $order, Request $request): Response
-    {
+    public function index(
+        Order $order,
+        BrandRepository $brandRepository,
+        ModelRepository $modelRepository,
+        Request $request
+    ): Response {
         $form = $this->createForm(OrderEquipmentAcceptanceProtocolType::class);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
@@ -41,6 +47,8 @@ class OrderDocumentController extends BaseController
         return $this->render('document/equipment_acceptance_protocol.html.twig', [
             'order' => $order,
             'form' => $form->createView(),
+            'brands' => $brandRepository->findAll(),
+            'models' => $modelRepository->findAll(),
         ]);
     }
 

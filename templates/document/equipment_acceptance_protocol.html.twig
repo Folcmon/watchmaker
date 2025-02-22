@@ -3,52 +3,6 @@
 {% block title %}{{ "Protokół przyjęcia"|trans }}{% endblock %}
 
 {% block stylesheets %}
-    <style>
-        /* Stylowanie dla wydruku */
-        @media print {
-            body {
-                font-family: Arial, sans-serif;
-                color: #000;
-            }
-
-            .container, .row, .col-md-12, .card {
-                width: 100%;
-                margin: 0;
-                padding: 0;
-            }
-
-            h4, .btn, .card-footer, .sidebar, .layout-navbar, .page-title-header {
-                display: none !important; /* Ukrycie menu, nawigacji i zbędnych przycisków */
-            }
-
-            hr {
-                border-top: 1px solid #000;
-            }
-
-            .text-center {
-                text-align: center;
-            }
-
-            .border-top {
-                border-top: 1px solid #000 !important;
-            }
-        }
-
-        /* Style widoczne na ekranie */
-        .container {
-            max-width: 800px;
-        }
-
-        .border-top {
-            height: 50px;
-            margin-top: 20px;
-        }
-
-        h1 {
-            font-size: 24px;
-            font-weight: bold;
-        }
-    </style>
 {% endblock %}
 
 {% block leftBody %}
@@ -68,79 +22,91 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-body">
-                    <h1 class="text-center mb-4">Protokół przyjęcia sprzętu do serwisu</h1>
                     {{ form_start(form) }}
-                    <div class="row mb-4">
-                        <div class="col-md-12">
-                            {{ form_row(form.service_provider, {'label_attr': {'class': 'form-label'}, 'attr': {'class': 'form-control'}}) }}
+                    <div class="printable-section">
+                        <h1 class="text-center mb-4">Protokół przyjęcia sprzętu do serwisu</h1>
+                        <div class="row mb-4">
+                            <div class="col-md-12">
+                                {{ form_row(form.service_provider, {'label_attr': {'class': 'form-label'}, 'attr': {'class': 'form-control'}}) }}
+                            </div>
                         </div>
-                    </div>
-                    <div class="row mb-4">
-                        <div class="col-md-12">
-                            {{ form_row(form.service_provider_address, {'label_attr': {'class': 'form-label'}, 'attr': {'class': 'form-control'}}) }}
+                        <div class="row mb-4">
+                            <div class="col-md-12">
+                                {{ form_row(form.service_provider_address, {'label_attr': {'class': 'form-label'}, 'attr': {'class': 'form-control'}}) }}
+                            </div>
                         </div>
-                    </div>
-                    <div class="row mb-4">
-                        <div class="col-md-12">
-                            {{ form_row(form.service_provider_phone, {'label_attr': {'class': 'form-label'}, 'attr': {'class': 'form-control'}}) }}
+                        <div class="row mb-4">
+                            <div class="col-md-12">
+                                {{ form_row(form.service_provider_phone, {'label_attr': {'class': 'form-label'}, 'attr': {'class': 'form-control'}}) }}
+                            </div>
                         </div>
-                    </div>
-                    <div class="row mb-4">
-                        <div class="col-md-12">
-                            {{ form_row(form.device_type, {'label_attr': {'class': 'form-label'}, 'attr': {'class': 'form-control'}}) }}
+                        <div class="row mb-4">
+                            <div class="col-md-12">
+                                {{ form_row(form.device_type, {'label_attr': {'class': 'form-label'}, 'attr': {'class': 'form-control'}}) }}
+                            </div>
                         </div>
-                    </div>
-                    <div class="row mb-4">
-                        <div class="col-md-12">
-                            {{ form_row(form.brand, {'label_attr': {'class': 'form-label'}, 'attr': {'class': 'form-control'}}) }}
+                        <div class="row mb-4">
+                            <div class="col-md-12">
+                                {{ form_row(form.brand, {'label_attr': {'class': 'form-label'}, 'attr': {'class': 'form-control','list':'order_equipment_acceptance_protocol_brand_list'}}) }}
+                                <datalist id="order_equipment_acceptance_protocol_brand_list">
+                                    {% for brand in brands %}
+                                    <option value="{{ brand.name }}">
+                                        {% endfor %}
+                                </datalist>
+                            </div>
                         </div>
-                    </div>
-                    <div class="row mb-4">
-                        <div class="col-md-12">
-                            {{ form_row(form.model, {'label_attr': {'class': 'form-label'}, 'attr': {'class': 'form-control'}}) }}
+                        <div class="row mb-4">
+                            <div class="col-md-12">
+                                {{ form_row(form.model, {'label_attr': {'class': 'form-label'}, 'attr': {'class': 'form-control','list':'order_equipment_acceptance_protocol_model_list'}}) }}
+                                <datalist id="order_equipment_acceptance_protocol_model_list">
+                                    {% for model in models %}
+                                    <option value="{{ model.name }}">
+                                        {% endfor %}
+                                </datalist>
+                            </div>
                         </div>
-                    </div>
-                    <div class="row mb-4">
-                        <div class="col-md-12">
-                            {{ form_row(form.serial_number, {'label_attr': {'class': 'form-label'}, 'attr': {'class': 'form-control'}}) }}
+                        <div class="row mb-4">
+                            <div class="col-md-12">
+                                {{ form_row(form.serial_number, {'label_attr': {'class': 'form-label'}, 'attr': {'class': 'form-control'}}) }}
+                            </div>
                         </div>
-                    </div>
-                    <div class="mb-4">
-                        {{ form_row(form.fault_description, {'label_attr': {'class': 'form-label'}, 'attr': {'class': 'form-control'}}) }}
-                    </div>
-                    <div class="row mb-4">
-                        <div class="col-md-12">
-                            {{ form_row(form.customer_name, {'label_attr': {'class': 'form-label'}, 'attr': {'class': 'form-control'}}) }}
+                        <div class="mb-4">
+                            {{ form_row(form.fault_description, {'label_attr': {'class': 'form-label'}, 'attr': {'class': 'form-control'}}) }}
                         </div>
+                        <div class="row mb-4">
+                            <div class="col-md-12">
+                                {{ form_row(form.customer_name, {'label_attr': {'class': 'form-label'}, 'attr': {'class': 'form-control'}}) }}
+                            </div>
 
-                    </div>
-                    <div class="row mb-4">
-                        <div class="col-md-12">
-                            {{ form_row(form.customer_phone, {'label_attr': {'class': 'form-label'}, 'attr': {'class': 'form-control'}}) }}
                         </div>
-                    </div>
-                    <div class="mb-4">
-                        {{ form_row(form.date_received, {'label_attr': {'class': 'form-label'}, 'attr': {'class': 'form-control'}}) }}
-                    </div>
-                    <hr>
-                    <div class="row mt-4">
-                        <div class="col-md-6 text-center">
-                            <p>Podpis przyjmującego</p>
-                            <div class="border-top mt-4" style="height: 50px;"></div>
+                        <div class="row mb-4">
+                            <div class="col-md-12">
+                                {{ form_row(form.customer_phone, {'label_attr': {'class': 'form-label'}, 'attr': {'class': 'form-control'}}) }}
+                            </div>
                         </div>
-                        <div class="col-md-6 text-center">
-                            <p>Podpis odbierającego</p>
-                            <div class="border-top mt-4" style="height: 50px;"></div>
+                        <div class="mb-4">
+                            {{ form_row(form.date_received, {'label_attr': {'class': 'form-label'}, 'attr': {'class': 'form-control'}}) }}
                         </div>
-                    </div>
-                    <div class="row mt-4 mb-5">
-                        <input type="submit" class="btn btn-primary float-end" value="Zapisz protokół"/>
+                        <hr>
+                        <div class="row mt-4">
+                            <div class="col-md-6 text-center">
+                                <p>Podpis przyjmującego</p>
+                                <div class="border-top mt-4" style="height: 50px;"></div>
+                            </div>
+                            <div class="col-md-6 text-center">
+                                <p>Podpis odbierającego</p>
+                                <div class="border-top mt-4" style="height: 50px;"></div>
+                            </div>
+                        </div>
+                        <div class="row mt-4 mb-5">
+                            <input type="submit" class="btn btn-primary float-end" value="Zapisz protokół"/>
+                        </div>
                     </div>
                     {{ form_end(form) }}
                 </div>
                 <div class="card-footer border-top pt-4">
                     <div class="col-xl-12">
-                        <a href="#" onclick="window.print()" class="btn btn-primary float-start btn-lg">
+                        <a href="#" class="btn btn-primary float-start btn-lg print-pdf">
                             {{ "Drukuj"|trans }}
                         </a>
                         <a href="{{ path('order_show',{'id': order.id}) }}"
@@ -150,4 +116,159 @@
             </div>
         </div>
     </div>
+{% endblock %}
+
+{% block body_scripts %}
+    {{ parent() }}
+    <script>
+        let jsPDF = window.jspdf.jsPDF;
+
+        function loadCustomFont(doc) {
+            doc.addFileToVFS("Roboto-Regular.ttf", "BASE64_KOD_HERE"); // Wklej Base64 tutaj
+            doc.addFont("Roboto-Regular.ttf", "Roboto", "normal");
+            doc.setFont("Roboto");
+        }
+
+        function loadScript(url) {
+            return new Promise((resolve, reject) => {
+                const script = document.createElement('script');
+                script.src = url;
+                script.onload = resolve;
+                script.onerror = reject;
+                document.head.appendChild(script);
+            });
+        }
+
+        // Ładujemy skrypty w odpowiedniej kolejności
+        async function initializePDFGenerator() {
+            try {
+                await loadScript('https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js');
+                await loadScript('https://unpkg.com/jspdf-autotable');
+
+                const {jsPDF} = window.jspdf;
+
+                function generateProtocolPDF() {
+                    const doc = new jsPDF({
+                        orientation: 'portrait',
+                        unit: 'mm',
+                        format: 'a4'
+                    });
+                    doc.addFont('https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.66/fonts/Roboto/Roboto-Regular.ttf', 'Roboto', 'normal');
+                    doc.setFont("Roboto"); // Czcionka obsługująca polskie znaki
+                    doc.setFontSize(14);
+
+                    // Nagłówek - dzielimy go na kilka linii, jeśli jest za szeroki
+                    const headerText = 'PROTOKÓŁ PRZYJĘCIA SPRZĘTU DO SERWISU';
+                    const pageWidth = doc.internal.pageSize.width;
+                    const margin = 10; // Marginesy
+
+                    const splitTitle = doc.splitTextToSize(headerText, pageWidth - 2 * margin);
+                    doc.text(splitTitle, pageWidth / 2, 20, {align: 'center'});
+
+                    // Pobieramy dane z formularza
+                    const convertToUTF8 = (text) => new TextDecoder("utf-8").decode(new TextEncoder().encode(text));
+
+                    const data = {
+                        wykonawca: convertToUTF8(document.getElementById('order_equipment_acceptance_protocol_service_provider').value),
+                        adres: convertToUTF8(document.getElementById('order_equipment_acceptance_protocol_service_provider_address').value),
+                        telefon: convertToUTF8(document.getElementById('order_equipment_acceptance_protocol_service_provider_phone').value),
+                        sprzet: convertToUTF8(document.getElementById('order_equipment_acceptance_protocol_device_type').value),
+                        marka: convertToUTF8(document.getElementById('order_equipment_acceptance_protocol_brand').value),
+                        model: convertToUTF8(document.getElementById('order_equipment_acceptance_protocol_model').value),
+                        numer: convertToUTF8(document.getElementById('order_equipment_acceptance_protocol_serial_number').value),
+                        usterka: convertToUTF8(document.getElementById('order_equipment_acceptance_protocol_fault_description').value),
+                        klient: convertToUTF8(document.getElementById('order_equipment_acceptance_protocol_customer_name').value),
+                        telefonKlienta: convertToUTF8(document.getElementById('order_equipment_acceptance_protocol_customer_phone').value),
+                        data: convertToUTF8(document.getElementById('order_equipment_acceptance_protocol_date_received').value)
+                    };
+
+                    let currentY = 30;
+
+                    // Konfiguracja tabel
+                    const tableStyles = {
+                        theme: 'grid',
+                        styles: {fontSize: 10, cellPadding: 3, font: 'Roboto'},
+                        headStyles: {fillColor: [220, 220, 220], textColor: [0, 0, 0], fontStyle: 'bold'},
+                        bodyStyles: {fillColor: [255, 255, 255]},
+                        alternateRowStyles: {fillColor: [245, 245, 245]},
+                        margin: {top: 35}
+                    };
+
+                    // Dane serwisu
+                    doc.autoTable({
+                        head: [['DANE SERWISU', '']],
+                        body: [['Wykonawca:', data.wykonawca], ['Adres:', data.adres], ['Telefon:', data.telefon]],
+                        ...tableStyles,
+                        startY: currentY
+                    });
+
+                    currentY = doc.lastAutoTable.finalY + 10;
+
+                    // Dane sprzętu
+                    doc.autoTable({
+                        head: [['DANE SPRZĘTU', '']],
+                        body: [['Rodzaj sprzętu:', data.sprzet], ['Marka:', data.marka], ['Model:', data.model], ['Numer seryjny:', data.numer]],
+                        ...tableStyles,
+                        startY: currentY
+                    });
+
+                    currentY = doc.lastAutoTable.finalY + 10;
+
+                    // Opis usterki
+                    doc.autoTable({
+                        head: [['OPIS USTERKI']],
+                        body: [[data.usterka || '']],
+                        ...tableStyles,
+                        startY: currentY
+                    });
+
+                    currentY = doc.lastAutoTable.finalY + 10;
+
+                    // Dane klienta
+                    doc.autoTable({
+                        head: [['DANE KLIENTA', '']],
+                        body: [['Imię i nazwisko:', data.klient], ['Telefon:', data.telefonKlienta], ['Data przyjęcia:', data.data]],
+                        ...tableStyles,
+                        startY: currentY
+                    });
+
+                    currentY = doc.lastAutoTable.finalY + 20;
+
+                    // Podpisy
+                    doc.setFontSize(10);
+                    doc.text('Podpis przyjmującego', 50, currentY + 20, {align: 'center'});
+                    doc.text('Podpis klienta', 150, currentY + 20, {align: 'center'});
+
+                    doc.line(20, currentY + 15, 80, currentY + 15);
+                    doc.line(120, currentY + 15, 180, currentY + 15);
+
+                    // Stopka z datą
+                    doc.setFontSize(8);
+                    const today = new Date().toLocaleDateString('pl-PL');
+                    doc.text(`Dokument wygenerowano: ${today}`, pageWidth / 2, 280, {align: 'center'});
+
+                    // RODO - ochrona danych osobowych
+                    const rodoText =
+                        "Zgodnie z art. 13 ust. 1 i 2 Rozporządzenia Parlamentu Europejskiego i Rady (UE) 2016/679 (RODO) informujemy, że " +
+                        "dane osobowe podane w niniejszym dokumencie będą przetwarzane w celu realizacji usługi serwisowej. Dane nie będą " +
+                        "udostępniane osobom trzecim, a ich przetwarzanie odbywa się zgodnie z polityką prywatności dostępną w siedzibie firmy.";
+
+                    const rodoWrapped = doc.splitTextToSize(rodoText, pageWidth - 2 * margin);
+                    doc.text(rodoWrapped, margin, 285);
+
+                    doc.save('protokol-serwisowy.pdf');
+                }
+
+                $(document).on('click', '.print-pdf', function (e) {
+                    e.preventDefault();
+                    generateProtocolPDF();
+                });
+            } catch (error) {
+                console.error('Błąd podczas ładowania skryptów:', error);
+            }
+        }
+
+        // Inicjalizujemy generator
+        initializePDFGenerator();
+    </script>
 {% endblock %}

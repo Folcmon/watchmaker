@@ -24,6 +24,10 @@ class OrderDocumentController extends BaseController
         Request $request
     ): Response {
         $form = $this->createForm(OrderEquipmentAcceptanceProtocolType::class);
+        $form->get('customer_name')->setData($order->getClient()->getName());
+        $form->get('customer_phone')->setData($order->getClient()->getTelephone());
+        $form->get('date_received')->setData(new \DateTime());
+        $form->get('fault_description')->setData($order->getDescription());
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();

@@ -7,14 +7,11 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Gedmo\Loggable\Loggable;
-use Gedmo\Mapping\Annotation as Gedmo;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 
 #[ORM\Entity(repositoryClass: OrderRepository::class)]
 #[ORM\Table(name: 'orders')]
-#[Gedmo\Loggable]
-class Order implements Loggable
+class Order
 {
     use TimestampableEntity;
 
@@ -24,16 +21,13 @@ class Order implements Loggable
     private ?int $id;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    #[Gedmo\Versioned]
     private ?string $description;
 
     #[ORM\ManyToOne(targetEntity: Client::class, inversedBy: 'orders')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Gedmo\Versioned]
     private ?Client $client;
 
     #[ORM\Column(type: 'string', length: 255)]
-    #[Gedmo\Versioned]
     private ?string $name;
 
     #[ORM\OneToMany(targetEntity: ServiceAttachment::class, mappedBy: 'service', cascade: ['all'], orphanRemoval: true)]
@@ -46,11 +40,9 @@ class Order implements Loggable
     private Collection $realisedServiceUsedItems;
 
     #[ORM\Column(length: 255)]
-    #[Gedmo\Versioned]
     private ?string $status = null;
 
     #[ORM\Column(type: 'integer')]
-    #[Gedmo\Versioned]
     private int $labor = 0;
 
     #[ORM\ManyToOne]

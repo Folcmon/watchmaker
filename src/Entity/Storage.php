@@ -31,7 +31,7 @@ class Storage
     #[ORM\Column(type: 'integer')]
     private int $price = 0;
 
-    #[ORM\Column(type: 'decimal')]
+    #[ORM\Column(type: 'decimal', precision: 2)]
     private string $margin = '0.0';
 
     /**

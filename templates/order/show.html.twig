@@ -69,12 +69,17 @@
                         </table>
                     </div>
                     <div class="row mb-3">
-                        <div class="col-xl-12">
-                            {% for attachment in order.orderAttachments %}
-                                <img class="img-thumbnail"
-                                     src="{{ asset("uploads/service_attachment/") }}{{ attachment.getPath }}">
-                            {% endfor %}
-                        </div>
+                        {% for orderAttachment in order.orderAttachments %}
+                            <div class="col-md-3 mb-4 attachment-card-item">
+                                <div class="card">
+                                    <a href="{{ asset('uploads/' ~ orderAttachment.file.path) }}" target="_blank">
+                                        <img src="{{ asset('uploads/' ~ orderAttachment.file.path) }}"
+                                             class="card-img-top"
+                                             alt="Attachment" style="max-height: 240px">
+                                    </a>
+                                </div>
+                            </div>
+                        {% endfor %}
                     </div>
                     <div class="row mb-3">
                         <div class="col-xl-12">

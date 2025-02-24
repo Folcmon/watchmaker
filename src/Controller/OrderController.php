@@ -8,6 +8,7 @@ use App\Entity\OrderAttachment;
 use App\Enum\OrderStatusEnum;
 use App\Form\OrderType;
 use App\Repository\FileRepository;
+use App\Repository\OrderAttachementRepository;
 use App\Repository\OrderRepository;
 use App\Repository\StorageRepository;
 use Knp\Component\Pager\PaginatorInterface;
@@ -56,8 +57,13 @@ class OrderController extends BaseController
     }
 
     #[Route('/new/{client}', name: 'order_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, StorageRepository $storageRepository, FileRepository $fileRepository, ?Client $client = null): Response
-    {
+    public function new(
+        Request $request,
+        StorageRepository $storageRepository,
+        FileRepository $fileRepository,
+        OrderAttachementRepository $orderAttachmentRepository,
+        ?Client $client = null
+    ): Response {
         $order = new Order();
         $order->setStatus(OrderStatusEnum::NEW->value);
         $order->setOrderAcceptanceDate(new \DateTime());
@@ -67,7 +73,7 @@ class OrderController extends BaseController
         $this->entityManager->persist($order);
         $form = $this->createForm(OrderType::class, $order);
         $form->handleRequest($request);
-        $this->saveOrder($form, $request, $order, $storageRepository, $fileRepository);
+        $this->saveOrder($form, $request, $order, $storageRepository, $fileRepository, $orderAttachmentRepository);
         return $this->render('order/new.html.twig', [
             'order' => $order,
             'form' => $form->createView(),
@@ -89,7 +95,6 @@ class OrderController extends BaseController
                 $filename = md5(microtime()) . '.' . $extension;
                 $oneFileAttachment->move($directory, $filename);
                 $orderAttachment = new OrderAttachment();
-                $orderAttachment->setPath($filename);
                 $orderAttachment->setOrder($realisedOrder);
                 $this->doctrine->persist($orderAttachment);
                 $this->doctrine->flush();
@@ -106,11 +111,16 @@ class OrderController extends BaseController
     }
 
     #[Route('/{id}/edit', name: 'order_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Order $order, StorageRepository $storageRepository, FileRepository $fileRepository): Response
-    {
+    public function edit(
+        Request $request,
+        Order $order,
+        StorageRepository $storageRepository,
+        FileRepository $fileRepository,
+        OrderAttachementRepository $orderAttachmentRepository
+    ): Response {
         $form = $this->createForm(OrderType::class, $order);
         $form->handleRequest($request);
-        $this->saveOrder($form, $request, $order, $storageRepository, $fileRepository);
+        $this->saveOrder($form, $request, $order, $storageRepository, $fileRepository, $orderAttachmentRepository);
 
         return $this->render('order/edit.html.twig', [
             'order' => $order,
@@ -141,12 +151,11 @@ class OrderController extends BaseController
 
     #[Route('/client/{id}', name: 'order_show_by_client', methods: ['GET'])]
     public function showByClient(
-        Client             $client,
-        OrderRepository    $realisedOrderRepository,
+        Client $client,
+        OrderRepository $realisedOrderRepository,
         PaginatorInterface $paginator,
-        Request            $request
-    ): Response
-    {
+        Request $request
+    ): Response {
         $realisedOrders = $realisedOrderRepository->findBy(['client' => $client]);
 
         $pagination = $paginator->paginate(
@@ -163,13 +172,13 @@ class OrderController extends BaseController
     }
 
     private function saveOrder(
-        FormInterface     $form,
-        Request           $request,
-        Order             $order,
+        FormInterface $form,
+        Request $request,
+        Order $order,
         StorageRepository $storageRepository,
-        FileRepository    $fileRepository
-    ): void
-    {
+        FileRepository $fileRepository,
+        OrderAttachementRepository $orderAttachmentRepository
+    ): void {
         if ($form->isSubmitted() && $form->isValid()) {
             $usedParts = $order->getRealisedServiceUsedItems() ?? null;
             if ($usedParts != null) {
@@ -182,9 +191,17 @@ class OrderController extends BaseController
 
             }
             $this->entityManager->flush();
-            $files = $request->get('order')['orderAttachments'];
+            $files = $request->get('order')['orderAttachments'] ?? null;
             if ($files != null) {
                 foreach ($files as $file) {
+                    //check if order attachment exists
+                    $orderAttachment = $orderAttachmentRepository->findOneBy([
+                        'order' => $order,
+                        'file' => $fileRepository->find($file)
+                    ]);
+                    if ($orderAttachment !== null) {
+                        continue;
+                    }
                     $orderAttachment = new OrderAttachment();
                     $orderAttachment->setFile($fileRepository->find($file));
                     $orderAttachment->setOrder($order);

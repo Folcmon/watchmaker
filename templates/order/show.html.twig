@@ -70,7 +70,7 @@
                     </div>
                     <div class="row mb-3">
                         <div class="col-xl-12">
-                            {% for attachment in order.serviceAttachments %}
+                            {% for attachment in order.orderAttachments %}
                                 <img class="img-thumbnail"
                                      src="{{ asset("uploads/service_attachment/") }}{{ attachment.getPath }}">
                             {% endfor %}

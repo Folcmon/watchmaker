@@ -40,7 +40,8 @@ class FileController extends BaseController
         $uploadedFile->move($uploadDir, $fileName);
 
         // Tworzenie encji pliku
-        $fileEntity = new File($originalFilename, $extension);
+        $fileEntity = new File($uuid, $originalFilename, $extension);
+        $fileEntity->setUsedTimes(0);
         $entityManager->persist($fileEntity);
         $entityManager->flush();
 

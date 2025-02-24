@@ -17,10 +17,10 @@ class OrderAttachment
     #[ORM\Column(type: 'integer')]
     private ?int $id;
 
-    #[ORM\ManyToOne(targetEntity: Order::class, cascade: ['persist'], inversedBy: 'serviceAttachments')]
+    #[ORM\ManyToOne(targetEntity: Order::class, cascade: ['persist'], inversedBy: 'orderAttachments')]
     private ?Order $order;
 
-    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    #[ORM\OneToOne(cascade: ['persist', 'remove'], fetch: 'EAGER')]
     #[ORM\JoinColumn(nullable: false)]
     private ?File $file = null;
 

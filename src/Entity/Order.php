@@ -56,13 +56,13 @@ class Order
      * @var Collection<int, Document>
      */
     #[ORM\OneToMany(targetEntity: Document::class, mappedBy: 'associated_order', orphanRemoval: true)]
-    private Collection $document;
+    private Collection $documents;
 
     public function __construct()
     {
         $this->orderAttachments = new ArrayCollection();
         $this->realisedServiceUsedItems = new ArrayCollection();
-        $this->document = new ArrayCollection();
+        $this->documents = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -226,15 +226,15 @@ class Order
     /**
      * @return Collection<int, Document>
      */
-    public function getDocument(): Collection
+    public function getDocuments(): Collection
     {
-        return $this->document;
+        return $this->documents;
     }
 
     public function addDocument(Document $type): static
     {
-        if (!$this->document->contains($type)) {
-            $this->document->add($type);
+        if (!$this->documents->contains($type)) {
+            $this->documents->add($type);
             $type->setAssociatedOrder($this);
         }
 
@@ -243,7 +243,7 @@ class Order
 
     public function removeDocument(Document $type): static
     {
-        if ($this->document->removeElement($type)) {
+        if ($this->documents->removeElement($type)) {
             // set the owning side to null (unless already changed)
             if ($type->getAssociatedOrder() === $this) {
                 $type->setAssociatedOrder(null);

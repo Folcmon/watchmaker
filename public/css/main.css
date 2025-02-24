@@ -54,3 +54,29 @@
     height: 100% !important;
     line-height: inherit !important;
 }
+
+.custom-card {
+    height: 240px; /* Set the desired height for the card */
+    display: flex;
+    flex-direction: column;
+}
+
+.custom-card img {
+    height: 150px; /* Set the desired height for the image */
+    object-fit: cover; /* Ensure the image covers the area */
+}
+
+.custom-card-body {
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#upload-area .uppy-Dashboard-inner {
+    width: 100% !important;
+}
+
+#upload-area {
+    width: 100%;
+}

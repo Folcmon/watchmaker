@@ -27,9 +27,12 @@ class File
     #[ORM\Column(type: "datetime")]
     private DateTimeInterface $createdAt;
 
-    public function __construct(string $originalFilename, string $extension)
+    #[ORM\Column]
+    private ?int $usedTimes = null;
+
+    public function __construct(Uuid $uuid, string $originalFilename, string $extension)
     {
-        $this->uuid = Uuid::v4();
+        $this->uuid = $uuid;
         $this->originalFilename = $originalFilename;
         $this->createdAt = new \DateTime();
 
@@ -76,5 +79,17 @@ class File
         if (file_exists($filePath)) {
             unlink($filePath);
         }
+    }
+
+    public function getUsedTimes(): ?int
+    {
+        return $this->usedTimes;
+    }
+
+    public function setUsedTimes(int $usedTimes): static
+    {
+        $this->usedTimes = $usedTimes;
+
+        return $this;
     }
 }

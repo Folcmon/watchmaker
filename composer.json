@@ -15,6 +15,7 @@
     "doctrine/doctrine-migrations-bundle": "^3.2",
     "doctrine/orm": "3.3.*",
     "knplabs/knp-paginator-bundle": "*",
+    "omines/datatables-bundle": "^0.9.2",
     "phpdocumentor/reflection-docblock": "^5.3",
     "stof/doctrine-extensions-bundle": "^1.8",
     "symfony/asset": "7.2.*",

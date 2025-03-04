@@ -1,0 +1,288 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ "Protokół odbioru"|trans }}{% endblock %}
+
+{% block stylesheets %}
+{% endblock %}
+
+{% block leftBody %}
+    {% include '/shared/leftSidebar.html.twig' %}
+{% endblock %}
+
+{% block body %}
+    <h4 class="fw-bold py-3 mb-4 page-title-header"><span class="text-muted fw-light">
+           <a href="{{ path('order_show',{'id': order.id}) }}">{{ "Zlecenie"| trans }}</a> /</span> Numer {{ order.id }}
+        dla
+        klienta <a href="{{ path('app_client_show',{'id': order.client.id}) }}">
+            {{ order.client }}
+        </a> - {{ "protokół odbioru"|trans }}
+    </h4>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    {{ form_start(form) }}
+                    <div class="printable-section">
+                        <h1 class="text-center mb-4">Protokół odbioru sprzętu z serwisu</h1>
+                        <div class="row mb-4">
+                            <div class="col-md-12">
+                                {{ form_row(form.customer_name, {'label_attr': {'class': 'form-label'}, 'attr': {'class': 'form-control'}}) }}
+                            </div>
+                        </div>
+                        <div class="row mb-4">
+                            <div class="col-md-12">
+                                {{ form_row(form.customer_address, {'label_attr': {'class': 'form-label'}, 'attr': {'class': 'form-control'}}) }}
+                            </div>
+                        </div>
+                        <div class="row mb-4">
+                            <div class="col-md-12">
+                                {{ form_row(form.customer_phone, {'label_attr': {'class': 'form-label'}, 'attr': {'class': 'form-control'}}) }}
+                            </div>
+                        </div>
+                        <div class="row mb-4">
+                            <div class="col-md-12">
+                                {{ form_row(form.device_type, {'label_attr': {'class': 'form-label'}, 'attr': {'class': 'form-control'}}) }}
+                            </div>
+                        </div>
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                {{ form_row(form.brand, {'label_attr': {'class': 'form-label'}, 'attr': {'class': 'form-control'}}) }}
+                            </div>
+                            <div class="col-md-6">
+                                {{ form_row(form.model, {'label_attr': {'class': 'form-label'}, 'attr': {'class': 'form-control'}}) }}
+                            </div>
+                        </div>
+                        <div class="row mb-4">
+                            <div class="col-md-12">
+                                {{ form_row(form.serial_number, {'label_attr': {'class': 'form-label'}, 'attr': {'class': 'form-control'}}) }}
+                            </div>
+                        </div>
+                        <div class="mb-4">
+                            {{ form_row(form.accessories, {'label_attr': {'class': 'form-label'}, 'attr': {'class': 'form-control'}}) }}
+                        </div>
+                        <div class="mb-4">
+                            {{ form_row(form.service_description, {'label_attr': {'class': 'form-label'}, 'attr': {'class': 'form-control'}}) }}
+                        </div>
+                        <div class="mb-4">
+                            {{ form_row(form.equipment_condition, {'label_attr': {'class': 'form-label'}, 'attr': {'class': 'form-control'}}) }}
+                        </div>
+                        <div class="mb-4">
+                            {{ form_row(form.remarks, {'label_attr': {'class': 'form-label'}, 'attr': {'class': 'form-control'}}) }}
+                        </div>
+                        <div class="mb-4">
+                            {{ form_row(form.date_returned, {'label_attr': {'class': 'form-label'}, 'attr': {'class': 'form-control'}}) }}
+                        </div>
+                        <hr>
+                        <div class="row mt-4">
+                            <div class="col-md-12">
+                                <p>Klient potwierdza odbiór sprzętu po serwisie w stanie zgodnym z opisem powyżej.
+                                    Serwis nie ponosi odpowiedzialności za wady ukryte niewidoczne podczas
+                                    diagnostyki.</p>
+                            </div>
+                        </div>
+                        <div class="row mt-4">
+                            <div class="col-md-6 text-center">
+                                <p>Podpis klienta</p>
+                                <div class="border-top mt-4" style="height: 50px;"></div>
+                            </div>
+                            <div class="col-md-6 text-center">
+                                <p>Podpis pracownika serwisu</p>
+                                <div class="border-top mt-4" style="height: 50px;"></div>
+                            </div>
+                        </div>
+                        <div class="row mt-4 mb-5">
+                            <input type="submit" class="btn btn-primary float-end" value="Zapisz protokół"/>
+                        </div>
+                    </div>
+                    {{ form_end(form) }}
+                </div>
+                <div class="card-footer border-top pt-4">
+                    <div class="col-xl-12">
+                        <a href="#" class="btn btn-primary float-start btn-lg print-pdf">
+                            {{ "Drukuj"|trans }}
+                        </a>
+                        <a href="{{ path('order_show',{'id': order.id}) }}"
+                           class="btn btn-warning float-end btn-lg">{{ "Powrót"|trans }}</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block body_scripts %}
+    {{ parent() }}
+    <script>
+        let jsPDF = window.jspdf.jsPDF;
+
+        function loadCustomFont(doc) {
+            doc.addFileToVFS("Roboto-Regular.ttf", "BASE64_KOD_HERE"); // Wklej Base64 tutaj
+            doc.addFont("Roboto-Regular.ttf", "Roboto", "normal");
+            doc.setFont("Roboto");
+        }
+
+        function loadScript(url) {
+            return new Promise((resolve, reject) => {
+                const script = document.createElement('script');
+                script.src = url;
+                script.onload = resolve;
+                script.onerror = reject;
+                document.head.appendChild(script);
+            });
+        }
+
+        // Ładujemy skrypty w odpowiedniej kolejności
+        async function initializePDFGenerator() {
+            try {
+                await loadScript('https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js');
+                await loadScript('https://unpkg.com/jspdf-autotable');
+
+                const {jsPDF} = window.jspdf;
+
+                function generateProtocolPDF() {
+                    const doc = new jsPDF({
+                        orientation: 'portrait',
+                        unit: 'mm',
+                        format: 'a4'
+                    });
+                    doc.addFont('https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.66/fonts/Roboto/Roboto-Regular.ttf', 'Roboto', 'normal');
+                    doc.setFont("Roboto"); // Czcionka obsługująca polskie znaki
+                    doc.setFontSize(14);
+
+                    // Nagłówek - dzielimy go na kilka linii, jeśli jest za szeroki
+                    const headerText = 'PROTOKÓŁ ODBIORU SPRZĘTU Z SERWISU';
+                    const pageWidth = doc.internal.pageSize.width;
+                    const margin = 10; // Marginesy
+
+                    const splitTitle = doc.splitTextToSize(headerText, pageWidth - 2 * margin);
+                    doc.text(splitTitle, pageWidth / 2, 20, {align: 'center'});
+
+                    // Pobieramy dane z formularza
+                    const convertToUTF8 = (text) => new TextDecoder("utf-8").decode(new TextEncoder().encode(text));
+
+                    const data = {
+                        klient: convertToUTF8(document.getElementById('order_equipment_return_protocol_customer_name').value),
+                        adres: convertToUTF8(document.getElementById('order_equipment_return_protocol_customer_address').value),
+                        telefonKlienta: convertToUTF8(document.getElementById('order_equipment_return_protocol_customer_phone').value),
+                        sprzet: convertToUTF8(document.getElementById('order_equipment_return_protocol_device_type').value),
+                        marka: convertToUTF8(document.getElementById('order_equipment_return_protocol_brand').value),
+                        model: convertToUTF8(document.getElementById('order_equipment_return_protocol_model').value),
+                        numer: convertToUTF8(document.getElementById('order_equipment_return_protocol_serial_number').value),
+                        akcesoria: convertToUTF8(document.getElementById('order_equipment_return_protocol_accessories').value),
+                        opisUslugi: convertToUTF8(document.getElementById('order_equipment_return_protocol_service_description').value),
+                        stanSprzetu: convertToUTF8(document.querySelector('input[name="order_equipment_return_protocol[equipment_condition]"]:checked').value),
+                        uwagi: convertToUTF8(document.getElementById('order_equipment_return_protocol_remarks').value),
+                        data: convertToUTF8(document.getElementById('order_equipment_return_protocol_date_returned').value)
+                    };
+
+                    let currentY = 30;
+
+                    // Konfiguracja tabel
+                    const tableStyles = {
+                        theme: 'grid',
+                        styles: {fontSize: 10, cellPadding: 3, font: 'Roboto'},
+                        headStyles: {fillColor: [220, 220, 220], textColor: [0, 0, 0], fontStyle: 'bold'},
+                        bodyStyles: {fillColor: [255, 255, 255]},
+                        alternateRowStyles: {fillColor: [245, 245, 245]},
+                        margin: {top: 35}
+                    };
+
+                    // Dane klienta
+                    doc.autoTable({
+                        head: [['DANE KLIENTA', '']],
+                        body: [['Imię i nazwisko:', data.klient], ['Adres:', data.adres], ['Telefon:', data.telefonKlienta]],
+                        ...tableStyles,
+                        startY: currentY
+                    });
+
+                    currentY = doc.lastAutoTable.finalY + 10;
+
+                    // Dane sprzętu
+                    doc.autoTable({
+                        head: [['DANE SPRZĘTU', '']],
+                        body: [['Rodzaj sprzętu:', data.sprzet], ['Marka:', data.marka], ['Model:', data.model], ['Numer seryjny:', data.numer], ['Akcesoria:', data.akcesoria]],
+                        ...tableStyles,
+                        startY: currentY
+                    });
+
+                    currentY = doc.lastAutoTable.finalY + 10;
+
+                    // Opis wykonanej usługi
+                    doc.autoTable({
+                        head: [['OPIS WYKONANEJ USŁUGI']],
+                        body: [[data.opisUslugi || '']],
+                        ...tableStyles,
+                        startY: currentY
+                    });
+
+                    currentY = doc.lastAutoTable.finalY + 10;
+
+                    // Stan sprzętu po serwisie
+                    doc.autoTable({
+                        head: [['STAN SPRZĘTU PO SERWISIE']],
+                        body: [[data.stanSprzetu || '']],
+                        ...tableStyles,
+                        startY: currentY
+                    });
+
+                    currentY = doc.lastAutoTable.finalY + 10;
+
+                    // Uwagi
+                    doc.autoTable({
+                        head: [['UWAGI']],
+                        body: [[data.uwagi || '']],
+                        ...tableStyles,
+                        startY: currentY
+                    });
+
+                    currentY = doc.lastAutoTable.finalY + 10;
+
+                    // Gwarancja
+                    doc.autoTable({
+                        head: [['GWARANCJA', '']],
+                        body: [['Okres gwarancji:', data.okresGwarancji], ['Warunki gwarancji:', data.warunkiGwarancji]],
+                        ...tableStyles,
+                        startY: currentY
+                    });
+
+                    currentY = doc.lastAutoTable.finalY + 20;
+
+                    // Podpisy
+                    doc.setFontSize(10);
+                    doc.text('Podpis klienta', 50, currentY + 20, {align: 'center'});
+                    doc.text('Podpis pracownika serwisu', 150, currentY + 20, {align: 'center'});
+
+                    doc.line(20, currentY + 15, 80, currentY + 15);
+                    doc.line(120, currentY + 15, 180, currentY + 15);
+
+                    // Stopka z datą
+                    doc.setFontSize(8);
+                    const today = new Date().toLocaleDateString('pl-PL');
+                    doc.text(`Dokument wygenerowano: ${today}`, pageWidth / 2, 280, {align: 'center'});
+
+                    // RODO - ochrona danych osobowych
+                    const rodoText =
+                        "Zgodnie z art. 13 ust. 1 i 2 Rozporządzenia Parlamentu Europejskiego i Rady (UE) 2016/679 (RODO) informujemy, że " +
+                        "dane osobowe podane w niniejszym dokumencie będą przetwarzane w celu realizacji usługi serwisowej. Dane nie będą " +
+                        "udostępniane osobom trzecim, a ich przetwarzanie odbywa się zgodnie z polityką prywatności dostępną w siedzibie firmy.";
+
+                    const rodoWrapped = doc.splitTextToSize(rodoText, pageWidth - 2 * margin);
+                    doc.text(rodoWrapped, margin, 285);
+
+                    doc.save('protokol-serwisowy.pdf');
+                }
+
+                $(document).on('click', '.print-pdf', function (e) {
+                    e.preventDefault();
+                    generateProtocolPDF();
+                });
+            } catch (error) {
+                console.error('Błąd podczas ładowania skryptów:', error);
+            }
+        }
+
+        // Inicjalizujemy generator
+        initializePDFGenerator();
+    </script>
+{% endblock %}

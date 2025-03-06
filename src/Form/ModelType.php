@@ -14,18 +14,14 @@ class ModelType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('name')
-            ->add('createdAt', null, [
-                'widget' => 'single_text',
-            ])
-            ->add('updatedAt', null, [
-                'widget' => 'single_text',
+            ->add('name', null, [
+                'label' => 'Nazwa',
             ])
             ->add('brand', EntityType::class, [
+                'label' => 'Marka',
                 'class' => Brand::class,
                 'choice_label' => 'id',
-            ])
-        ;
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

@@ -60,8 +60,10 @@ class OrderDocumentController extends BaseController
 
     #[Route('/equipment-return-protocol/{order:id}', name: 'equipment_return_protocol')]
     public function equipmentReturnProtocol(
-        Order   $order,
-        Request $request
+        Order           $order,
+        BrandRepository $brandRepository,
+        ModelRepository $modelRepository,
+        Request         $request
     ): Response
     {
         $form = $this->createForm(OrderEquipmentReturnProtocolType::class);
@@ -96,6 +98,8 @@ class OrderDocumentController extends BaseController
 
         return $this->render('document/equipment_return_protocol.html.twig', [
             'order' => $order,
+            'brands' => $brandRepository->findAll(),
+            'models' => $modelRepository->findAll(),
             'form' => $form->createView(),
         ]);
     }

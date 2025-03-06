@@ -19,55 +19,57 @@ class OrderEquipmentReturnProtocolType extends AbstractType
                 'label' => 'Wykonawca',
                 'required' => true,
                 'data' => 'Salon zegarmistrzowski Radosław Krzysztof Kasperiuk'
+
             ])
             ->add('service_provider_address', TextType::class, [
                 'label' => 'Adres wykonawcy',
                 'required' => true,
-                'data' => 'Białystok, Suraska 1 lok 1'
+                'data' => 'Białystok . Suraska1 lok1'
+
             ])
             ->add('service_provider_phone', TextType::class, [
                 'label' => 'Telefon wykonawcy',
                 'required' => true,
                 'data' => '693 980 385'
-            ])
-            ->add('customer_name', TextType::class, [
-                'label' => 'Imię i nazwisko',
-                'required' => true,
-            ])
-            ->add('customer_address', TextType::class, [
-                'label' => 'Adres',
-                'required' => true,
-            ])
-            ->add('customer_phone', TextType::class, [
-                'label' => 'Telefon kontaktowy',
-                'required' => true,
+
             ])
             ->add('device_type', TextType::class, [
-                'label' => 'Rodzaj urządzenia',
+                'label' => 'Rodzaj sprzętu',
                 'required' => true,
+
+                'data' => 'Zegarek'
             ])
             ->add('brand', TextType::class, [
                 'label' => 'Marka',
                 'required' => true,
+
             ])
             ->add('model', TextType::class, [
                 'label' => 'Model',
                 'required' => true,
+
             ])
             ->add('serial_number', TextType::class, [
                 'label' => 'Numer seryjny',
                 'required' => false,
+
             ])
-            ->add('accessories', TextareaType::class, [
-                'label' => 'Akcesoria przekazane wraz ze sprzętem',
-                'required' => false,
+            ->add('customer_name', TextType::class, [
+                'label' => 'Dane klienta',
+                'required' => true,
+
+            ])
+            ->add('customer_phone', TextType::class, [
+                'label' => 'Telefon',
+                'required' => true,
+
             ])
             ->add('service_description', TextareaType::class, [
-                'label' => 'Opis wykonanej usługi',
+                'label' => 'Opis usługi',
                 'required' => true,
             ])
             ->add('equipment_condition', ChoiceType::class, [
-                'label' => 'Stan sprzętu po serwisie',
+                'label' => 'Stan po serwisie',
                 'choices' => [
                     'Sprzęt sprawny, gotowy do użytku' => 'Sprzęt sprawny, gotowy do użytku',
                     'Naprawa częściowa – wymaga dalszych działań' => 'Naprawa częściowa – wymaga dalszych działań',
@@ -86,14 +88,6 @@ class OrderEquipmentReturnProtocolType extends AbstractType
                 'widget' => 'single_text',
                 'required' => true,
                 'data' => new \DateTime()
-            ])
-            ->add('customer_signature', TextType::class, [
-                'label' => 'Podpis klienta',
-                'required' => true,
-            ])
-            ->add('service_provider_signature', TextType::class, [
-                'label' => 'Podpis pracownika serwisu',
-                'required' => true,
             ]);
     }
 

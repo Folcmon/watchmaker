@@ -124,8 +124,8 @@
         let jsPDF = window.jspdf.jsPDF;
 
         function loadCustomFont(doc) {
-            doc.addFileToVFS("Roboto-Regular.ttf", "BASE64_KOD_HERE"); // Wklej Base64 tutaj
             doc.addFont("Roboto-Regular.ttf", "Roboto", "normal");
+            doc.addFont("Roboto-Regular.ttf", "Roboto", "bold");
             doc.setFont("Roboto");
         }
 
@@ -154,6 +154,7 @@
                         format: 'a4'
                     });
                     doc.addFont('https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.66/fonts/Roboto/Roboto-Regular.ttf', 'Roboto', 'normal');
+                    doc.addFont('https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.66/fonts/Roboto/Roboto-Medium.ttf', 'Roboto', 'bold');
                     doc.setFont("Roboto"); // Czcionka obsługująca polskie znaki
                     doc.setFontSize(14);
 

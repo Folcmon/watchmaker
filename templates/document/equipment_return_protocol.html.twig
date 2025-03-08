@@ -151,7 +151,6 @@
             });
         }
 
-        // Ładujemy skrypty w odpowiedniej kolejności
         async function initializePDFGenerator() {
             try {
                 await loadScript('https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js');
@@ -167,18 +166,16 @@
                     });
                     doc.addFont('https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.66/fonts/Roboto/Roboto-Regular.ttf', 'Roboto', 'normal');
                     doc.addFont('https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.66/fonts/Roboto/Roboto-Medium.ttf', 'Roboto', 'bold');
-                    doc.setFont("Roboto"); // Czcionka obsługująca polskie znaki
+                    doc.setFont("Roboto");
                     doc.setFontSize(14);
 
-                    // Nagłówek - dzielimy go na kilka linii, jeśli jest za szeroki
                     const headerText = 'PROTOKÓŁ ODBIORU SPRZĘTU Z SERWISU';
                     const pageWidth = doc.internal.pageSize.width;
-                    const margin = 10; // Marginesy
+                    const margin = 10;
 
                     const splitTitle = doc.splitTextToSize(headerText, pageWidth - 2 * margin);
                     doc.text(splitTitle, pageWidth / 2, 20, {align: 'center'});
 
-                    // Pobieramy dane z formularza
                     const convertToUTF8 = (text) => text ? text : '';
 
                     const data = {
@@ -199,7 +196,6 @@
 
                     let currentY = 30;
 
-                    // Konfiguracja tabel
                     const tableStyles = {
                         theme: 'grid',
                         styles: {fontSize: 10, cellPadding: 3, font: 'Roboto'},
@@ -209,7 +205,6 @@
                         margin: {top: 35}
                     };
 
-                    // Dane serwisu
                     doc.autoTable({
                         head: [['DANE SERWISU', '']],
                         body: [
@@ -223,7 +218,6 @@
 
                     currentY = doc.lastAutoTable.finalY + 10;
 
-                    // Dane klienta
                     doc.autoTable({
                         head: [['DANE KLIENTA', '']],
                         body: [
@@ -237,7 +231,6 @@
 
                     currentY = doc.lastAutoTable.finalY + 10;
 
-                    // Dane sprzętu
                     doc.autoTable({
                         head: [['DANE SPRZĘTU', '']],
                         body: [
@@ -252,7 +245,6 @@
 
                     currentY = doc.lastAutoTable.finalY + 10;
 
-                    // Opis wykonanej usługi
                     doc.autoTable({
                         head: [['OPIS WYKONANEJ USŁUGI']],
                         body: [[data.opisUslugi || '']],
@@ -262,7 +254,6 @@
 
                     currentY = doc.lastAutoTable.finalY + 10;
 
-                    // Stan sprzętu po serwisie
                     doc.autoTable({
                         head: [['STAN SPRZĘTU PO SERWISIE']],
                         body: [[data.stanSprzetu || '']],
@@ -272,7 +263,6 @@
 
                     currentY = doc.lastAutoTable.finalY + 10;
 
-                    // Uwagi
                     doc.autoTable({
                         head: [['UWAGI']],
                         body: [[data.uwagi || '']],
@@ -282,7 +272,11 @@
 
                     currentY = doc.lastAutoTable.finalY + 20;
 
-                    // Podpisy
+                    if (currentY > 250) {
+                        doc.addPage();
+                        currentY = 20;
+                    }
+
                     doc.setFontSize(10);
                     doc.text('Podpis klienta', 50, currentY + 20, {align: 'center'});
                     doc.text('Podpis pracownika serwisu', 150, currentY + 20, {align: 'center'});
@@ -290,7 +284,6 @@
                     doc.line(20, currentY + 15, 80, currentY + 15);
                     doc.line(120, currentY + 15, 180, currentY + 15);
 
-                    // Informacja o odbiorze
                     currentY = currentY + 30;
                     doc.setFontSize(9);
                     const disclaimerText = "Klient potwierdza odbiór sprzętu po serwisie w stanie zgodnym z opisem powyżej. " +
@@ -298,12 +291,10 @@
                     const disclaimerWrapped = doc.splitTextToSize(disclaimerText, pageWidth - 2 * margin);
                     doc.text(disclaimerWrapped, margin, currentY);
 
-                    // Stopka z datą
                     doc.setFontSize(8);
                     const today = new Date().toLocaleDateString('pl-PL');
                     doc.text(`Dokument wygenerowano: ${today}`, pageWidth / 2, 280, {align: 'center'});
 
-                    // RODO - ochrona danych osobowych
                     const rodoText =
                         "Zgodnie z art. 13 ust. 1 i 2 Rozporządzenia Parlamentu Europejskiego i Rady (UE) 2016/679 (RODO) informujemy, że " +
                         "dane osobowe podane w niniejszym dokumencie będą przetwarzane w celu realizacji usługi serwisowej. Dane nie będą " +
@@ -324,7 +315,6 @@
             }
         }
 
-        // Inicjalizujemy generator
         initializePDFGenerator();
     </script>
 {% endblock %}

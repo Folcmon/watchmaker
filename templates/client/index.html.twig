@@ -66,9 +66,9 @@
                                 {% for client in pagination %}
                                     <tr>
                                         <td>{{ client.id }}</td>
-                                        <td>{{ client.name }}</td>
+                                        <td>{{ client.name |default('nie ustawiono') }}</td>
                                         <td>{{ client.telephone }}</td>
-                                        <td>{{ client.email }}</td>
+                                        <td>{{ client.email |default('nie ustawiono') }}</td>
                                         <td>{{ client.createdAt ? client.createdAt|date('Y-m-d H:i:s') : '' }}</td>
                                         <td>
                                             <a href="{{ path('app_client_show', {'id': client.id}) }}"

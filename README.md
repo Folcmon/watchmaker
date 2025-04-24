@@ -60,6 +60,8 @@
 - Opisać w README.md jakie założenia przyjęto przy tworzeniu projektu dla encji RealisedServiceUsedItem
 - Statystyki wykonanych usług i sprzedaży części
 - Wysyłka powiadomień email i sms
+- zrobić gotowy build do kubernetes
+- wszystkie tabelki zrobić ajaxowe na datatable
 
 # Przydatne komendy
 
